@@ -32,7 +32,7 @@ import {
   Smile
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import logoPremium from "@/assets/l.png";
+import logoPremium from "@/assets/logo.png";
 
 export default function App() {
   // Navigation states

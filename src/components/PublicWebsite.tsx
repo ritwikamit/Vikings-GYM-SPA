@@ -20,7 +20,7 @@ import {
   Globe
 } from "lucide-react";
 import { motion } from "motion/react";
-import logoPremium from "@/assets/l.png";
+import logoPremium from "@/assets/logo.png";
 
 interface PublicWebsiteProps {
   onJoinNow: () => void;
