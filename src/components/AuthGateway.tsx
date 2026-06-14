@@ -63,7 +63,11 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
       const loggedInUser = await login(regEmail, regPassword);
       onLoginSuccess(loggedInUser.role);
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.message || "Registration failed. Email may already exist.");
+      if (!err.response) {
+        setErrorMessage("Network error: Cannot reach the server. Please ensure the backend is running and the API URL is correct.");
+      } else {
+        setErrorMessage(err.response?.data?.message || "Registration failed. Email may already exist.");
+      }
     } finally {
       setLoading(false);
     }
