@@ -1004,7 +1004,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-neutral-950 border border-red-950 p-8 rounded-xl w-full max-w-lg shadow-2xl relative"
+                  className="bg-neutral-950 border border-red-950 p-6 sm:p-8 rounded-xl w-full max-w-lg shadow-2xl relative"
                 >
                   <button 
                     onClick={() => setIsMemberFormOpen(false)} 
@@ -1140,7 +1140,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-neutral-950 border border-neutral-800 p-8 rounded-xl w-full max-w-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto"
+                  className="bg-neutral-950 border border-neutral-800 p-6 sm:p-8 rounded-xl w-full max-w-2xl shadow-2xl relative max-h-[90vh] overflow-y-auto"
                 >
                   <button 
                     onClick={() => setSelectedMemberProfile(null)} 

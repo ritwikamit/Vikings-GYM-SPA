@@ -23,7 +23,9 @@ import {
   Briefcase,
   Smile,
   Wallet,
-  QrCode
+  QrCode,
+  Menu,
+  X
 } from "lucide-react";
 import logoPremium from "../assets/l.png";
 import { membersAPI } from "./api";
@@ -52,6 +54,7 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
   const navigate = useNavigate();
   const [currentBranchId, setCurrentBranchId] = useState("b-aurangabad");
   const [notifBoxOpen, setNotifBoxOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   if (!user) return null;
 
@@ -104,14 +107,27 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-black text-white font-sans antialiased">
-      <aside className="w-64 bg-[#0a0a0a] border-r border-red-950/20 shrink-0 hidden md:flex flex-col justify-between">
+    <div className="flex min-h-screen bg-black text-white font-sans antialiased relative">
+      {/* Mobile Sidebar Overlay */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-40 md:hidden backdrop-blur-sm"
+          onClick={() => setIsMobileSidebarOpen(false)}
+        />
+      )}
+
+      <aside className={`w-64 bg-[#0a0a0a] border-r border-red-950/20 shrink-0 flex-col justify-between fixed md:sticky top-0 h-screen z-50 transition-transform duration-300 md:translate-x-0 ${isMobileSidebarOpen ? "translate-x-0 flex" : "-translate-x-full md:flex"}`}>
         <div>
-          <div className="p-6 border-b border-red-950/30 flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
-            <span className="font-mono text-sm font-black tracking-widest text-white block">
-              VIKINGS <span className="text-red-500 block text-[10px] tracking-normal -mt-0.5">ERP MANAGER</span>
-            </span>
+          <div className="p-6 border-b border-red-950/30 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
+              <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
+              <span className="font-mono text-sm font-black tracking-widest text-white block">
+                VIKINGS <span className="text-red-500 block text-[10px] tracking-normal -mt-0.5">ERP MANAGER</span>
+              </span>
+            </div>
+            <button className="md:hidden text-gray-400 hover:text-white" onClick={() => setIsMobileSidebarOpen(false)}>
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
           <div className="p-4 space-y-1">
@@ -122,7 +138,10 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
               return (
                 <button
                   key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    setIsMobileSidebarOpen(false);
+                  }}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-xs font-semibold cursor-pointer tracking-wide font-mono transition-all uppercase ${
                     isActive 
                       ? "bg-red-600 font-bold text-black shadow shadow-red-900/10" 
@@ -156,12 +175,15 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
         </div>
       </aside>
 
-      <main className="flex-1 bg-black flex flex-col justify-between overflow-y-auto max-h-screen">
-        <header className="bg-[#0b0b0b]/90 border-b border-red-950/20 px-6 py-4 flex flex-col sm:flex-row gap-4 justify-between items-center sticky top-0 z-40 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <img src={logoPremium} alt="Vikings Logo" className="md:hidden h-8 w-auto mr-2" />
-            <MapPin className="text-red-500 w-4 h-4" />
-            <span className="font-mono text-xs font-bold text-gray-300">BRANCH CONTEXT:</span>
+      <main className="flex-1 bg-black flex flex-col justify-between overflow-y-auto max-h-screen w-full overflow-x-hidden">
+        <header className="bg-[#0b0b0b]/90 border-b border-red-950/20 px-4 sm:px-6 py-4 flex gap-4 justify-between items-center sticky top-0 z-30 backdrop-blur-md">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button className="md:hidden text-white mr-1" onClick={() => setIsMobileSidebarOpen(true)}>
+              <Menu className="w-6 h-6" />
+            </button>
+            <img src={logoPremium} alt="Vikings Logo" className="md:hidden h-8 w-auto hidden sm:block mr-2" />
+            <MapPin className="text-red-500 w-4 h-4 hidden sm:block" />
+            <span className="font-mono text-[10px] sm:text-xs font-bold text-gray-300 hidden sm:block">BRANCH CONTEXT:</span>
             
             {(user.role === UserRole.SUPER_ADMIN || user.role === UserRole.GYM_OWNER) ? (
               <select

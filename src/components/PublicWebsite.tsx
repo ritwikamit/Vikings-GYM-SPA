@@ -19,9 +19,11 @@ import {
   Users,
   Instagram,
   Facebook,
-  Globe
+  Globe,
+  Menu,
+  X
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.png";
 import { AnimatedMarqueeHero } from "./ui/hero-3";
 import DotPattern from "./ui/dot-pattern-1";
@@ -59,6 +61,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const [franchiseOpen, setFranchiseOpen] = useState(false);
   const [franchiseData, setFranchiseData] = useState({ name: "", city: "", capital: "20L-50L", phone: "" });
   const [franchiseSubmitted, setFranchiseSubmitted] = useState(false);
+
+  // Mobile menu state
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const calculateBMI = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,22 +136,75 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <button
             onClick={onLoginClick}
-            className="text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
+            className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
           >
             PORTAL LOGIN
           </button>
 
           <button
             onClick={onJoinNow}
-            className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-5 py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
+            className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-4 py-2 sm:px-5 sm:py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
           >
             JOIN NOW
           </button>
+
+          <button 
+            className="lg:hidden text-white p-2"
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center"
+          >
+            <button 
+              className="absolute top-6 right-6 text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <X className="w-8 h-8" />
+            </button>
+
+            <div className="flex flex-col items-center gap-8 text-xl font-bold font-mono tracking-widest text-gray-300">
+              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">ABOUT</a>
+              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">FACILITIES</a>
+              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">TRAINERS</a>
+              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
+              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setFranchiseOpen(true);
+                }}
+                className="hover:text-red-500 transition-colors cursor-pointer text-center uppercase"
+              >
+                Franchise
+              </button>
+              
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onLoginClick();
+                }}
+                className="mt-8 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
+              >
+                PORTAL LOGIN
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <AnimatedMarqueeHero
