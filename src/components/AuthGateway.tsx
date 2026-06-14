@@ -49,14 +49,21 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
     setErrorMessage("");
     setLoading(true);
 
-    // If backend supports public register, wire it here. 
-    // Currently relying on backend admin creation, but we could mock a POST /auth/register
     try {
-      // Assuming members can register via an open endpoint.
-      // await authAPI.register({ email: regEmail, password: regPassword, name: regName, phone: regPhone });
-      setErrorMessage("Public registration requires manager approval. Please visit reception.");
+      // Register the member using the backend API
+      const res = await authAPI.register({ 
+        email: regEmail, 
+        password: regPassword, 
+        name: regName, 
+        phone: regPhone,
+        role: "MEMBER" // Explicitly request member role
+      });
+      
+      // Auto-login upon successful registration
+      const loggedInUser = await login(regEmail, regPassword);
+      onLoginSuccess(loggedInUser.role);
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.message || "Registration failed.");
+      setErrorMessage(err.response?.data?.message || "Registration failed. Email may already exist.");
     } finally {
       setLoading(false);
     }
