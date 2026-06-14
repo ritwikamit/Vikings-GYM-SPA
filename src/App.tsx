@@ -263,7 +263,7 @@ export default function App() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<PublicWebsite onJoinNow={() => navigate("/login")} onLoginClick={() => navigate("/login")} />} />
+      <Route path="/" element={<PublicWebsite onJoinNow={() => navigate("/login?view=register")} onLoginClick={() => navigate("/login")} />} />
       <Route path="/login" element={
         <AuthRedirect>
           <AuthGateway onLoginSuccess={(role) => navigate(role === UserRole.MEMBER ? "/member" : "/erp")} onBackToWebsite={() => navigate("/")} />

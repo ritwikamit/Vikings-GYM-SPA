@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { 
   Lock, 
@@ -17,10 +18,15 @@ interface AuthGatewayProps {
 
 export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGatewayProps) {
   const { login } = useAuth();
-  const [isLoginView, setIsLoginView] = useState(true);
+  const location = useLocation();
+  const [isLoginView, setIsLoginView] = useState(() => {
+    return new URLSearchParams(location.search).get("view") !== "register";
+  });
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Register fields
@@ -32,6 +38,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+    setSuccessMessage("");
     setLoading(true);
 
     try {
@@ -47,6 +54,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
+    setSuccessMessage("");
     setLoading(true);
 
     try {
@@ -67,6 +75,30 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
         setErrorMessage("Network error: Cannot reach the server. Please ensure the backend is running and the API URL is correct.");
       } else {
         setErrorMessage(err.response?.data?.message || "Registration failed. Email may already exist.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    
+    if (!email) {
+      setErrorMessage("Please enter your registered email address first.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await authAPI.forgotPassword(email);
+      setSuccessMessage("If your email is registered, you will receive a reset link shortly.");
+    } catch (err: any) {
+      if (!err.response) {
+        setErrorMessage("Network error: Cannot reach the server.");
+      } else {
+        setErrorMessage(err.response?.data?.message || "Failed to process request.");
       }
     } finally {
       setLoading(false);
@@ -101,6 +133,11 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
         {errorMessage && (
           <div className="p-3 bg-red-500/10 border border-red-500/30 rounded text-xs text-red-400 mb-5 leading-normal">
             {errorMessage}
+          </div>
+        )}
+        {successMessage && (
+          <div className="p-3 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-400 mb-5 leading-normal">
+            {successMessage}
           </div>
         )}
 
@@ -144,6 +181,8 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                   <div className="text-right mt-1.5">
                     <button
                       type="button"
+                      onClick={handleForgotPassword}
+                      disabled={loading}
                       className="text-[10px] text-gray-500 hover:text-red-500 font-mono transition-all cursor-pointer"
                     >
                       FORGOT PASSWORD?
