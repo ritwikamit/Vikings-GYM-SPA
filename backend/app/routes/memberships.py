@@ -247,9 +247,8 @@ def expired_memberships():
 
 
 @memberships_bp.route("/plans", methods=["GET"])
-@jwt_required()
 def list_plans():
-    """List all membership plans."""
+    """List all membership plans. Public endpoint."""
     plans = MembershipPlan.objects(is_deleted=False)
     return success_response([p.to_dict() for p in plans])
 

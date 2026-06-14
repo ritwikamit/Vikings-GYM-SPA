@@ -1,6 +1,6 @@
 """Trainers routes — CRUD + clients, performance, schedule."""
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.trainer import Trainer
 from app.models.member import Member
 from app.models.pt_session import PtSession
@@ -14,17 +14,31 @@ trainers_bp = Blueprint("trainers", __name__)
 
 
 @trainers_bp.route("", methods=["GET"])
-@jwt_required()
-@roles_required("SUPER_ADMIN", "GYM_OWNER", "RECEPTIONIST", "TRAINER")
+@jwt_required(optional=True)
 def list_trainers():
-    """List all trainers."""
+    """List all trainers. Public endpoint with restricted fields for unauthenticated users."""
+    from app.models.user import User
+    identity = get_jwt_identity()
+    user = User.objects(id=identity, is_deleted=False).first() if identity else None
+    is_staff = user and user.role in ["SUPER_ADMIN", "GYM_OWNER", "RECEPTIONIST", "TRAINER"]
+
     page, per_page = get_pagination_args()
     query = Trainer.objects(is_deleted=False)
     status = request.args.get("status", "")
     if status:
         query = query.filter(status=status)
     items, pagination = paginate_query(query.order_by("name"), page, per_page)
-    return success_response([t.to_dict() for t in items], pagination=pagination)
+    
+    res = []
+    for t in items:
+        d = t.to_dict()
+        if not is_staff:
+            d.pop("salary", None)
+            d.pop("commissionRate", None)
+            d.pop("commission_percent", None)
+        res.append(d)
+        
+    return success_response(res, pagination=pagination)
 
 
 @trainers_bp.route("", methods=["POST"])

@@ -97,7 +97,14 @@ def create_member():
 @jwt_required()
 def get_member(member_id):
     """Get member profile by ID."""
-    member = Member.objects(id=member_id, is_deleted=False).first()
+    if member_id == "me":
+        user = get_current_user()
+        if not user:
+            return error_response("User not found", status_code=404)
+        member = Member.objects(user_id=user.id, is_deleted=False).first()
+    else:
+        member = Member.objects(id=member_id, is_deleted=False).first()
+        
     if not member:
         return error_response("Member not found", status_code=404)
 

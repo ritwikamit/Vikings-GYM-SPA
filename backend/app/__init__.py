@@ -22,7 +22,7 @@ def create_app(config_name: str | None = None) -> Flask:
     db.init_app(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": app.config["FRONTEND_URL"]}})
+    cors.init_app(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002", "http://127.0.0.1:5173"]}}, supports_credentials=True)
     socketio.init_app(app)
 
     # JWT token blocklist (in-memory for dev, use Redis in prod)

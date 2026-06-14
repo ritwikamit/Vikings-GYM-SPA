@@ -97,16 +97,16 @@ def seed():
 
         # ── Members (20) ──
         member_names = [
-            ("Rahul Deshmukh", "M", "rahul.d@gmail.com"), ("Sneha Kulkarni", "F", "sneha.k@gmail.com"),
-            ("Amit Joshi", "M", "amit.j@gmail.com"), ("Pooja Wagh", "F", "pooja.w@gmail.com"),
-            ("Sagar Patil", "M", "sagar.p@gmail.com"), ("Anjali More", "F", "anjali.m@gmail.com"),
-            ("Vishal Shinde", "M", "vishal.s@gmail.com"), ("Ritu Chauhan", "F", "ritu.c@gmail.com"),
-            ("Kunal Deshpande", "M", "kunal.d@gmail.com"), ("Meena Iyer", "F", "meena.i@gmail.com"),
-            ("Akash Gaikwad", "M", "akash.g@gmail.com"), ("Divya Rao", "F", "divya.r@gmail.com"),
-            ("Nikhil Pawar", "M", "nikhil.p@gmail.com"), ("Swati Jadhav", "F", "swati.j@gmail.com"),
-            ("Rohan Bhosale", "M", "rohan.b@gmail.com"), ("Tanvi Shah", "F", "tanvi.s@gmail.com"),
-            ("Varun Kale", "M", "varun.k@gmail.com"), ("Shruti Mishra", "F", "shruti.m@gmail.com"),
-            ("Pranav Thakur", "M", "pranav.t@gmail.com"), ("Nisha Gupta", "F", "nisha.g@gmail.com"),
+            ("Rahul Deshmukh", "Male", "rahul.d@gmail.com"), ("Sneha Kulkarni", "Female", "sneha.k@gmail.com"),
+            ("Amit Joshi", "Male", "amit.j@gmail.com"), ("Pooja Wagh", "Female", "pooja.w@gmail.com"),
+            ("Sagar Patil", "Male", "sagar.p@gmail.com"), ("Anjali More", "Female", "anjali.m@gmail.com"),
+            ("Vishal Shinde", "Male", "vishal.s@gmail.com"), ("Ritu Chauhan", "Female", "ritu.c@gmail.com"),
+            ("Kunal Deshpande", "Male", "kunal.d@gmail.com"), ("Meena Iyer", "Female", "meena.i@gmail.com"),
+            ("Akash Gaikwad", "Male", "akash.g@gmail.com"), ("Divya Rao", "Female", "divya.r@gmail.com"),
+            ("Nikhil Pawar", "Male", "nikhil.p@gmail.com"), ("Swati Jadhav", "Female", "swati.j@gmail.com"),
+            ("Rohan Bhosale", "Male", "rohan.b@gmail.com"), ("Tanvi Shah", "Female", "tanvi.s@gmail.com"),
+            ("Varun Kale", "Male", "varun.k@gmail.com"), ("Shruti Mishra", "Female", "shruti.m@gmail.com"),
+            ("Pranav Thakur", "Male", "pranav.t@gmail.com"), ("Nisha Gupta", "Female", "nisha.g@gmail.com"),
         ]
         members = []
         member_users = []

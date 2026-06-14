@@ -1,1 +1,1 @@
-"""Seed package."""
+"""Seed data package."""

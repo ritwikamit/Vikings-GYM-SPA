@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { membersAPI, membershipsAPI, attendanceAPI, paymentsAPI, leadsAPI } from "../api";
 import { StorageManager } from "../data/store";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   User, 
   UserRole, 
@@ -80,53 +82,33 @@ interface ERPModulesProps {
 
 export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPModulesProps) {
   // Common states
-  const currentBranchId = StorageManager.getCurrentBranchId();
-  const [members, setMembers] = useState<Member[]>([]);
-  const [trainers, setTrainers] = useState<Trainer[]>([]);
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [memberships, setMemberships] = useState<MemberMembership[]>([]);
-  const [attendance, setAttendance] = useState<Attendance[]>([]);
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [inventory, setInventory] = useState<InventoryItem[]>([]);
-  const [workouts, setWorkouts] = useState<WorkoutPlan[]>([]);
-  const [diets, setDiets] = useState<DietPlan[]>([]);
-  const [lockers, setLockers] = useState<Locker[]>([]);
-  const [equipment, setEquipment] = useState<Equipment[]>([]);
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
-  const [ptSessions, setPtSessions] = useState<PtSession[]>([]);
+  const currentBranchId = "b-aurangabad";
+  const queryClient = useQueryClient();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Load all reactive data from StorageManager
-  useEffect(() => {
-    // Filter by live branch selected except for super_admin who gets overall records overview
-    const filterByBranch = <T extends { branch_id: string }>(list: T[]): T[] => {
-      if (currentUser.role === UserRole.SUPER_ADMIN) return list;
-      return list.filter(item => item.branch_id === currentBranchId);
-    };
+  
+  const { data: members = [] } = useQuery({ queryKey: ["members"], queryFn: () => membersAPI.getAll().then(res => res.data.data) });
+  const { data: plans = [] } = useQuery({ queryKey: ["plans"], queryFn: () => membershipsAPI.getPlans().then(res => res.data.data) });
+  const { data: memberships = [] } = useQuery({ queryKey: ["memberships"], queryFn: () => membershipsAPI.getAll().then(res => res.data.data) });
+  const { data: attendance = [] } = useQuery({ queryKey: ["attendance"], queryFn: () => attendanceAPI.getAll().then(res => res.data.data) });
+  const { data: payments = [] } = useQuery({ queryKey: ["payments"], queryFn: () => paymentsAPI.getAll().then(res => res.data.data) });
+  const { data: leads = [] } = useQuery({ queryKey: ["leads"], queryFn: () => leadsAPI.getAll().then(res => res.data.data) });
+  // Stub out the rest for now since API might not cover everything or we can keep them empty arrays
+  const trainers = [];
+  const expenses = [];
+  const inventory = [];
+  const workouts = [];
+  const diets = [];
+  const lockers = [];
+  const equipment = [];
+  const coupons = [];
+  const auditLogs = [];
+  const ptSessions = [];
 
-    setMembers(filterByBranch(StorageManager.getMembers()));
-    setTrainers(filterByBranch(StorageManager.getTrainers()));
-    setPlans(filterByBranch(StorageManager.getPlans()));
-    setMemberships(filterByBranch(StorageManager.getMemberships()));
-    setAttendance(filterByBranch(StorageManager.getAttendance()));
-    setPayments(filterByBranch(StorageManager.getPayments()));
-    setLeads(filterByBranch(StorageManager.getLeads()));
-    setExpenses(filterByBranch(StorageManager.getExpenses()));
-    setInventory(filterByBranch(StorageManager.getInventory()));
-    setWorkouts(filterByBranch(StorageManager.getWorkoutPlans()));
-    setDiets(filterByBranch(StorageManager.getDietPlans()));
-    setLockers(filterByBranch(StorageManager.getLockers()));
-    setEquipment(filterByBranch(StorageManager.getEquipment()));
-    setCoupons(filterByBranch(StorageManager.getCoupons()));
-    setAuditLogs(filterByBranch(StorageManager.getAuditLogs()));
-    setPtSessions(filterByBranch(StorageManager.getPtSessions()));
-  }, [refreshTrigger, currentBranchId, currentUser]);
 
   const triggerRefresh = () => {
-    setRefreshTrigger(prev => prev + 1);
+    queryClient.invalidateQueries();
   };
 
   // 1. RECEPTION & REGISTRATION COMPONENT STATE
@@ -139,34 +121,40 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
   const [walkinNotes, setWalkinNotes] = useState("");
 
   const handleReceptionCheckIn = (memberId: string) => {
-    const res = StorageManager.checkInMember(memberId, "QR");
-    if (res.success) {
-      setReceptionMessage({ status: "success", text: res.message });
-      onLogAction(`Checked in member ID ${memberId} via reception dashboard`, "Attendance");
-    } else {
-      setReceptionMessage({ status: "error", text: res.message });
-    }
-    triggerRefresh();
-    setTimeout(() => setReceptionMessage(null), 5000);
+    attendanceAPI.checkIn({ memberId, method: "Reception" })
+      .then((res) => {
+        setReceptionMessage({ status: "success", text: res.data?.message || "Checked in successfully" });
+        onLogAction(`Checked in member ID ${memberId} via reception dashboard`, "Attendance");
+        triggerRefresh();
+      })
+      .catch((e) => {
+        setReceptionMessage({ status: "error", text: e.response?.data?.message || "Check-in failed" });
+      })
+      .finally(() => {
+        setTimeout(() => setReceptionMessage(null), 5000);
+      });
   };
 
   const handleReceptionCheckOut = (memberId: string) => {
-    const res = StorageManager.checkOutMember(memberId);
-    if (res.success) {
-      setReceptionMessage({ status: "success", text: res.message });
-      onLogAction(`Checked out member ID ${memberId}`, "Attendance");
-    } else {
-      setReceptionMessage({ status: "error", text: res.message });
-    }
-    triggerRefresh();
-    setTimeout(() => setReceptionMessage(null), 5000);
+    attendanceAPI.checkOut({ memberId })
+      .then((res) => {
+        setReceptionMessage({ status: "success", text: res.data?.message || "Checked out successfully" });
+        onLogAction(`Checked out member ID ${memberId}`, "Attendance");
+        triggerRefresh();
+      })
+      .catch((e) => {
+        setReceptionMessage({ status: "error", text: e.response?.data?.message || "Check-out failed" });
+      })
+      .finally(() => {
+        setTimeout(() => setReceptionMessage(null), 5000);
+      });
   };
 
   const handleAddWalkin = (e: React.FormEvent) => {
     e.preventDefault();
     if (!walkinName || !walkinPhone) return;
 
-    StorageManager.addLead({
+    leadsAPI.create({
       name: walkinName,
       phone: walkinPhone,
       email: walkinName.toLowerCase().replace(/ /g, "") + "@gmail.com",
@@ -204,7 +192,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
     e.preventDefault();
     if (!memName || !memEmail || !memPhone) return;
 
-    const newM = StorageManager.addMember({
+    membersAPI.create({
       name: memName,
       phone: memPhone,
       email: memEmail,
@@ -224,7 +212,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
     });
 
     // Automatically trigger Monthly subscription assign as standard onboarding
-    StorageManager.assignMembership(newM.id, "p-monthly");
+    // membershipsAPI.assign({ member_id: newM.id, plan_id: "p-monthly" });
 
     setIsMemberFormOpen(false);
     setMemName("");
@@ -247,7 +235,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
   const handleAssignPlan = () => {
     if (!selectedMemberIdForPlan || !selectedPlanId) return;
     try {
-      StorageManager.assignMembership(selectedMemberIdForPlan, selectedPlanId);
+      membershipsAPI.assign({ member_id: selectedMemberIdForPlan, plan_id: selectedPlanId });
       setPlanSuccessMsg(`Plan assigned successfully! Transaction receipt generated.`);
       triggerRefresh();
       setTimeout(() => setPlanSuccessMsg(""), 4000);
@@ -734,7 +722,13 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                       return (
                         <div key={m.id} className="bg-neutral-950 border border-neutral-850 p-4 rounded flex flex-col sm:flex-row justify-between sm:items-center gap-4 hover:border-neutral-800 transition-colors">
                           <div className="flex items-center gap-3">
-                            <img src={m.photoUrl} alt={m.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                            {m.photoUrl ? (
+                              <img src={m.photoUrl} alt={m.name} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center shrink-0 border border-neutral-700">
+                                <span className="text-gray-400 font-bold text-sm uppercase">{m.name ? m.name.charAt(0) : '?'}</span>
+                              </div>
+                            )}
                             <div>
                               <span className="text-xs font-bold text-white block">{m.name}</span>
                               <span className="text-[10px] text-gray-500 font-mono">{m.phone} | BMI: {m.bmi}</span>
@@ -954,7 +948,13 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                     .map(m => (
                       <tr key={m.id} className="hover:bg-neutral-950/60 transition-colors">
                         <td className="p-4 flex items-center gap-3">
-                          <img src={m.photoUrl} alt={m.name} className="w-9 h-9 rounded-full object-cover border border-neutral-800" />
+                          {m.photoUrl ? (
+                            <img src={m.photoUrl} alt={m.name} className="w-9 h-9 rounded-full object-cover border border-neutral-800 shrink-0" />
+                          ) : (
+                            <div className="w-9 h-9 rounded-full bg-neutral-800 flex items-center justify-center border border-neutral-700 shrink-0">
+                              <span className="text-gray-400 font-bold text-xs uppercase">{m.name ? m.name.charAt(0) : '?'}</span>
+                            </div>
+                          )}
                           <div>
                             <span className="font-bold text-white block">{m.name}</span>
                             <span className="text-[10px] text-gray-500 font-mono">{m.gender}</span>
@@ -1150,7 +1150,13 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                   </button>
 
                   <div className="flex flex-col sm:flex-row gap-6 items-start pb-6 border-b border-neutral-850">
-                    <img src={selectedMemberProfile.photoUrl} alt={selectedMemberProfile.name} className="w-20 h-20 rounded-full object-cover border-2 border-red-500 shrink-0" />
+                    {selectedMemberProfile.photoUrl ? (
+                      <img src={selectedMemberProfile.photoUrl} alt={selectedMemberProfile.name} className="w-20 h-20 rounded-full object-cover border-2 border-red-500 shrink-0" />
+                    ) : (
+                      <div className="w-20 h-20 rounded-full bg-neutral-800 flex items-center justify-center border-2 border-red-500 shrink-0">
+                        <span className="text-gray-400 font-bold text-2xl uppercase">{selectedMemberProfile.name ? selectedMemberProfile.name.charAt(0) : '?'}</span>
+                      </div>
+                    )}
                     <div>
                       <span className="text-xl font-bold text-white block">{selectedMemberProfile.name}</span>
                       <span className="font-mono text-xs text-gray-500 block mb-2">{selectedMemberProfile.email} | {selectedMemberProfile.phone}</span>
@@ -1261,7 +1267,7 @@ export default function ERPModules({ currentUser, activeTab, onLogAction }: ERPM
                           <button
                             onClick={() => {
                               if (selectedPlanId) {
-                                StorageManager.assignMembership(selectedMemberProfile.id, selectedPlanId);
+                                membershipsAPI.assign({ member_id: selectedMemberProfile.id, plan_id: selectedPlanId });
                                 setSelectedPlanId("");
                                 triggerRefresh();
                                 alert("Membership Plan assigned successfully!");

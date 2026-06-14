@@ -9,8 +9,11 @@ class User(db.Document):
     ROLE_CHOICES = (
         ("SUPER_ADMIN", "Super Admin"),
         ("GYM_OWNER", "Gym Owner"),
+        ("BRANCH_MANAGER", "Branch Manager"),
         ("RECEPTIONIST", "Receptionist"),
         ("TRAINER", "Trainer"),
+        ("ACCOUNTANT", "Accountant"),
+        ("NUTRITIONIST", "Nutritionist"),
         ("MEMBER", "Member"),
     )
 
