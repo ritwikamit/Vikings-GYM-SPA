@@ -22,6 +22,10 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
   const [isLoginView, setIsLoginView] = useState(() => {
     return new URLSearchParams(location.search).get("view") !== "register";
   });
+
+  useEffect(() => {
+    setIsLoginView(new URLSearchParams(location.search).get("view") !== "register");
+  }, [location.search]);
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
