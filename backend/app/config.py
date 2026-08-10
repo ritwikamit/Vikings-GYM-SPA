@@ -14,8 +14,9 @@ class Config:
     JWT_HEADER_TYPE = "Bearer"
 
     # MongoDB
+    # Accept both MONGODB_URI (canonical) and MONGO_URI (Render dashboard legacy name).
     MONGODB_SETTINGS = {
-        "host": os.getenv("MONGODB_URI", "mongodb://localhost:27017/vikings_gym"),
+        "host": os.getenv("MONGODB_URI") or os.getenv("MONGO_URI") or "mongodb://localhost:27017/vikings_gym",
         "connect": False,
     }
 

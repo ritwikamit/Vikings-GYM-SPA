@@ -26,7 +26,8 @@ def create_app(config_name: str | None = None) -> Flask:
     frontend_url = os.getenv("FRONTEND_URL", "")
     cors_origins = [
         "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", 
-        "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"
+        "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173",
+        "https://vikingsgymspa.vercel.app",
     ]
     if frontend_url:
         cors_origins.append(frontend_url)
