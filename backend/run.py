@@ -1,7 +1,6 @@
-"""
-Vikings Gym & Spa — Flask Backend Entry Point
-Run with: python run.py
-"""
+import eventlet
+eventlet.monkey_patch()
+
 import os
 from dotenv import load_dotenv
 
