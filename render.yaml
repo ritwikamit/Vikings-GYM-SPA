@@ -11,9 +11,9 @@ services:
         value: "3.11.0"
       - key: FLASK_ENV
         value: "production"
-      - key: MONGODB_URI
+      - key: MONGO_URI
         sync: false
       - key: JWT_SECRET_KEY
         generateValue: true
       - key: FRONTEND_URL
-        value: "https://vikingsgymspa.vercel.app"
+        sync: false
