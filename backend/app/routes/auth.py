@@ -172,3 +172,26 @@ def reset_password():
     if not ok:
         return error_response(msg)
     return success_response(message=msg)
+
+
+@auth_bp.route("/debug/db", methods=["GET"])
+def debug_db():
+    """TEMP diagnostic — remove after fixing production DB issue."""
+    from pymongo import MongoClient
+    import re
+    uri = current_app.config.get("MONGODB_SETTINGS", {}).get("host", "NOT SET")
+    redacted = re.sub(r"(mongodb(\+srv)?://)([^@/]+)@", r"\1***:***@", uri)
+    results = {"uri": redacted}
+    try:
+        client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+        info = client.server_info()
+        results["raw_connect"] = "OK " + str(info.get("version"))
+    except Exception as e:
+        results["raw_connect"] = f"FAIL {type(e).__name__}: {e}"
+    try:
+        from app.models.user import User
+        n = User.objects.count()
+        results["mongoengine"] = f"OK count={n}"
+    except Exception as e:
+        results["mongoengine"] = f"FAIL {type(e).__name__}: {e}"
+    return success_response(results)
