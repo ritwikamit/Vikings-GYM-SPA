@@ -180,7 +180,7 @@ def debug_db():
     from pymongo import MongoClient
     import re
     uri = current_app.config.get("MONGODB_SETTINGS", {}).get("host", "NOT SET")
-    redacted = re.sub(r"(mongodb(\+srv)?://)([^@/]+)@", r"\1***:***@", uri)
+    redacted = re.sub(r"(mongodb(\+srv)?://)([^:/]+):([^@/]+)@", lambda m: f"{m.group(1)}{m.group(3)}:***@", uri)
     results = {"uri": redacted}
     try:
         client = MongoClient(uri, serverSelectionTimeoutMS=5000)
