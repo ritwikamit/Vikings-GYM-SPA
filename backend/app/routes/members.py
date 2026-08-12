@@ -14,6 +14,7 @@ from app.utils.response import success_response, error_response, paginate_query
 from app.utils.validators import validate_required_fields, validate_email, validate_phone
 from app.utils.helpers import generate_member_id, generate_referral_code, get_pagination_args, get_client_ip
 from app.services.qr_service import generate_member_qr
+from app.services.member_service import ensure_member_for_user
 
 members_bp = Blueprint("members", __name__)
 
@@ -102,6 +103,9 @@ def get_member(member_id):
         if not user:
             return error_response("User not found", status_code=404)
         member = Member.objects(user_id=user.id, is_deleted=False).first()
+        # Auto-link a Member profile so self-registered users always have one.
+        if not member:
+            member = ensure_member_for_user(user)
     else:
         member = Member.objects(id=member_id, is_deleted=False).first()
         
@@ -110,7 +114,7 @@ def get_member(member_id):
 
     # MEMBER role can only access own profile
     user = get_current_user()
-    if user and user.role == "MEMBER" and str(member.user_id) != str(user.id) if member.user_id else True:
+    if user and user.role == "MEMBER" and member.user_id and str(member.user_id) != str(user.id):
         return error_response("Access denied", status_code=403)
 
     return success_response(member.to_dict())
@@ -118,12 +122,21 @@ def get_member(member_id):
 
 @members_bp.route("/<member_id>", methods=["PUT"])
 @jwt_required()
-@roles_required("SUPER_ADMIN", "GYM_OWNER", "RECEPTIONIST")
 def update_member(member_id):
-    """Update member profile."""
-    member = Member.objects(id=member_id, is_deleted=False).first()
-    if not member:
-        return error_response("Member not found", status_code=404)
+    """Update member profile. Staff edit any profile; MEMBER edits only own."""
+    user = get_current_user()
+    if member_id == "me":
+        if not user:
+            return error_response("User not found", status_code=404)
+        member = Member.objects(user_id=user.id, is_deleted=False).first() or ensure_member_for_user(user)
+    else:
+        member = Member.objects(id=member_id, is_deleted=False).first()
+        if not member:
+            return error_response("Member not found", status_code=404)
+
+    # MEMBER role can only update their own profile
+    if user and user.role == "MEMBER" and member.user_id and str(member.user_id) != str(user.id):
+        return error_response("Access denied", status_code=403)
 
     data = request.get_json() or {}
 
@@ -151,13 +164,11 @@ def update_member(member_id):
             setattr(member, field, data[field])
 
     if "height" in data:
-        member.height = float(data["height"])
+        member.height = float(data["height"] or 0)
     if "weight" in data:
-        member.weight = float(data["weight"])
+        member.weight = float(data["weight"] or 0)
 
     member.save()
-
-    user = get_current_user()
     log_audit(user, f"Updated member profile for {member.name}", "Members Module", get_client_ip())
 
     return success_response(member.to_dict(), "Member updated successfully")

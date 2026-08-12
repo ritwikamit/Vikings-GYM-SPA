@@ -20,5 +20,11 @@ export const authAPI = {
     api.post('/auth/forgot-password', { email }),
 
   resetPassword: (email: string, new_password: string) =>
-    api.post('/auth/reset-password', { email, new_password })
+    api.post('/auth/reset-password', { email, new_password }),
+
+  googleLogin: (id_token: string) =>
+    api.post('/auth/google', { id_token }),
+
+  facebookLogin: (access_token: string) =>
+    api.post('/auth/facebook', { access_token })
 }

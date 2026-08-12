@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { membersAPI } from "../api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   Smile, 
   Wallet, 
@@ -99,6 +99,76 @@ export default function MemberDashboard() {
     },
     enabled: !!memberId,
   });
+
+  const queryClient = useQueryClient();
+
+  const [editMode, setEditMode] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
+  const [profileForm, setProfileForm] = useState({
+    name: "",
+    phone: "",
+    gender: "",
+    dob: "",
+    bloodGroup: "",
+    height: "",
+    weight: "",
+    fitnessGoal: "",
+    emergencyContactName: "",
+    emergencyContactPhone: "",
+    address: "",
+    medicalConditions: "",
+  });
+
+  React.useEffect(() => {
+    if (member) {
+      setProfileForm({
+        name: member?.name || "",
+        phone: member?.phone || "",
+        gender: member?.gender || "",
+        dob: member?.dob || "",
+        bloodGroup: member?.bloodGroup || "",
+        height: member?.height ? String(member.height) : "",
+        weight: member?.weight ? String(member.weight) : "",
+        fitnessGoal: member?.fitnessGoal || "",
+        emergencyContactName: member?.emergencyContactName || "",
+        emergencyContactPhone: member?.emergencyContactPhone || "",
+        address: member?.address || "",
+        medicalConditions: member?.medicalConditions || "",
+      });
+    }
+  }, [member]);
+
+  const updateProfileMutation = useMutation({
+    mutationFn: (payload: object) => membersAPI.update("me", payload),
+    onSuccess: () => {
+      setEditMode(false);
+      setSaveMessage("Profile updated successfully.");
+      setTimeout(() => setSaveMessage(""), 3500);
+      queryClient.invalidateQueries({ queryKey: ["my-profile"] });
+    },
+    onError: (err: any) => {
+      setSaveMessage(err?.response?.data?.message || "Failed to save profile changes.");
+    },
+  });
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaveMessage("");
+    updateProfileMutation.mutate({
+      name: profileForm.name,
+      phone: profileForm.phone,
+      gender: profileForm.gender,
+      dob: profileForm.dob,
+      bloodGroup: profileForm.bloodGroup,
+      height: profileForm.height ? Number(profileForm.height) : 0,
+      weight: profileForm.weight ? Number(profileForm.weight) : 0,
+      fitnessGoal: profileForm.fitnessGoal,
+      emergencyContactName: profileForm.emergencyContactName,
+      emergencyContactPhone: profileForm.emergencyContactPhone,
+      address: profileForm.address,
+      medicalConditions: profileForm.medicalConditions,
+    });
+  };
 
   if (isMemberLoading) {
     return (
@@ -555,69 +625,174 @@ export default function MemberDashboard() {
       {/* PROFILE TAB */}
       {activeTab === "profile" && (
         <div className="bg-neutral-900/50 border border-neutral-850 rounded-xl p-6 space-y-6">
-          <div className="border-b border-neutral-800 pb-4">
-            <h2 className="text-lg font-bold text-white font-mono flex items-center gap-2">
-              <UserIcon className="w-5 h-5 text-red-500" />
-              MY WARRIOR PROFILE
-            </h2>
-            <p className="text-xs text-gray-400 font-mono">Personal metrics, health details, and account credentials</p>
+          <div className="border-b border-neutral-800 pb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-white font-mono flex items-center gap-2">
+                <UserIcon className="w-5 h-5 text-red-500" />
+                MY WARRIOR PROFILE
+              </h2>
+              <p className="text-xs text-gray-400 font-mono">Edit your personal metrics, health details, and contact info</p>
+            </div>
+            <div className="flex gap-2">
+              {!editMode ? (
+                <button
+                  onClick={() => { setEditMode(true); setSaveMessage(""); }}
+                  className="bg-red-600 hover:bg-red-700 text-black font-mono font-bold text-[11px] px-4 py-2 rounded uppercase transition-all cursor-pointer"
+                >
+                  EDIT PROFILE
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setEditMode(false)}
+                    className="bg-neutral-800 hover:bg-neutral-700 text-gray-300 font-mono font-bold text-[11px] px-4 py-2 rounded uppercase transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => updateProfileMutation.mutate({
+                      name: profileForm.name,
+                      phone: profileForm.phone,
+                      gender: profileForm.gender,
+                      dob: profileForm.dob,
+                      bloodGroup: profileForm.bloodGroup,
+                      height: profileForm.height ? Number(profileForm.height) : 0,
+                      weight: profileForm.weight ? Number(profileForm.weight) : 0,
+                      fitnessGoal: profileForm.fitnessGoal,
+                      emergencyContactName: profileForm.emergencyContactName,
+                      emergencyContactPhone: profileForm.emergencyContactPhone,
+                      address: profileForm.address,
+                      medicalConditions: profileForm.medicalConditions,
+                    })}
+                    disabled={updateProfileMutation.isPending}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-black font-mono font-bold text-[11px] px-4 py-2 rounded uppercase transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
-            {/* Personal Details */}
-            <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
-              <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
-                PERSONAL INFORMATION
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">FULL NAME:</span>
-                  <span className="text-white font-bold">{displayName}</span>
+          {saveMessage && (
+            <div className="p-3 bg-emerald-600/10 border border-emerald-800/40 rounded text-xs text-emerald-400 font-mono">
+              {saveMessage}
+            </div>
+          )}
+          {updateProfileMutation.isError && (
+            <div className="p-3 bg-red-500/10 border border-red-800/40 rounded text-xs text-red-400 font-mono">
+              {saveMessage}
+            </div>
+          )}
+
+          {!editMode ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+              <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
+                <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
+                  PERSONAL INFORMATION
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between"><span className="text-gray-500">FULL NAME:</span><span className="text-white font-bold">{member?.name || displayName}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">EMAIL:</span><span className="text-white">{member?.email || displayEmail}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">PHONE:</span><span className="text-white">{member?.phone || user?.phone || "Not provided"}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">GENDER:</span><span className="text-white uppercase">{member?.gender || "Unspecified"}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">DATE OF BIRTH:</span><span className="text-white">{member?.dob || "Not provided"}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">ADDRESS:</span><span className="text-white">{member?.address || "Not provided"}</span></div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">EMAIL:</span>
-                  <span className="text-white">{displayEmail}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">PHONE:</span>
-                  <span className="text-white">{member?.phone || "Not provided"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">GENDER:</span>
-                  <span className="text-white uppercase">{member?.gender || "Unspecified"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">DATE OF BIRTH:</span>
-                  <span className="text-white">{member?.dob || "Not provided"}</span>
+              </div>
+              <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
+                <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
+                  FITNESS & HEALTH METRICS
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between"><span className="text-gray-500">BLOOD GROUP:</span><span className="text-white font-bold">{member?.bloodGroup || member?.blood_group || "O+"}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">HEIGHT / WEIGHT:</span><span className="text-white">{member?.height || "—"} cm / {member?.weight || "—"} kg</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">FITNESS GOAL:</span><span className="text-emerald-400 uppercase font-bold">{member?.fitnessGoal || member?.fitness_goal || "General Fitness"}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">EMERGENCY CONTACT:</span><span className="text-white">{member?.emergencyContactName || member?.emergency_contact_name || "On file"} ({member?.emergencyContactPhone || member?.emergency_contact_phone || "N/A"})</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500">MEDICAL NOTES:</span><span className="text-white">{member?.medicalConditions || "None on file"}</span></div>
                 </div>
               </div>
             </div>
-
-            {/* Health & Emergency */}
-            <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
-              <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
-                FITNESS & HEALTH METRICS
-              </h3>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-500">BLOOD GROUP:</span>
-                  <span className="text-white font-bold">{member?.blood_group || member?.bloodGroup || "O+"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">HEIGHT / WEIGHT:</span>
-                  <span className="text-white">{member?.height || "—"} cm / {member?.weight || "—"} kg</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">FITNESS GOAL:</span>
-                  <span className="text-emerald-400 uppercase font-bold">{member?.fitness_goal || member?.fitnessGoal || "General Fitness"}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">EMERGENCY CONTACT:</span>
-                  <span className="text-white">{member?.emergency_contact_name || "On file"} ({member?.emergency_contact_phone || "N/A"})</span>
+          ) : (
+            <form onSubmit={handleSaveProfile} className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+              <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
+                <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
+                  PERSONAL INFORMATION
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-gray-500 mb-1">FULL NAME</label>
+                    <input value={profileForm.name} onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">PHONE</label>
+                    <input value={profileForm.phone} onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })} placeholder="+91 1234567890" className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">GENDER</label>
+                    <select value={profileForm.gender} onChange={(e) => setProfileForm({ ...profileForm, gender: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none">
+                      <option value="">Unspecified</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">DATE OF BIRTH</label>
+                    <input type="date" value={profileForm.dob} onChange={(e) => setProfileForm({ ...profileForm, dob: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">ADDRESS</label>
+                    <input value={profileForm.address} onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+              <div className="bg-black/60 border border-neutral-800 rounded-xl p-5 space-y-4">
+                <h3 className="text-xs font-bold text-red-400 uppercase tracking-widest border-b border-neutral-850 pb-2">
+                  FITNESS & HEALTH METRICS
+                </h3>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-gray-500 mb-1">BLOOD GROUP</label>
+                    <input value={profileForm.bloodGroup} onChange={(e) => setProfileForm({ ...profileForm, bloodGroup: e.target.value })} placeholder="e.g. O+" className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-500 mb-1">HEIGHT (cm)</label>
+                      <input type="number" value={profileForm.height} onChange={(e) => setProfileForm({ ...profileForm, height: e.target.value })} placeholder="e.g. 175" className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-gray-500 mb-1">WEIGHT (kg)</label>
+                      <input type="number" value={profileForm.weight} onChange={(e) => setProfileForm({ ...profileForm, weight: e.target.value })} placeholder="e.g. 70" className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">FITNESS GOAL</label>
+                    <select value={profileForm.fitnessGoal} onChange={(e) => setProfileForm({ ...profileForm, fitnessGoal: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none">
+                      <option value="General Fitness">General Fitness</option>
+                      <option value="Muscle Gain">Muscle Gain</option>
+                      <option value="Weight Loss">Weight Loss</option>
+                      <option value="Endurance">Endurance</option>
+                      <option value="Strength">Strength</option>
+                      <option value="Rehabilitation">Rehabilitation</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">EMERGENCY CONTACT NAME</label>
+                    <input value={profileForm.emergencyContactName} onChange={(e) => setProfileForm({ ...profileForm, emergencyContactName: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">EMERGENCY CONTACT PHONE</label>
+                    <input value={profileForm.emergencyContactPhone} onChange={(e) => setProfileForm({ ...profileForm, emergencyContactPhone: e.target.value })} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-gray-500 mb-1">MEDICAL CONDITIONS</label>
+                    <textarea value={profileForm.medicalConditions} onChange={(e) => setProfileForm({ ...profileForm, medicalConditions: e.target.value })} rows={2} className="w-full bg-neutral-950 border border-neutral-800 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          )}
         </div>
       )}
 
