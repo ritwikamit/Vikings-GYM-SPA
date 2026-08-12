@@ -5,6 +5,19 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-12 — Added project README with UI screenshots (Antigravity session)
+
+**What changed:**
+- `README.md` — Replaced generic starter template with an enterprise-grade README including deployment badges, tech stack breakdown, local setup instructions, default seeded admin credentials, API route reference table, and deployment steps.
+- `assets/screenshots/hero_banner.jpg` — High-resolution preview of the dark-mode luxury Gym & Spa Admin Management Dashboard.
+- `assets/screenshots/member_portal.jpg` — High-resolution preview of the interactive Member Console UI (digital QR pass, workout plans, and diet tracking).
+
+**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel and Render deployments auto-build clean.
+
+**How to verify:** View repository homepage on GitHub: `https://github.com/ritwikamit/Vikings-GYM-SPA`.
+
+---
+
 ## 2026-08-12 — Fixed production login/sign-up (opencode session)
 
 **Problem:** Login showed "Invalid credentials provided.", sign-up showed "Network error: Cannot reach the server."
