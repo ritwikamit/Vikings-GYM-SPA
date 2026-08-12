@@ -265,99 +265,6 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         ]}
       />
 
-      {/* About Section */}
-      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
-            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
-              VIKINGS GYM <span className="text-red-500">वाइकिंग्स जिम</span>
-            </h2>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}`} />
-                ))}
-              </div>
-              <span className="text-sm font-mono text-white">{GYM_CONFIG.rating}</span>
-              <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="text-xs font-mono text-gray-400 hover:text-red-500 underline underline-offset-2">
-                Rated {GYM_CONFIG.reviews} times on Google
-              </a>
-            </div>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
-              {GYM_CONFIG.name} is Aurangabad's ultimate commercial fitness & steam spa facility. Imported heavy-duty
-              plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating
-              Moroccan steam spa baths — built for warriors who want to train hard and recover harder.
-            </p>
-            <ul className="space-y-4 mb-8">
-              <li className="flex items-start gap-3 text-sm text-gray-300">
-                <MapPin className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-mono text-white text-xs uppercase">Address:</span>
-                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.address} (see map below for directions)</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-gray-300">
-                <Phone className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-mono text-white text-xs uppercase">Call / WhatsApp:</span>
-                  <p className="text-gray-400 text-xs mt-1">
-                    <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500">{GYM_CONFIG.phoneDisplay}</a> ·{" "}
-                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp us</a>
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-gray-300">
-                <Calendar className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-mono text-white text-xs uppercase">Operating Hours:</span>
-                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.hours}</p>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 text-sm text-gray-300">
-                <Instagram className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
-                <div>
-                  <span className="font-mono text-white text-xs uppercase">Instagram:</span>
-                  <p className="text-gray-400 text-xs mt-1">
-                    <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="hover:text-red-500">@{GYM_CONFIG.instagram.split("/").pop()}</a>
-                  </p>
-                </div>
-              </li>
-            </ul>
-            <button
-              onClick={onJoinNow}
-              className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
-            >
-              BEGIN YOUR JOURNEY
-            </button>
-          </div>
-
-          <div className="bg-neutral-900/50 border border-neutral-900 rounded-xl overflow-hidden">
-            <iframe
-              src={GYM_CONFIG.mapEmbed}
-              title="VIKINGS GYM Location"
-              className="w-full h-[400px] border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <div className="p-5 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-xs font-mono text-emerald-400">OPEN NOW · {GYM_CONFIG.hours}</span>
-              </div>
-              <a
-                href={GYM_CONFIG.mapLink}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs font-mono font-bold text-black bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-all cursor-pointer"
-              >
-                GET DIRECTIONS
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Facilities Showcase */}
       <section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
         <div className="text-center mb-16">
@@ -812,6 +719,99 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </motion.div>
         </div>
       )}
+
+      {/* About Section (bottom of page) */}
+      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
+            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
+              VIKINGS GYM <span className="text-red-500">वाइकिंग्स जिम</span>
+            </h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}`} />
+                ))}
+              </div>
+              <span className="text-sm font-mono text-white">{GYM_CONFIG.rating}</span>
+              <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="text-xs font-mono text-gray-400 hover:text-red-500 underline underline-offset-2">
+                Rated {GYM_CONFIG.reviews} times on Google
+              </a>
+            </div>
+            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+              {GYM_CONFIG.name} is Aurangabad's ultimate commercial fitness & steam spa facility. Imported heavy-duty
+              plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating
+              Moroccan steam spa baths — built for warriors who want to train hard and recover harder.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <MapPin className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Address:</span>
+                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.address} (see map below for directions)</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Phone className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Call / WhatsApp:</span>
+                  <p className="text-gray-400 text-xs mt-1">
+                    <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500">{GYM_CONFIG.phoneDisplay}</a> ·{" "}
+                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp us</a>
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Calendar className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Operating Hours:</span>
+                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.hours}</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Instagram className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Instagram:</span>
+                  <p className="text-gray-400 text-xs mt-1">
+                    <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="hover:text-red-500">@{GYM_CONFIG.instagram.split("/").pop()}</a>
+                  </p>
+                </div>
+              </li>
+            </ul>
+            <button
+              onClick={onJoinNow}
+              className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
+            >
+              BEGIN YOUR JOURNEY
+            </button>
+          </div>
+
+          <div className="bg-neutral-900/50 border border-neutral-900 rounded-xl overflow-hidden">
+            <iframe
+              src={GYM_CONFIG.mapEmbed}
+              title="VIKINGS GYM Location"
+              className="w-full h-[400px] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="p-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-xs font-mono text-emerald-400">OPEN NOW · {GYM_CONFIG.hours}</span>
+              </div>
+              <a
+                href={GYM_CONFIG.mapLink}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs font-mono font-bold text-black bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-all cursor-pointer"
+              >
+                GET DIRECTIONS
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-neutral-950/80 border-t border-neutral-900 px-6 py-12 max-w-7xl mx-auto">
