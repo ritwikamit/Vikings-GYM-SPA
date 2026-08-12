@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
 import AuthGateway from "./components/AuthGateway";
 import ERPModules from "./components/ERPModules";
+import MemberDashboard from "./components/MemberDashboard";
 import { UserRole } from "./types";
 
 import { 
@@ -99,7 +100,7 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
         ];
       case UserRole.MEMBER:
         return [
-          { key: "memberProfile", label: "My Warrior Profile", icon: Users },
+          { key: "memberDashboard", label: "My Warrior Console", icon: LayoutDashboard },
         ];
       default:
         return [];
@@ -275,8 +276,8 @@ export default function App() {
         path="/member" 
         element={
           <ProtectedRoute roles={[UserRole.MEMBER]}>
-            <ConsoleLayout activeTab="memberProfile" setActiveTab={() => {}}>
-              <MemberSelfService />
+            <ConsoleLayout activeTab="memberDashboard" setActiveTab={() => {}}>
+              <MemberDashboard />
             </ConsoleLayout>
           </ProtectedRoute>
         } 

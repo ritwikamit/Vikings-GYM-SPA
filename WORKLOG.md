@@ -5,6 +5,24 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-12 — Built comprehensive Member Dashboard UI (Antigravity session)
+
+**What changed:**
+- `src/components/MemberDashboard.tsx` — Created a rich, full-featured member-facing dashboard component with 6 interactive tabs:
+  1. **Overview**: Metric cards for active plan, total gym visits, workouts, diet plans, and a digital QR entry pass.
+  2. **Attendance**: Detailed attendance log table (date, check-in, check-out, entry method, status).
+  3. **Workouts**: Assigned exercise routines with goal badges, descriptions, sets, reps, and target protocols.
+  4. **Diet & Nutrition**: Prescribed meal schedules (breakfast, lunch, snacks, dinner) with target calories and macronutrient progress bars (protein, carbs, fats).
+  5. **Payments**: Transaction history and invoice receipts table with payment methods (Razorpay/UPI/Cash) and status badges.
+  6. **My Profile**: Full personal information, fitness goals, physical metrics (height/weight/blood group), and emergency contact details.
+- `src/App.tsx` — Wired `MemberDashboard` into the `/member` route for `UserRole.MEMBER`, updated sidebar navigation item (`My Warrior Console`).
+
+**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel auto-deploys frontend.
+
+**How to verify:** Log in on `https://vikingsgymspa.vercel.app/login` with member credentials (or `rahul.d@gmail.com` / `Member@123`). Lands on `/member` showing the full member dashboard with attendance, workouts, diet, payments, and profile tabs.
+
+---
+
 ## 2026-08-12 — Added project README with UI screenshots (Antigravity session)
 
 **What changed:**
