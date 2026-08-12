@@ -18,8 +18,6 @@ import {
   Star,
   Users,
   Instagram,
-  Facebook,
-  Globe,
   Menu,
   X
 } from "lucide-react";
@@ -27,11 +25,47 @@ import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.png";
 import { AnimatedMarqueeHero } from "./ui/hero-3";
 import DotPattern from "./ui/dot-pattern-1";
+import { GYM_CONFIG } from "../config/gym";
 
 interface PublicWebsiteProps {
   onJoinNow: () => void;
   onLoginClick: () => void;
 }
+
+const DEFAULT_PLANS = [
+  {
+    name: "Monthly Warrior",
+    price: "₹1,200",
+    period: "per month",
+    desc: "Full gym floor access + steam bath. Perfect for starting your journey.",
+    features: ["Full gym floor access", "Steam bath included", "Locker facility", "Trainer on floor"],
+    popular: false,
+  },
+  {
+    name: "Quarterly Shield",
+    price: "₹3,000",
+    period: "per 3 months",
+    desc: "Save more with a quarterly commitment and all floor privileges.",
+    features: ["Everything in Monthly", "Free fitness assessment", "Guest pass (2x)", "Priority class booking"],
+    popular: true,
+  },
+  {
+    name: "Half-Year Berserker",
+    price: "₹5,500",
+    period: "per 6 months",
+    desc: "Six months of relentless gains with bonus personal training slots.",
+    features: ["Everything in Quarterly", "2 PT sessions included", "Personalized diet plan", "Spa upgrade once a week"],
+    popular: false,
+  },
+  {
+    name: "Annual Valhalla",
+    price: "₹9,999",
+    period: "per year",
+    desc: "The full Valhalla experience — best value for dedicated warriors.",
+    features: ["Everything in Half-Year", "4 PT sessions included", "Customized diet + audit", "1 month free", "Free Vikings T-shirt"],
+    popular: false,
+  },
+];
 
 export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsiteProps) {
   const { data: plansData } = useQuery({
@@ -231,6 +265,99 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         ]}
       />
 
+      {/* About Section */}
+      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
+            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
+              VIKINGS GYM <span className="text-red-500">वाइकिंग्स जिम</span>
+            </h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}`} />
+                ))}
+              </div>
+              <span className="text-sm font-mono text-white">{GYM_CONFIG.rating}</span>
+              <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="text-xs font-mono text-gray-400 hover:text-red-500 underline underline-offset-2">
+                Rated {GYM_CONFIG.reviews} times on Google
+              </a>
+            </div>
+            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
+              {GYM_CONFIG.name} is Aurangabad's ultimate commercial fitness & steam spa facility. Imported heavy-duty
+              plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating
+              Moroccan steam spa baths — built for warriors who want to train hard and recover harder.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <MapPin className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Address:</span>
+                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.address} (see map below for directions)</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Phone className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Call / WhatsApp:</span>
+                  <p className="text-gray-400 text-xs mt-1">
+                    <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500">{GYM_CONFIG.phoneDisplay}</a> ·{" "}
+                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp us</a>
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Calendar className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Operating Hours:</span>
+                  <p className="text-gray-400 text-xs mt-1">{GYM_CONFIG.hours}</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3 text-sm text-gray-300">
+                <Instagram className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
+                <div>
+                  <span className="font-mono text-white text-xs uppercase">Instagram:</span>
+                  <p className="text-gray-400 text-xs mt-1">
+                    <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="hover:text-red-500">@{GYM_CONFIG.instagram.split("/").pop()}</a>
+                  </p>
+                </div>
+              </li>
+            </ul>
+            <button
+              onClick={onJoinNow}
+              className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
+            >
+              BEGIN YOUR JOURNEY
+            </button>
+          </div>
+
+          <div className="bg-neutral-900/50 border border-neutral-900 rounded-xl overflow-hidden">
+            <iframe
+              src={GYM_CONFIG.mapEmbed}
+              title="VIKINGS GYM Location"
+              className="w-full h-[400px] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <div className="p-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-xs font-mono text-emerald-400">OPEN NOW · {GYM_CONFIG.hours}</span>
+              </div>
+              <a
+                href={GYM_CONFIG.mapLink}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs font-mono font-bold text-black bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition-all cursor-pointer"
+              >
+                GET DIRECTIONS
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Facilities Showcase */}
       <section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
         <div className="text-center mb-16">
@@ -382,7 +509,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {plansData && plansData.map((plan: any, index: number) => (
+          {(plansData && plansData.length > 0 ? plansData : DEFAULT_PLANS).map((plan: any, index: number) => (
             <div
               key={index}
               className={`bg-neutral-900/40 rounded-xl relative border ${plan.popular ? "border-red-600 shadow-xl shadow-red-900/10 scale-105" : "border-neutral-850"} p-6 flex flex-col justify-between`}
@@ -489,16 +616,16 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               LOCATION & OPERATING DETAILS
             </h2>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8">
-              We stand prepared for your visit at our premiere Aurangabad branch. Drop in for a high-fidelity physical facility tour, experience our cold spa chambers, and enjoy an pre-workout beverage inside our supplements cafe.
+              Drop in for a high-fidelity physical facility tour, experience our steam spa chambers, and enjoy an pre-workout beverage inside our supplements cafe. We're on MG Road, Aurangabad — open Monday to Saturday, 5 AM to 10 PM.
             </p>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <MapPin className="w-5 h-5 text-red-500 mt-1 shrink-0" />
                 <div>
-                  <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">HQ BRANCH ADDRESS:</h4>
+                  <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">GYM ADDRESS:</h4>
                   <p className="text-xs text-gray-400">
-                    First Floor, Plot 22, Near Cannought Plaza, Town Center, CIDCO, Aurangabad, PIN 431003
+                    {GYM_CONFIG.address}
                   </p>
                 </div>
               </div>
@@ -508,7 +635,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <div>
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">DIRECT INQUIRIES:</h4>
                   <p className="text-xs text-gray-400">
-                    Direct Ph: +91 99999 88888 | Email: ritwik014017@gmail.com
+                    <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500">{GYM_CONFIG.phoneDisplay}</a> ·{" "}
+                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp</a> · {GYM_CONFIG.email}
                   </p>
                 </div>
               </div>
@@ -518,8 +646,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <div>
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">WARRIORS DOCTRINE TIMINGS:</h4>
                   <p className="text-xs text-gray-400 font-mono leading-relaxed">
-                    Monday - Saturday: 05:30 AM to 10:30 PM <br />
-                    Sunday Scheduled Steam Baths: 06:00 AM to 12:00 PM Only
+                    {GYM_CONFIG.hours}
                   </p>
                 </div>
               </div>
@@ -540,7 +667,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <CheckCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
                 <h4 className="text-white font-mono font-bold text-sm uppercase mb-1">MESSAGE TRANSMITTED</h4>
                 <p className="text-xs text-gray-400">
-                  A front desk assistant from Vikings CIDCO Aurangabad will get back to you via call or WhatsApp on {contactPhone} shortly. Prepare your shields!
+                  A front desk assistant from Vikings Gym Aurangabad will get back to you via call or WhatsApp on {contactPhone} shortly. Prepare your shields!
                 </p>
               </motion.div>
             ) : (
@@ -697,18 +824,18 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
 
           <p className="text-xs text-gray-500 font-mono text-center md:text-left">
-            © 2026 Vikings Gym & Spa - CIDCO Aurangabad Franchise. All rights reserved. Built for Commercial Enterprise.
+            © 2026 Vikings Gym & Spa - MG Road, Aurangabad, Bihar. All rights reserved.
           </p>
 
           <div className="flex gap-4">
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+            <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Facebook className="w-4 h-4" />
+            <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+              <MapPin className="w-4 h-4" />
             </a>
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Globe className="w-4 h-4" />
+            <a href={`tel:${GYM_CONFIG.phone}`} className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+              <Phone className="w-4 h-4" />
             </a>
           </div>
         </div>
