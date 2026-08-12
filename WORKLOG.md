@@ -1,0 +1,46 @@
+# WORKLOG — Vikings-GYM-SPA
+
+Running changelog for AI assistants. Read this first (after AGENTS.md).
+Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
+
+---
+
+## 2026-08-12 — Fixed production login/sign-up (opencode session)
+
+**Problem:** Login showed "Invalid credentials provided.", sign-up showed "Network error: Cannot reach the server."
+
+**Root causes (all fixed):**
+1. `render.yaml` set env `MONGO_URI` but `config.py` read `MONGODB_URI` → backend couldn't reach Atlas.
+2. CORS didn't allow `https://vikingsgymspa.vercel.app` → browser blocked all API responses.
+3. `MONGODB_URI` in Render had placeholder `<db_password>` and no database name.
+4. Atlas Network Access only allowed two residential IPs, not Render's egress.
+5. Deploy crash "Exited with status 1" was fixed by Antigravity CLI: `eventlet 0.39.0` + top-level `eventlet.monkey_patch()` in `run.py` + `setuptools>=68.0.0` in requirements.
+
+**Code changes made (all on `main`):**
+- `backend/app/config.py` — accept `MONGODB_URI` or `MONGO_URI`.
+- `backend/app/__init__.py` — added `https://vikingsgymspa.vercel.app` to CORS origins.
+- `src/components/AuthGateway.tsx` — login now distinguishes network errors from bad credentials.
+- `backend/requirements.txt`, `backend/run.py` — eventlet fix (by Antigravity).
+- Temp debug endpoint `/api/auth/debug/db` added then removed.
+
+**Dashboard changes (manual, not code):**
+- Render `MONGODB_URI = mongodb+srv://ritwik014017_db_user:<pw>@cluster0.elk8qoz.mongodb.net/vikings_erp?retryWrites=true&w=majority` (uses `vikings_erp` DB).
+- Atlas Network Access: `0.0.0.0/0` allowed.
+- Vercel: `VITE_API_URL=https://vikings-gym-backend.onrender.com/api`.
+
+**Deploy status:** Backend + frontend live and working. Login/sign-up verified (register 201, login 200).
+
+**Production DB users now:** `test@example.com` (MEMBER), `verifytest100@example.com` (MEMBER), `ritwik014017@gmail.com` (SUPER_ADMIN, pw `Admin@123`, created by opencode with user permission).
+
+**How to verify:** `POST https://vikings-gym-backend.onrender.com/api/auth/login` with `ritwik014017@gmail.com` / `Admin@123` → 200 SUPER_ADMIN. Or log in on https://vikingsgymspa.vercel.app → lands on `/erp`.
+
+---
+
+## 2026-08-12 — Repo set up locally (opencode session)
+
+**What was done:**
+- Cloned repo, installed Node.js 24 LTS (winget), frontend `npm install`, backend venv + `pip install -r requirements.txt`.
+- Installed portable MongoDB 8.3.7 at `C:\mongodb` (MSI failed with 1603; using ZIP + `mongod --dbpath C:\mongodb\data\db`). Local `MONGODB_URI=mongodb://localhost:27017/vikings_gym`.
+- Seeded local DB: `$env:PYTHONIOENCODING="utf-8"; python -m seed.seed_data`.
+
+**How to run locally:** see AGENTS.md backend/frontend commands.
