@@ -167,7 +167,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-black/40 border border-neutral-850 pl-11 pr-4 py-2.5 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                      placeholder="e.g. ritwik014017@gmail.com"
+                      placeholder="Enter your email"
                       required
                     />
                   </div>
@@ -182,7 +182,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-black/40 border border-neutral-850 pl-11 pr-4 py-2.5 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                      placeholder="••••••••••••"
+                      placeholder="Enter your password"
                       required
                     />
                   </div>
@@ -233,7 +233,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                       value={regName}
                       onChange={(e) => setRegName(e.target.value)}
                       className="w-full bg-black/40 border border-neutral-850 px-3 py-2 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                      placeholder="e.g. Ritwik Singh"
+                      placeholder="Enter your name"
                       required
                     />
                   </div>
@@ -244,7 +244,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
                       className="w-full bg-black/40 border border-neutral-850 px-3 py-2 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                      placeholder="+91..."
+                      placeholder="Enter your phone number"
                       required
                     />
                   </div>
@@ -257,7 +257,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     className="w-full bg-black/40 border border-neutral-850 px-3 py-2 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                    placeholder="name@gmail.com"
+                    placeholder="Enter your email"
                     required
                   />
                 </div>
@@ -269,7 +269,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
                     className="w-full bg-black/40 border border-neutral-850 px-3 py-2 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                    placeholder="••••••••••••"
+                    placeholder="Enter your password"
                     required
                   />
                 </div>
