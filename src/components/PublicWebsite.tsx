@@ -35,34 +35,34 @@ interface PublicWebsiteProps {
 const DEFAULT_PLANS = [
   {
     name: "Monthly Warrior",
-    price: "₹1,200",
-    period: "per month",
-    desc: "Full gym floor access + steam bath. Perfect for starting your journey.",
-    features: ["Full gym floor access", "Steam bath included", "Locker facility", "Trainer on floor"],
+    price: "₹2,000",
+    period: "30 Days",
+    desc: "Full gym floor access for one month. Start your fitness journey today.",
+    features: ["Full gym floor access", "All strength & cardio zones", "Steam bath included", "Locker facility"],
     popular: false,
   },
   {
     name: "Quarterly Shield",
-    price: "₹3,000",
-    period: "per 3 months",
-    desc: "Save more with a quarterly commitment and all floor privileges.",
-    features: ["Everything in Monthly", "Free fitness assessment", "Guest pass (2x)", "Priority class booking"],
+    price: "₹4,900",
+    period: "90 Days",
+    desc: "Three months of training at a better per-day rate than monthly.",
+    features: ["Everything in Monthly", "Free fitness assessment", "Guest passes (2x)", "Priority class booking"],
     popular: true,
   },
   {
     name: "Half-Year Berserker",
-    price: "₹5,500",
-    period: "per 6 months",
-    desc: "Six months of relentless gains with bonus personal training slots.",
-    features: ["Everything in Quarterly", "2 PT sessions included", "Personalized diet plan", "Spa upgrade once a week"],
+    price: "₹9,000",
+    period: "179 Days",
+    desc: "Six months of relentless gains with the best value pricing.",
+    features: ["Everything in Quarterly", "Trainer guidance included", "Personalized diet plan", "Premium plan pricing"],
     popular: false,
   },
   {
     name: "Annual Valhalla",
-    price: "₹9,999",
-    period: "per year",
-    desc: "The full Valhalla experience — best value for dedicated warriors.",
-    features: ["Everything in Half-Year", "4 PT sessions included", "Customized diet + audit", "1 month free", "Free Vikings T-shirt"],
+    price: "₹18,000",
+    period: "365 Days",
+    desc: "The full Valhalla experience — the ultimate annual commitment for dedicated warriors.",
+    features: ["Everything in Half-Year", "Best per-day rate", "Customized diet + audit", "Priority trainer slots"],
     popular: false,
   },
 ];
@@ -463,9 +463,55 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           ))}
         </div>
-      </section>
 
-      {/* Trainers Showcase */}
+        {/* Group Classes & Personal Training */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-8">
+            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-4">GROUP CLASSES · ₹1,500 / 30 DAYS</p>
+            <h3 className="text-white font-sans font-bold text-lg mb-4">TRAIN IN THE PACK</h3>
+            <ul className="space-y-3 mb-6">
+              {["Zumba", "Dance Classes", "Yoga"].map((c) => (
+                <li key={c} className="flex gap-2.5 items-start text-xs text-gray-300">
+                  <CheckCircle className="w-4 h-4 text-red-500 shrink-0 select-none" />
+                  <span>{c} — ₹1,500 / month</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={onJoinNow}
+              className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
+            >
+              ENQUIRE ABOUT GROUP CLASSES
+            </button>
+          </div>
+
+          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-8">
+            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-4">PERSONAL TRAINING · 1-ON-1 COACHING</p>
+            <h3 className="text-white font-sans font-bold text-lg mb-4">TRAIN LIKE A BERSERKER</h3>
+            <ul className="space-y-3 mb-6">
+              {[
+                { name: "1 Month", price: "₹7,000" },
+                { name: "2 Months", price: "₹12,000" },
+                { name: "3 Months", price: "₹21,000" },
+              ].map((pt) => (
+                <li key={pt.name} className="flex justify-between items-center text-xs text-gray-300">
+                  <span className="flex gap-2.5 items-center">
+                    <CheckCircle className="w-4 h-4 text-red-500 shrink-0 select-none" />
+                    {pt.name} Personal Training
+                  </span>
+                  <span className="font-mono text-white font-bold">{pt.price}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              onClick={onJoinNow}
+              className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
+            >
+              BOOK A PERSONAL TRAINER
+            </button>
+          </div>
+        </div>
+      </section>
       <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
