@@ -5,6 +5,30 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-12 — Social login, reset-link fallback, editable member profile (opencode session)
+
+**Commit `767e3f0` pushed to main.** Fixes user-reported issues + new auth features.
+
+**Motivation:** (1) forgot-password email never arrived because SMTP is unconfigured; (2) member dashboard showed `PHONE: Not provided` even though a phone was entered at registration — because `register` created a `User` but no linked `Member`, and phone lived on the User; (3) member profile was read-only.
+
+**What changed:**
+- `backend/app/services/member_service.py` (new) — `ensure_member_for_user(user)` creates a linked Member profile (member_id VK-xxx, phone/name/email from User, referral code, QR) if missing.
+- `backend/app/routes/auth.py` — register() now calls `ensure_member_for_user` for MEMBER role; forgot-password returns `data.reset_link` when SMTP not configured (on-screen reset link fallback); new `POST /auth/google` (verifies Google ID token via tokeninfo, creates/returns JWT) and `POST /auth/facebook` (verifies via Graph API). New env vars: `GOOGLE_CLIENT_ID`, `FACEBOOK_APP_ID`.
+- `backend/app/routes/members.py` — `GET /members/me` and `PUT /members/me` now auto-create the Member profile on demand; MEMBER role can update ONLY their own profile (removed staff-only restriction on update).
+- `src/context/AuthContext.tsx` — added `loginWithTokens(data)` for social login sessions.
+- `src/components/AuthGateway.tsx` — forgot password now shows the reset link on-screen when SMTP is off; added Google + Facebook sign-in buttons (load GIS + FB SDK), graceful "not configured" message when client IDs are missing.
+- `src/components/MemberDashboard.tsx` — profile tab is now EDITABLE: name, phone, gender, DOB, address, blood group, height/weight, fitness goal, emergency contact, medical notes with Edit/Save/Cancel. Phone display falls back to `user?.phone`.
+- `src/api/auth.ts` — added `googleLogin`, `facebookLogin`.
+- `.env.local` — added `VITE_GOOGLE_CLIENT_ID=`, `VITE_FACEBOOK_APP_ID=` (empty).
+
+**Deploy status:** Pushed → Vercel auto-deploys. Backend needs Render restart to pick up new routes.
+
+**How to verify:** Register a member (phone shows up in profile now). Edit profile + save. Forgot password shows a clickable reset link → /reset-password. Google/Facebook buttons render; they show "not configured" until client IDs are set.
+
+**TODO (user action):** Create OAuth credentials (Google OAuth Client ID, Facebook App ID) and add `GOOGLE_CLIENT_ID`, `FACEBOOK_APP_ID` to Render + `VITE_GOOGLE_CLIENT_ID`, `VITE_FACEBOOK_APP_ID` to Vercel. Optionally add Gmail app password via `MAIL_USERNAME`/`MAIL_PASSWORD` to enable real emails.
+
+---
+
 ## 2026-08-12 — Real pricing from old site packages.php (opencode session)
 
 **What changed (commit `7ee8ccd`, pushed to main):**
