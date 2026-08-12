@@ -5,22 +5,15 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
-## 2026-08-12 — Added Instagram, Google Maps, Razorpay, Google Reviews, & Portal Directory (Antigravity session)
+## 2026-08-12 — Reverted latest public website changes (Antigravity session)
 
 **What changed:**
-- `src/components/PublicWebsite.tsx` — Implemented all 8 requested website enhancements:
-  1. **Instagram Account Connection**: Added `@vikings_fitness` link (`https://www.instagram.com/vikings_fitness`) in header bar, footer, and social buttons.
-  2. **Razorpay Payment Gateway Modal**: Added interactive Razorpay checkout modal under membership plans with 3-step payment directions for members.
-  3. **Membership Plans & Packages Section**: Integrated dynamic plan cards with Razorpay checkout triggers and feature breakdowns.
-  4. **Google Maps Embed & Directions**: Added official Google Maps link (`Q92C+M8J, MG Rd, Aurangabad, Bihar 824101`) and interactive embedded map iframe.
-  5. **Updated Location & Operating Hours**: Address: `MG Rd, Aurangabad, Bihar 824101`, Phone: `077649 22023`, Hours: Mon–Sat 5:00 AM – 10:00 PM, Sunday: Closed.
-  6. **Google Reviews & Rating Section**: Displayed `4.4 ⭐ (27 Google Reviews)` rating badge, verified member review cards, and "Leave a Google Review" call-to-action button.
-  7. **Earlier Portal Services Grid**: Extracted and integrated 10 quick portal shortcuts (Enquiry, Client Login, Book PT Sessions, Book Group Class, Packages, Photo Gallery, Trainers, Google Reviews, Instagram, Call Desk).
-  8. **WhatsApp Floating Button**: Added quick floating WhatsApp inquiry button (`https://api.whatsapp.com/send?phone=917764922023`).
+- `src/components/PublicWebsite.tsx` — Reverted commit `a16cca2` upon user request. Restored previous clean Public Website implementation.
+- `WORKLOG.md` — Updated with revert documentation.
 
-**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel auto-deploys frontend.
+**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel auto-deploys clean state.
 
-**How to verify:** Open `https://vikingsgymspa.vercel.app`. Verify Instagram links, Razorpay payment modal, Google Maps location, 4.4 ⭐ Google Reviews section, and quick portal directory.
+**How to verify:** View `https://vikingsgymspa.vercel.app`. Website restored to previous stable version.
 
 ---
 
