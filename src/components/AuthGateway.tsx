@@ -244,7 +244,7 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
                       value={regPhone}
                       onChange={(e) => setRegPhone(e.target.value)}
                       className="w-full bg-black/40 border border-neutral-850 px-3 py-2 rounded text-xs text-white focus:border-red-650 focus:outline-none"
-                      placeholder="Enter your phone number"
+                      placeholder="+91 1234567890"
                       required
                     />
                   </div>

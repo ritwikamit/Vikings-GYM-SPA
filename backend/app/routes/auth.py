@@ -1,4 +1,5 @@
 """Auth routes — login, register, password management, token refresh."""
+import os
 from flask import Blueprint, request, current_app
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity, get_jwt,
@@ -12,6 +13,7 @@ from app.utils.response import success_response, error_response
 from app.utils.validators import validate_email, validate_required_fields
 from app.utils.helpers import get_client_ip
 from app.models.user import User
+from app.services.notification_service import NotificationService
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -145,13 +147,13 @@ def forgot_password():
 
     user = User.objects(email=email.lower().strip(), is_deleted=False).first()
     if user:
-        # In production, send actual email with reset link/token
-        from app.services.notification_service import NotificationService
+        from app.config import Config
+        base_url = os.getenv("FRONTEND_URL", Config.FRONTEND_URL).rstrip("/")
         NotificationService.send_email(
             to_email=email,
             subject="Password Reset — Vikings Gym & Spa",
             body=f"Hi {user.name},\n\nUse this link to reset your password: "
-                 f"http://localhost:5173/reset-password?email={email}\n\n"
+                 f"{base_url}/reset-password?email={email}\n\n"
                  f"If you didn't request this, ignore this email.",
         )
 

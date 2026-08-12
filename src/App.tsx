@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
 import AuthGateway from "./components/AuthGateway";
+import ResetPassword from "./components/ResetPassword";
 import ERPModules from "./components/ERPModules";
 import MemberDashboard from "./components/MemberDashboard";
 import { UserRole } from "./types";
@@ -270,6 +271,7 @@ export default function App() {
           <AuthGateway onLoginSuccess={(role) => navigate(role === UserRole.MEMBER ? "/member" : "/erp")} onBackToWebsite={() => navigate("/")} />
         </AuthRedirect>
       } />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Secured Member Routes (For MEMBER Role) */}
       <Route 
