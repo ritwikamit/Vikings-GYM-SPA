@@ -5,6 +5,26 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-12 — Real gym details + About/map/plans fixes (opencode session)
+
+**Context:** Antigravity reverted the Public Website. User then requested Instagram, maps, about-details, plans, reviews, Razorpay, old-site migration, and notifications, and asked opencode to do the quick wins so Antigravity gets only the big builds.
+
+**What changed (commit `d5826d2`, pushed to main):**
+- `src/config/gym.ts` — real details: instagram `https://www.instagram.com/vikings_fitness`, phone `077649 22023` / `+917764922023` / WhatsApp `917764922023`, address `Q92C+M8J, MG Rd, Aurangabad, Bihar 824101`, rating 4.4 (27 reviews), hours `Mon–Sat 5 AM – 10 PM · Sunday Closed`, full Google Maps place link + embed URL.
+- `src/components/PublicWebsite.tsx` —
+  - Added missing `#about` section (nav linked to it but it didn't exist — a blank-page/link bug). Shows rating badge, address, phone/WhatsApp, hours, Hindi name, "Begin your journey" CTA, and embedded Google Map iframe with "GET DIRECTIONS".
+  - Pricing section now renders `DEFAULT_PLANS` fallback when the plans API returns nothing — fixes empty memberships grid.
+  - Contact section updated to real address/phone/hours (removed fake CIDCO details, fake phone, old timings).
+  - Footer social icons now link to Instagram, Google Maps, and `tel:` instead of `#`.
+  - Removed unused `Facebook`/`Globe` imports.
+- Verified: `npm run lint` (tsc --noEmit) clean, `npm run build` succeeds.
+
+**Deploy status:** Pushed to main → Vercel auto-deploys. Verify at https://vikingsgymspa.vercel.app — About section with map, working Instagram/maps/tel links, pricing may show fallback plans if backend plans are empty.
+
+**Pending (handed to Antigravity via prompt):** Razorpay member payment flow, Reviews section + backend moderation, migrate old-site sections (https://app2023.13designstreet.com/vikings_gym/webapp/index.php + packages/offers/gallery/trainers/reviews/feedback/enquiry/book-pt/group-class), automated notifications (APScheduler + SMTP + in-app). Plan prices in DEFAULT_PLANS are placeholders — confirm with gym owner.
+
+---
+
 ## 2026-08-12 — Reverted Public Website changes (Antigravity session)
 
 **What changed:**
