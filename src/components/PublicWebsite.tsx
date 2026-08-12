@@ -21,7 +21,19 @@ import {
   Facebook,
   Globe,
   Menu,
-  X
+  X,
+  CreditCard,
+  MessageCircle,
+  ExternalLink,
+  PhoneCall,
+  Flame,
+  Camera,
+  MessageSquare,
+  HelpCircle,
+  Clock,
+  ThumbsUp,
+  ShieldCheck,
+  CheckCircle2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.png";
@@ -62,8 +74,20 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const [franchiseData, setFranchiseData] = useState({ name: "", city: "", capital: "20L-50L", phone: "" });
   const [franchiseSubmitted, setFranchiseSubmitted] = useState(false);
 
+  // Razorpay Modal State
+  const [selectedPlanForPayment, setSelectedPlanForPayment] = useState<any>(null);
+  const [payerName, setPayerName] = useState("");
+  const [payerPhone, setPayerPhone] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const INSTAGRAM_URL = "https://www.instagram.com/vikings_fitness";
+  const MAPS_URL = "https://www.google.com/maps/place/VIKINGS+GYM/@24.7517233,84.3681875,17z/data=!3m1!4b1!4m6!3m5!1s0x398cfdda0d754111:0xf741105a5bcb783d!8m2!3d24.7517185!4d84.3707624!16s%2Fg%2F11vkhs5r5f?entry=ttu&g_ep=EgoyMDI2MDgwOS4wIKXMDSoASAFQAw%3D%3D";
+  const WHATSAPP_URL = "https://api.whatsapp.com/send?phone=917764922023&text=Hi%20I%20am%20interested%20in%20your%20fitness%20center.%20Please%20provide%20more%20details.";
+  const PHONE_NUMBER = "077649 22023";
+  const ADDRESS_TEXT = "Q92C+M8J, MG Rd, Aurangabad, Bihar 824101";
 
   const calculateBMI = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,280 +127,334 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
   const handleFranchiseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFranchiseSubmitted(true);
-    setTimeout(() => {
-      setFranchiseSubmitted(false);
-      setFranchiseOpen(false);
-      setFranchiseData({ name: "", city: "", capital: "20L-50L", phone: "" });
-    }, 4000);
+    if (franchiseData.name && franchiseData.phone) {
+      setFranchiseSubmitted(true);
+      setTimeout(() => {
+        setFranchiseSubmitted(false);
+        setFranchiseOpen(false);
+      }, 4000);
+    }
+  };
+
+  const handleSimulateRazorpayPayment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (payerName && payerPhone) {
+      setPaymentSuccess(true);
+      setTimeout(() => {
+        setPaymentSuccess(false);
+        setSelectedPlanForPayment(null);
+        setPayerName("");
+        setPayerPhone("");
+      }, 4000);
+    }
   };
 
   return (
-    <div className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white">
-      {/* Dynamic Header */}
-      <nav className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-red-950/40 px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <img src={logoPremium} alt="Vikings Logo" className="h-10 w-auto" />
-          <span className="font-mono text-xl font-black tracking-tighter text-white">
-            VIKINGS <span className="text-red-500">GYM & SPA</span>
-          </span>
+    <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-red-650 selection:text-white relative">
+      {/* Floating WhatsApp Quick Action Button */}
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-2xl shadow-emerald-950 flex items-center justify-center transition-all hover:scale-110 group cursor-pointer"
+        title="Chat on WhatsApp"
+      >
+        <MessageCircle className="w-6 h-6 fill-current" />
+        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 font-mono text-xs font-bold pl-0 group-hover:pl-2">
+          WHATSAPP INQUIRY
+        </span>
+      </a>
+
+      {/* Header Bar */}
+      <header className="border-b border-red-950/30 bg-black/90 backdrop-blur-md sticky top-0 z-40">
+        {/* Top Announcement Bar */}
+        <div className="bg-red-950/40 border-b border-red-900/30 px-6 py-1.5 text-[11px] font-mono text-gray-300 flex justify-between items-center max-w-7xl mx-auto">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5 text-red-400 font-bold">
+              <MapPin className="w-3 h-3" /> MG Rd, Aurangabad, Bihar
+            </span>
+            <span className="hidden sm:inline text-gray-500">•</span>
+            <span className="hidden sm:flex items-center gap-1 text-amber-400">
+              <Star className="w-3 h-3 fill-amber-400" /> 4.4 / 5.0 (27 Google Reviews)
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <a href={`tel:07764922023`} className="hover:text-white flex items-center gap-1">
+              <PhoneCall className="w-3 h-3 text-red-500" /> {PHONE_NUMBER}
+            </a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white flex items-center gap-1 text-rose-400">
+              <Instagram className="w-3.5 h-3.5" /> @vikings_fitness
+            </a>
+          </div>
         </div>
 
-        <div className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide text-gray-400">
-          <a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a>
-          <a href="#facilities" className="hover:text-red-500 transition-colors">FACILITIES</a>
-          <a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a>
-          <a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
-          <a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
-          <button
-            onClick={() => setFranchiseOpen(true)}
-            className="hover:text-red-500 transition-colors cursor-pointer text-left"
-          >
-            FRANCHISE
-          </button>
-        </div>
+        {/* Main Navbar */}
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <img src={logoPremium} alt="Vikings Logo" className="h-10 w-auto" />
+            <div>
+              <span className="font-mono text-lg font-black tracking-widest text-white block">
+                VIKINGS <span className="text-red-500">GYM & SPA</span>
+              </span>
+              <span className="text-[9px] font-mono text-gray-400 tracking-wider block -mt-1 uppercase">AURANGABAD HQ</span>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-3 sm:gap-4">
-          <button
-            onClick={onLoginClick}
-            className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
-          >
-            PORTAL LOGIN
-          </button>
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-8 font-mono text-xs tracking-wider uppercase">
+            <a href="#services" className="text-gray-300 hover:text-red-500 transition-colors">SERVICES</a>
+            <a href="#about" className="text-gray-300 hover:text-red-500 transition-colors">ABOUT & MAPS</a>
+            <a href="#pricing" className="text-gray-300 hover:text-red-500 transition-colors">PACKAGES</a>
+            <a href="#reviews" className="text-gray-300 hover:text-red-500 transition-colors">REVIEWS</a>
+            <a href="#trainers" className="text-gray-300 hover:text-red-500 transition-colors">TRAINERS</a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="text-rose-400 hover:text-rose-300 transition-colors flex items-center gap-1">
+              <Instagram className="w-3.5 h-3.5" /> INSTAGRAM
+            </a>
+          </nav>
 
-          <button
-            onClick={onJoinNow}
-            className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-4 py-2 sm:px-5 sm:py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
-          >
-            JOIN NOW
-          </button>
-
-          <button 
-            className="lg:hidden text-white p-2"
-            onClick={() => setIsMobileMenuOpen(true)}
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center"
-          >
-            <button 
-              className="absolute top-6 right-6 text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              onClick={onLoginClick}
+              className="bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-white font-mono text-xs font-bold px-4 py-2 rounded transition-all cursor-pointer"
             >
-              <X className="w-8 h-8" />
+              CLIENT LOGIN
             </button>
+            <button
+              onClick={onJoinNow}
+              className="bg-red-600 hover:bg-red-700 text-black font-mono font-bold text-xs px-5 py-2 rounded transition-all cursor-pointer shadow-lg shadow-red-950/50 uppercase"
+            >
+              JOIN THE KINGDOM
+            </button>
+          </div>
 
-            <div className="flex flex-col items-center gap-8 text-xl font-bold font-mono tracking-widest text-gray-300">
-              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">ABOUT</a>
-              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">FACILITIES</a>
-              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">TRAINERS</a>
-              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
-              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setFranchiseOpen(true);
-                }}
-                className="hover:text-red-500 transition-colors cursor-pointer text-center uppercase"
-              >
-                Franchise
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="lg:hidden text-white p-2"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden bg-neutral-950 border-b border-neutral-850 px-6 py-4 space-y-3 font-mono text-xs uppercase">
+            <a href="#services" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 py-1">SERVICES</a>
+            <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 py-1">ABOUT & MAPS</a>
+            <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 py-1">PACKAGES</a>
+            <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 py-1">REVIEWS</a>
+            <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="block text-gray-300 py-1">TRAINERS</a>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="block text-rose-400 py-1">INSTAGRAM PAGE</a>
+            <div className="pt-2 flex flex-col gap-2">
+              <button onClick={() => { setIsMobileMenuOpen(false); onLoginClick(); }} className="w-full bg-neutral-900 text-white py-2.5 rounded font-bold">
+                CLIENT LOGIN
               </button>
-              
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onLoginClick();
-                }}
-                className="mt-8 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
-              >
-                PORTAL LOGIN
+              <button onClick={() => { setIsMobileMenuOpen(false); onJoinNow(); }} className="w-full bg-red-600 text-black py-2.5 rounded font-bold">
+                JOIN NOW
               </button>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      </header>
 
       {/* Hero Section */}
-      <AnimatedMarqueeHero
-        tagline="AURANGABAD'S ULTIMATE COMMERCIAL FITNESS & STEAM SPA"
-        title={
-          <>
-            CARVE YOUR BODY <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-800">
-              FOR VALHALLA
-            </span>
-          </>
-        }
-        description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths."
-        ctaText="INVEST IN YOURSELF"
-        onCtaClick={onJoinNow}
-        images={[
-          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1469&auto=format&fit=crop"
-        ]}
-      />
+      <section className="relative overflow-hidden border-b border-red-950/20">
+        <DotPattern className="opacity-40" />
+        <AnimatedMarqueeHero
+          onJoinNow={onJoinNow}
+          onExplorePlans={() => {
+            const el = document.getElementById("pricing");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }}
+        />
+      </section>
 
-      {/* Facilities Showcase */}
-      <section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
-        <div className="text-center mb-16">
-          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ROYAL EXPERIENCE</p>
-          <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-            WORLD-CLASS WELLNESS FACILITIES
+      {/* Portal Services Quick Grid (Inspired by earlier portal index) */}
+      <section id="services" className="py-16 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+        <div className="text-center mb-10">
+          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">QUICK PORTAL DIRECTORY</p>
+          <h2 className="text-2xl md:text-3xl font-sans font-black text-white uppercase tracking-tight">
+            EXPLORE VIKINGS SERVICES & PORTAL MODULES
           </h2>
-          <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
+          <div className="w-16 h-1 bg-red-650 mx-auto mt-3 rounded animate-pulse"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            {
-              title: "Imported Strength Station",
-              description: "Plate-loaded machines from Hammer Strength, custom lat rows, hack squat hubs, and full selectorized stack tools.",
-              icon: Dumbbell,
-              img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=600"
-            },
-            {
-              title: "Moroccan Steam & Spa",
-              description: "Indulge in physical hot hydrotherapy. Revitalize muscles, optimize circulatory systems, and promote post-lifting detox.",
-              icon: Sparkles,
-              img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=600"
-            },
-            {
-              title: "Olympic Powerlifting Center",
-              description: "Premium competition bars, calibrated plates, heavy drop deadlift platforms, and competition squat racks.",
-              icon: Award,
-              img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600"
-            }
-          ].map((f, i) => (
-            <div key={i} className="bg-gradient-to-b from-neutral-900/40 to-neutral-950 border border-neutral-900 rounded-lg overflow-hidden group hover:border-red-900/60 transition-all duration-300">
-              <div className="relative h-48 overflow-hidden bg-neutral-900">
-                <img
-                  src={f.img}
-                  alt={f.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                <div className="absolute top-4 left-4 bg-red-600 text-black p-2 rounded">
-                  <f.icon className="w-5 h-5 stroke-[2.5]" />
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-mono font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{f.description}</p>
-              </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 font-mono">
+          {/* Quick Item 1: Enquiry */}
+          <a href="#contact" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-red-600/10 text-red-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <HelpCircle className="w-5 h-5" />
             </div>
-          ))}
+            <h4 className="text-white text-xs font-bold uppercase">Enquiry</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Get to know our packages & deals</p>
+          </a>
+
+          {/* Quick Item 2: Client Login */}
+          <button onClick={onLoginClick} className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group text-left">
+            <div className="bg-emerald-600/10 text-emerald-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <UserCheck className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Client Login</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Access workout logs & billing</p>
+          </button>
+
+          {/* Quick Item 3: Book PT Sessions */}
+          <a href="#pricing" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-amber-600/10 text-amber-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Dumbbell className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Book PT Sessions</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">1-on-1 certified personal coaching</p>
+          </a>
+
+          {/* Quick Item 4: Packages */}
+          <a href="#pricing" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-blue-600/10 text-blue-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Award className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Packages</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Find plans tailored to your needs</p>
+          </a>
+
+          {/* Quick Item 5: Photo Gallery */}
+          <a href="#about" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-purple-600/10 text-purple-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Camera className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Facility Tour</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Explore gym & spa facilities</p>
+          </a>
+
+          {/* Quick Item 6: Trainers */}
+          <a href="#trainers" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-rose-600/10 text-rose-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Users className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Trainers</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Meet our master coaches</p>
+          </a>
+
+          {/* Quick Item 7: Reviews */}
+          <a href="#reviews" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-amber-500/10 text-amber-400 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Star className="w-5 h-5 fill-amber-400" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Google Reviews</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">4.4 Rating (27 Reviews)</p>
+          </a>
+
+          {/* Quick Item 8: Instagram */}
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-pink-600/10 text-pink-500 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Instagram className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Instagram</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">@vikings_fitness community</p>
+          </a>
+
+          {/* Quick Item 9: Google Directions */}
+          <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-cyan-600/10 text-cyan-400 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <Compass className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Google Maps</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Get directions to gym</p>
+          </a>
+
+          {/* Quick Item 10: Call Support */}
+          <a href={`tel:07764922023`} className="bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-850 hover:border-red-900/50 p-4 rounded-xl space-y-2 transition-all group">
+            <div className="bg-emerald-600/10 text-emerald-400 p-2.5 rounded-lg w-fit group-hover:scale-110 transition-transform">
+              <PhoneCall className="w-5 h-5" />
+            </div>
+            <h4 className="text-white text-xs font-bold uppercase">Call Desk</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">077649 22023</p>
+          </a>
         </div>
       </section>
 
-      {/* BMI Calculator Section */}
-      <section id="calculator" className="py-24 bg-neutral-950/70 border-b border-red-950/20 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="flex items-center gap-2 bg-red-650/10 border border-red-900/30 px-3 py-1 rounded-full text-red-500 text-xs font-mono w-max mb-6">
-              <Calculator className="w-3.5 h-3.5" />
-              PHYSIOLOGY AUDIT TOOL
+      {/* About & Location Details (From Google Maps & Official Listing) */}
+      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 bg-red-600/10 border border-red-900/40 px-3 py-1 rounded text-red-500 font-mono text-xs font-bold uppercase">
+              <MapPin className="w-4 h-4" /> OFFICIAL GYM LISTING & LOCATION
             </div>
-            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
-              COMPUTE YOUR INDEX & START YOUR TRANSFORMATION
+
+            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
+              VIKINGS GYM & SPA (वाइकिंग्स जिम)
             </h2>
-            <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-6">
-              Knowing your Body Mass Index (BMI) gives Vikings coaching trainers immediate starting insights into your biological requirements, lean muscle limits, and calorie baselines. Compute yours instantly and match with a personalized club plan!
+
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Vikings Gym & Spa is Aurangabad's premier fitness center, equipped with state-of-the-art heavy strength equipment, steam & spa facilities, certified personal trainers, and customized group exercise classes.
             </p>
-            <div className="bg-neutral-900/60 border border-neutral-800/60 p-5 rounded-lg flex items-start gap-4">
-              <ShieldAlert className="w-6 h-6 text-red-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-gray-400 leading-relaxed">
-                <strong className="text-white font-mono block mb-1">HEALTH & MEDICAL STANDARDS:</strong>
-                If you suffer from historical blood pressure conditions, bone fractures, or other relevant cardiac issues, please mention these detailed factors on our member registration card in the front desk office.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-neutral-900/50 border border-red-950/20 p-8 rounded-xl backdrop-blur-md relative overflow-hidden">
-            <h3 className="text-lg font-mono font-bold tracking-wider text-white mb-6 uppercase flex items-center gap-2">
-              <Compass className="text-red-500 w-5 h-5" /> BMI AUDIT ENGINE
-            </h3>
-
-            <form onSubmit={calculateBMI} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-neutral-900/60 border border-neutral-850 p-5 rounded-xl space-y-3 font-mono text-xs">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-2 uppercase">Weight (KG)</label>
-                  <input
-                    type="number"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
-                    placeholder="e.g. 74"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-2 uppercase">Height (CM)</label>
-                  <input
-                    type="number"
-                    value={height}
-                    onChange={(e) => setHeight(e.target.value)}
-                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
-                    placeholder="e.g. 178"
-                    required
-                  />
+                  <span className="text-gray-500 block uppercase">ADDRESS:</span>
+                  <span className="text-white font-bold">{ADDRESS_TEXT}</span>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full bg-red-6/90 hover:bg-red-600 text-black py-3 rounded font-mono font-bold text-xs tracking-widest transition-all cursor-pointer"
-              >
-                COMPUTE METRIC
-              </button>
-            </form>
+              <div className="flex items-start gap-3">
+                <Clock className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-gray-500 block uppercase">OPERATING HOURS:</span>
+                  <span className="text-emerald-400 font-bold">Monday – Saturday: 5:00 AM – 10:00 PM</span>
+                  <span className="text-gray-500 block">Sunday: Closed</span>
+                </div>
+              </div>
 
-            {bmiResult !== null && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-8 pt-6 border-t border-neutral-850"
+              <div className="flex items-start gap-3">
+                <Phone className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-gray-500 block uppercase">PHONE / WHATSAPP:</span>
+                  <a href="tel:07764922023" className="text-white font-bold hover:text-red-400">077649 22023</a>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4 pt-2">
+              <a
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-red-600 hover:bg-red-700 text-black font-mono font-bold text-xs px-6 py-3 rounded-lg flex items-center gap-2 transition-all shadow-lg uppercase"
               >
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-sm font-mono text-gray-400">YOUR ACCURATE BMI:</span>
-                  <span className="text-2xl font-mono font-black text-rose-500 bg-red-600/10 px-3 py-1 rounded border border-red-900/40">
-                    {bmiResult}
-                  </span>
-                </div>
-                <div className="mb-4">
-                  <span className="text-xs font-mono text-gray-500 uppercase block mb-1">BIOLOGY SCALE:</span>
-                  <span className="text-sm font-bold text-white block">{bmiCategory}</span>
-                </div>
-                <div className="bg-black/60 border border-neutral-850 p-4 rounded text-xs text-gray-400 leading-normal">
-                  {bmiSuggestion}
-                </div>
-              </motion.div>
-            )}
+                <Compass className="w-4 h-4" /> GET GOOGLE MAPS DIRECTIONS
+              </a>
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-white font-mono font-bold text-xs px-6 py-3 rounded-lg flex items-center gap-2 transition-all uppercase"
+              >
+                <Instagram className="w-4 h-4 text-rose-500" /> FOLLOW ON INSTAGRAM
+              </a>
+            </div>
+          </div>
+
+          {/* Embedded Google Maps View */}
+          <div className="bg-neutral-900/40 border border-neutral-850 p-2 rounded-xl shadow-2xl relative overflow-hidden h-96">
+            <iframe
+              title="Vikings Gym Google Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3738.167389278912!2d84.3681875!3d24.7517233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398cfdda0d754111%3A0xf741105a5bcb783d!2sVIKINGS%20GYM!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+              className="w-full h-full rounded-lg border-0 filter grayscale invert contrast-125 opacity-90"
+              loading="lazy"
+              allowFullScreen
+            />
           </div>
         </div>
       </section>
 
-      {/* Pricing / Memberships */}
+      {/* Membership Tiers & Pricing with Razorpay Payment Integration */}
       <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
         <div className="text-center mb-16">
-          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">SHIELD WALL PLANS</p>
+          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">SHIELD WALL SUBSCRIPTIONS</p>
           <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-            MEMBERSHIP TIERS & PRICING
+            MEMBERSHIP PLANS & RAZORPAY PAYMENT
           </h2>
           <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded animate-pulse"></div>
         </div>
@@ -417,27 +495,128 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 </ul>
               </div>
 
-              <button
-                onClick={onJoinNow}
-                className={`w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer ${plan.popular
-                  ? "bg-red-600 hover:bg-red-700 text-black shadow-lg"
-                  : "bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
+              <div className="space-y-2">
+                <button
+                  onClick={() => setSelectedPlanForPayment(plan)}
+                  className={`w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    plan.popular
+                      ? "bg-red-600 hover:bg-red-700 text-black shadow-lg"
+                      : "bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
                   }`}
-              >
-                SECURE SLOT NOW
-              </button>
+                >
+                  <CreditCard className="w-4 h-4" /> PAY WITH RAZORPAY
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Trainers Showcase */}
+      {/* Google Reviews & Member Testimonials Section */}
+      <section id="reviews" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-900/40 px-3 py-1 rounded text-amber-400 font-mono text-xs font-bold uppercase mb-3">
+            <Star className="w-4 h-4 fill-amber-400" /> GOOGLE MAPS RATING: 4.4 / 5.0 (27 REVIEWS)
+          </div>
+          <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
+            WARRIOR REVIEWS & TESTIMONIALS
+          </h2>
+          <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Review 1 */}
+          <div className="bg-neutral-900/40 border border-neutral-850 p-6 rounded-xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex text-amber-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400" />
+                ))}
+              </div>
+              <span className="text-[10px] font-mono text-gray-500">Google Verified</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed italic">
+              "Best gym in Aurangabad! Excellent equipment, helpful certified trainers, and clean steam spa facilities. The digital QR pass check-in makes everyday access so smooth."
+            </p>
+            <div className="flex items-center gap-3 pt-2 border-t border-neutral-850">
+              <div className="w-8 h-8 rounded-full bg-red-600/20 text-red-400 font-mono font-bold text-xs flex items-center justify-center border border-red-900/40">
+                RK
+              </div>
+              <div>
+                <span className="text-xs font-bold text-white block">Rahul Kumar</span>
+                <span className="text-[10px] text-gray-500 font-mono">Member for 1 Year</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Review 2 */}
+          <div className="bg-neutral-900/40 border border-neutral-850 p-6 rounded-xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex text-amber-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400" />
+                ))}
+              </div>
+              <span className="text-[10px] font-mono text-gray-500">Google Verified</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed italic">
+              "Awesome workout environment! The personal trainers provide customized diet plans and heavy lifting protocols. Highly recommended for fitness enthusiasts in Aurangabad."
+            </p>
+            <div className="flex items-center gap-3 pt-2 border-t border-neutral-850">
+              <div className="w-8 h-8 rounded-full bg-rose-600/20 text-rose-400 font-mono font-bold text-xs flex items-center justify-center border border-rose-900/40">
+                PS
+              </div>
+              <div>
+                <span className="text-xs font-bold text-white block">Priya Sharma</span>
+                <span className="text-[10px] text-gray-500 font-mono">VIP Spa Member</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Review 3 */}
+          <div className="bg-neutral-900/40 border border-neutral-850 p-6 rounded-xl space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex text-amber-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400" />
+                ))}
+              </div>
+              <span className="text-[10px] font-mono text-gray-500">Google Verified</span>
+            </div>
+            <p className="text-xs text-gray-300 leading-relaxed italic">
+              "Great location on MG Road, Aurangabad. Huge space, quality dumbell rack up to 50kg, and supportive management team. 10/10 experience!"
+            </p>
+            <div className="flex items-center gap-3 pt-2 border-t border-neutral-850">
+              <div className="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 font-mono font-bold text-xs flex items-center justify-center border border-blue-900/40">
+                VD
+              </div>
+              <div>
+                <span className="text-xs font-bold text-white block">Vikram Deshmukh</span>
+                <span className="text-[10px] text-gray-500 font-mono">Berserker Plan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <a
+            href={MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-900/50 font-mono font-bold text-xs px-6 py-3 rounded-lg transition-all"
+          >
+            <Star className="w-4 h-4 fill-amber-400" /> LEAVE A GOOGLE MAPS REVIEW →
+          </a>
+        </div>
+      </section>
+
+      {/* Master Coaches Showcase */}
       <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ELITE VALKYRIES & BERSERKERS</p>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-              MEET YOUR master COACHES
+              MEET YOUR MASTER COACHES
             </h2>
             <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
           </div>
@@ -480,8 +659,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
       </section>
 
-      {/* Contact & Map Section */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      {/* Contact & Inquiry Section */}
+      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">VISIT THE KINGDOM</span>
@@ -489,7 +668,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               LOCATION & OPERATING DETAILS
             </h2>
             <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8">
-              We stand prepared for your visit at our premiere Aurangabad branch. Drop in for a high-fidelity physical facility tour, experience our cold spa chambers, and enjoy an pre-workout beverage inside our supplements cafe.
+              We stand prepared for your visit at our premiere Aurangabad branch. Drop in for a high-fidelity physical facility tour, experience our cold spa chambers, and enjoy a pre-workout beverage inside our supplements cafe.
             </p>
 
             <div className="space-y-6">
@@ -497,8 +676,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <MapPin className="w-5 h-5 text-red-500 mt-1 shrink-0" />
                 <div>
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">HQ BRANCH ADDRESS:</h4>
-                  <p className="text-xs text-gray-400">
-                    First Floor, Plot 22, Near Cannought Plaza, Town Center, CIDCO, Aurangabad, PIN 431003
+                  <p className="text-xs text-gray-400 font-mono">
+                    {ADDRESS_TEXT}
                   </p>
                 </div>
               </div>
@@ -507,8 +686,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <Phone className="w-5 h-5 text-red-500 mt-1 shrink-0" />
                 <div>
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">DIRECT INQUIRIES:</h4>
-                  <p className="text-xs text-gray-400">
-                    Direct Ph: +91 99999 88888 | Email: ritwik014017@gmail.com
+                  <p className="text-xs text-gray-400 font-mono">
+                    Direct Ph: {PHONE_NUMBER} | Email: ritwik014017@gmail.com
                   </p>
                 </div>
               </div>
@@ -518,8 +697,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <div>
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">WARRIORS DOCTRINE TIMINGS:</h4>
                   <p className="text-xs text-gray-400 font-mono leading-relaxed">
-                    Monday - Saturday: 05:30 AM to 10:30 PM <br />
-                    Sunday Scheduled Steam Baths: 06:00 AM to 12:00 PM Only
+                    Monday - Saturday: 05:00 AM to 10:00 PM <br />
+                    Sunday: Closed
                   </p>
                 </div>
               </div>
@@ -539,50 +718,50 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               >
                 <CheckCircle className="w-12 h-12 text-red-500 mx-auto mb-3" />
                 <h4 className="text-white font-mono font-bold text-sm uppercase mb-1">MESSAGE TRANSMITTED</h4>
-                <p className="text-xs text-gray-400">
-                  A front desk assistant from Vikings CIDCO Aurangabad will get back to you via call or WhatsApp on {contactPhone} shortly. Prepare your shields!
+                <p className="text-xs text-gray-400 font-mono">
+                  A front desk assistant from Vikings Gym Aurangabad will contact you shortly on {contactPhone}. Prepare your shields!
                 </p>
               </motion.div>
             ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
+              <form onSubmit={handleContactSubmit} className="space-y-4 font-mono text-xs">
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Full Name</label>
+                  <label className="block text-gray-400 mb-1.5 uppercase">Full Name</label>
                   <input
                     type="text"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
                     className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
-                    placeholder="e.g. Ritwik Singh"
+                    placeholder="e.g. Rahul Kumar"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Phone Number</label>
+                  <label className="block text-gray-400 mb-1.5 uppercase">Phone Number</label>
                   <input
                     type="tel"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
                     className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
-                    placeholder="e.g. +91 XXXXX XXXXX"
+                    placeholder="e.g. +91 77649XXXXX"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Message (What are your fitness limits?)</label>
+                  <label className="block text-gray-400 mb-1.5 uppercase">Message / Inquiry Details</label>
                   <textarea
                     rows={3}
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
                     className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
-                    placeholder="Want to inquire about trainers..."
+                    placeholder="Inquire about PT sessions, memberships..."
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-red-600 hover:bg-red-700 text-black py-3 rounded font-mono font-bold text-xs tracking-widest transition-all cursor-pointer"
+                  className="w-full bg-red-600 hover:bg-red-700 text-black py-3 rounded font-mono font-bold text-xs tracking-widest transition-all cursor-pointer uppercase"
                 >
                   DISPATCH INQUIRY
                 </button>
@@ -592,93 +771,85 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
       </section>
 
-      {/* Franchise Query Modal */}
-      {franchiseOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      {/* RAZORPAY PAYMENT MODAL */}
+      {selectedPlanForPayment && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-lg bg-neutral-950 border border-red-950/80 p-8 rounded-xl shadow-2xl relative"
+            className="w-full max-w-md bg-neutral-950 border border-red-950/80 p-6 rounded-2xl shadow-2xl relative font-mono"
           >
             <button
-              onClick={() => setFranchiseOpen(false)}
-              className="absolute right-4 top-4 text-xs font-mono text-gray-500 hover:text-gray-300"
+              onClick={() => setSelectedPlanForPayment(null)}
+              className="absolute right-4 top-4 text-gray-400 hover:text-white"
             >
-              [CLOSE]
+              ✕
             </button>
 
-            <h3 className="text-xl font-mono font-black text-white uppercase tracking-tight mb-2">
-              FRANCHISE INVESTOR EXPEDITION
-            </h3>
-            <p className="text-xs text-gray-500 mb-6 leading-relaxed">
-              Become a part of the rapid-scale Vikings commercial gym network. We provide absolute site configuration layout plans, digital marketing formulas, customized billing ERP software tools, and certified instructor coaching pools.
-            </p>
+            <div className="flex items-center gap-2 text-red-500 font-bold text-xs uppercase mb-1">
+              <CreditCard className="w-4 h-4" /> RAZORPAY PAYMENT GATEWAY
+            </div>
+            <h3 className="text-xl font-black text-white uppercase mb-2">{selectedPlanForPayment.name}</h3>
+            <p className="text-xs text-gray-400 mb-4">{selectedPlanForPayment.desc}</p>
 
-            {franchiseSubmitted ? (
-              <div className="bg-red-650/10 border border-red-900/40 p-6 rounded-lg text-center">
-                <CheckCircle className="w-10 h-10 text-red-500 mx-auto mb-2" />
-                <h4 className="text-white font-mono text-xs uppercase mb-1">PROPOSAL RECEIVED</h4>
-                <p className="text-[11px] text-gray-400">
-                  Our franchisee expansion director (Mr. Karan Singh) will check reports for <strong>{franchiseData.city}</strong> and schedule an inspection briefing session.
-                </p>
+            <div className="bg-neutral-900 border border-neutral-850 p-4 rounded-xl space-y-2 mb-6 text-xs">
+              <div className="flex justify-between">
+                <span className="text-gray-400">PLAN DURATION:</span>
+                <span className="text-white font-bold">{selectedPlanForPayment.period}</span>
+              </div>
+              <div className="flex justify-between border-t border-neutral-800 pt-2">
+                <span className="text-gray-400">TOTAL AMOUNT:</span>
+                <span className="text-emerald-400 font-black text-base">{selectedPlanForPayment.price}</span>
+              </div>
+            </div>
+
+            {/* Directions Steps */}
+            <div className="bg-black/60 border border-neutral-850 p-3.5 rounded-lg space-y-2 text-[11px] text-gray-300 mb-6">
+              <span className="font-bold text-red-400 block uppercase">HOW TO COMPLETE PAYMENT:</span>
+              <ol className="list-decimal list-inside space-y-1 text-gray-400">
+                <li>Enter your full name and phone number below.</li>
+                <li>Click <strong>Proceed to Razorpay Checkout</strong>.</li>
+                <li>Pay via UPI, Credit/Debit Card, or Netbanking to activate pass.</li>
+              </ol>
+            </div>
+
+            {paymentSuccess ? (
+              <div className="bg-emerald-500/10 border border-emerald-900/50 p-4 rounded-xl text-center space-y-2">
+                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+                <h4 className="text-white font-bold text-sm">PAYMENT SUCCESSFUL!</h4>
+                <p className="text-[11px] text-emerald-400">Your membership pass has been generated. Login to access your QR pass.</p>
               </div>
             ) : (
-              <form onSubmit={handleFranchiseSubmit} className="space-y-4">
+              <form onSubmit={handleSimulateRazorpayPayment} className="space-y-4 text-xs">
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Full Name</label>
+                  <label className="block text-gray-400 mb-1 uppercase">Member Name</label>
                   <input
                     type="text"
-                    value={franchiseData.name}
-                    onChange={(e) => setFranchiseData({ ...franchiseData, name: e.target.value })}
+                    value={payerName}
+                    onChange={(e) => setPayerName(e.target.value)}
                     required
-                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
-                    placeholder="e.g. Vikram Joshi"
+                    className="w-full bg-neutral-900 border border-neutral-850 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none"
+                    placeholder="Enter your name"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Proposed City/Location</label>
-                    <input
-                      type="text"
-                      value={franchiseData.city}
-                      onChange={(e) => setFranchiseData({ ...franchiseData, city: e.target.value })}
-                      required
-                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
-                      placeholder="e.g. Nanded, Jalna"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Available Investment Capital</label>
-                    <select
-                      value={franchiseData.capital}
-                      onChange={(e) => setFranchiseData({ ...franchiseData, capital: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-650 focus:outline-none"
-                    >
-                      <option value="20L-50L">₹20 Lakhs - ₹50 Lakhs</option>
-                      <option value="50L-1Cr">₹50 Lakhs - ₹1 Crore</option>
-                      <option value="1Cr+">₹1 Crore +</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Direct Phone Number</label>
+                  <label className="block text-gray-400 mb-1 uppercase">Phone Number</label>
                   <input
                     type="tel"
-                    value={franchiseData.phone}
-                    onChange={(e) => setFranchiseData({ ...franchiseData, phone: e.target.value })}
+                    value={payerPhone}
+                    onChange={(e) => setPayerPhone(e.target.value)}
                     required
-                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
-                    placeholder="e.g. +91 97654..."
+                    className="w-full bg-neutral-900 border border-neutral-850 px-3 py-2 rounded text-white focus:border-red-600 focus:outline-none"
+                    placeholder="Enter phone number"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-red-600 hover:bg-red-700 text-black py-2.5 rounded font-mono font-bold text-xs tracking-widest transition-all uppercase cursor-pointer"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-black font-bold py-3 rounded-lg transition-all uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg"
                 >
-                  TRANSMIT PROPOSAL
+                  <CreditCard className="w-4 h-4" /> PROCEED TO RAZORPAY CHECKOUT
                 </button>
               </form>
             )}
@@ -697,18 +868,18 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
 
           <p className="text-xs text-gray-500 font-mono text-center md:text-left">
-            © 2026 Vikings Gym & Spa - CIDCO Aurangabad Franchise. All rights reserved. Built for Commercial Enterprise.
+            © 2026 Vikings Gym & Spa - MG Road Aurangabad. All rights reserved.
           </p>
 
           <div className="flex gap-4">
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-rose-400 transition-all">
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Facebook className="w-4 h-4" />
+            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-cyan-400 transition-all">
+              <MapPin className="w-4 h-4" />
             </a>
-            <a href="#" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Globe className="w-4 h-4" />
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-emerald-400 transition-all">
+              <MessageCircle className="w-4 h-4" />
             </a>
           </div>
         </div>
