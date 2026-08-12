@@ -5,20 +5,15 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
-## 2026-08-12 — Redesigned Public Website with Vibrant Luxury Theme (Antigravity session)
+## 2026-08-12 — Reverted Public Website changes (Antigravity session)
 
 **What changed:**
-- `src/components/PublicWebsite.tsx` — Completely overhauled design aesthetics to eliminate dull monochrome tones:
-  1. **Rich Background Gradients & Glows**: Deep obsidian mesh background (`#0e070c` to `#160a13`) with ambient radial crimson, violet, and gold light orbs.
-  2. **10-Card Vibrant Portal Directory**: Color-coded service cards (Ruby Red, Emerald Green, Amber Gold, Sapphire Blue, Amethyst Purple, Hot Pink, Cyan Teal, Coral Rose) with hover lift & shadow animations.
-  3. **Full-Color Interactive Google Map**: Embedded active full-color Google Map iframe for location `Q92C+M8J, MG Rd, Aurangabad, Bihar 824101`.
-  4. **Glowing Google Reviews Badge**: Prominently featured `4.4 ⭐ (27 Google Reviews)` rating badge, review testimonials, and Google Maps review action button.
-  5. **Vibrant Razorpay Payment Gateway**: Color-coded membership plan cards with Razorpay checkout triggers and 3-step payment directions modal.
-  6. **Instagram Integration**: Added `@vikings_fitness` gradient badges across header, quick directory, and footer.
+- `src/components/PublicWebsite.tsx` — Reverted commit `a675235` upon user request. Restored previous clean Public Website implementation.
+- `WORKLOG.md` — Updated with revert documentation.
 
-**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel auto-deploys updated frontend.
+**Deploy status:** Pushed to GitHub `main` (`https://github.com/ritwikamit/Vikings-GYM-SPA`). Vercel auto-deploys clean state.
 
-**How to verify:** Open `https://vikingsgymspa.vercel.app`. Verify vibrant color palette, full-color Google Map embed, 4.4 ⭐ Google Reviews, Razorpay checkout modal, and Instagram links.
+**How to verify:** View `https://vikingsgymspa.vercel.app`.
 
 ---
 
