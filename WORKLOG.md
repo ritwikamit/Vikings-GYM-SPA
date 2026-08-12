@@ -5,6 +5,21 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-12 — Real pricing from old site packages.php (opencode session)
+
+**What changed (commit `7ee8ccd`, pushed to main):**
+- Scraped https://app2023.13designstreet.com/vikings_gym/webapp/packages.php for real prices.
+- `src/components/PublicWebsite.tsx` — replaced placeholder DEFAULT_PLANS with real gym membership pricing:
+  - Monthly with the actual prices you confirmed (₹2,000/30d, ₹4,900/90d, ₹9,000/179d, ₹18,000/365d).
+  - Added "Group Classes" card (Zumba, Dance, Yoga — ₹1,500/30 days) and "Personal Training" card (1mo ₹7,000 / 2mo ₹12,000 / 3mo ₹21,000) below the plan grid.
+- Verified: `npm run lint` clean, `npm run build` succeeds.
+
+**Deploy status:** Pushed → Vercel auto-deploys. Check pricing + group class/PT sections on https://vikingsgymspa.vercel.app.
+
+**Note:** Backend MembershipPlan data may still differ — public site shows fallback plans only when the plans API returns nothing. Consider syncing these rates into backend seeds/plans later.
+
+---
+
 ## 2026-08-12 — Real gym details + About/map/plans fixes (opencode session)
 
 **Context:** Antigravity reverted the Public Website. User then requested Instagram, maps, about-details, plans, reviews, Razorpay, old-site migration, and notifications, and asked opencode to do the quick wins so Antigravity gets only the big builds.
