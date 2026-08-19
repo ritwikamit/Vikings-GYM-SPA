@@ -1,12 +1,14 @@
 import { launch } from "puppeteer";
+import { install as installBrowser } from "@puppeteer/browsers";
 import http from "http";
-import { readFile, writeFile, stat } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
 import { existsSync } from "fs";
 import path from "path";
 
 const DIST = path.resolve("dist");
 const PORT = 4174;
 const BASE = `http://localhost:${PORT}`;
+const CACHE_DIR = path.resolve(".puppeteer-cache");
 
 const MIME = {
   ".html": "text/html",
@@ -24,12 +26,7 @@ const MIME = {
   ".txt": "text/plain",
 };
 
-async function findChrome() {
-  try {
-    const { default: puppeteer } = await import("puppeteer");
-    const p = await puppeteer.executablePath();
-    if (existsSync(p)) return p;
-  } catch {}
+function systemChrome() {
   const candidates = [
     process.env.CHROME_PATH,
     "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -38,26 +35,34 @@ async function findChrome() {
     "/usr/bin/chromium",
     "/usr/bin/chromium-browser",
     "/usr/bin/chromium.chromium",
-    process.env.LAMBDA_TASK_ROOT ? "/opt/chromium/chrome" : null,
   ].filter(Boolean);
-  for (const c of candidates) {
-    if (c && existsSync(c)) return c;
-  }
-  return null;
+  return candidates.find((c) => existsSync(c)) || null;
 }
 
 async function ensureChrome() {
-  const found = await findChrome();
-  if (found) return found;
-  console.log("PRERENDER: Chrome not found, downloading via puppeteer...");
+  if (process.platform !== "win32") {
+    try {
+      const { default: chromium } = await import("@sparticuz/chromium");
+      const exec = await chromium.executablePath();
+      if (exec && existsSync(exec)) {
+        return { executablePath: exec, args: chromium.args };
+      }
+    } catch {}
+  }
   try {
     const { default: puppeteer } = await import("puppeteer");
-    await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
-    return await findChrome();
-  } catch (e) {
-    console.log("PRERENDER: could not obtain Chrome:", e.message);
-    return null;
-  }
+    const p = await puppeteer.executablePath();
+    if (existsSync(p)) return { executablePath: p, args: [] };
+  } catch {}
+  const sys = systemChrome();
+  if (sys) return { executablePath: sys, args: [] };
+  console.log("PRERENDER: downloading Chrome (first run only)...");
+  const installed = await installBrowser({
+    browser: "chrome",
+    buildId: "latest",
+    cacheDir: CACHE_DIR,
+  });
+  return { executablePath: installed.executablePath, args: [] };
 }
 
 function serve() {
@@ -95,42 +100,37 @@ async function renderPage(browser, route) {
 }
 
 async function main() {
-  const chrome = await ensureChrome();
-  if (!chrome) {
-    console.log("PRERENDER: no Chrome available, skipping");
-    return;
-  }
-  console.log("PRERENDER: using chrome at", chrome);
-
   if (!existsSync(DIST)) {
     console.log("PRERENDER: no dist folder, skipping");
     return;
   }
+  let chromeCfg;
+  try {
+    chromeCfg = await ensureChrome();
+  } catch (e) {
+    console.log("PRERENDER: no Chrome available, skipping:", e.message);
+    return;
+  }
+  console.log("PRERENDER: using chrome at", chromeCfg.executablePath);
 
   const server = serve();
-
   try {
     const browser = await launch({
-      executablePath: chrome,
+      executablePath: chromeCfg.executablePath,
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu", "--disable-dev-shm-usage"],
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu", "--disable-dev-shm-usage", ...(chromeCfg.args || [])],
     });
-
-    const routes = ["/"];
-    for (const route of routes) {
-      const html = await renderPage(browser, route);
-      const outFile = route === "/" ? "index.html" : route.slice(1) + ".html";
-      await writeFile(path.join(DIST, outFile), html, "utf8");
-      console.log(`PRERENDER: saved dist/${outFile} (${html.length} bytes)`);
-    }
-
+    const html = await renderPage(browser, "/");
+    await writeFile(path.join(DIST, "index.html"), html, "utf8");
+    console.log(`PRERENDER: saved dist/index.html (${html.length} bytes)`);
     await browser.close();
+  } catch (e) {
+    console.log("PRERENDER: rendering failed, keeping original build:", e.message);
   } finally {
     server.close();
   }
 }
 
 main().catch((e) => {
-  console.error("PRERENDER ERROR:", e.message);
-  process.exit(1);
+  console.log("PRERENDER: skipped, keeping original build:", e.message);
 });
