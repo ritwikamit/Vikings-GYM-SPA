@@ -1,0 +1,17 @@
+{
+  "name": "Vikings Gym & Spa",
+  "short_name": "Vikings Gym",
+  "description": "Premium gym & fitness center in Aurangabad, Bihar — strength machines, steam spa, zumba, yoga & personal training.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "632x632",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
