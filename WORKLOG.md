@@ -5,6 +5,28 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-08-19 — Google Search Console SEO: verification, canonical www, SPA prerender (opencode session)
+
+**Goal:** Get the site to show logo + details in Google search results (was showing "No information is available for this page").
+
+**What changed (commits `bb3a7ca`, `dec7718`, `71873a0`, `0e67688` — all pushed to main):**
+- `public/google6150f36a1a21fac7.html` (new) — Google Search Console domain verification file.
+- Canonicalized everything to `https://www.vikingsgym.in` (Vercel 308-redirects apex → www, which was causing Search Console sitemap "couldn't fetch"): updated `public/sitemap.xml`, `public/robots.txt`, and all URL references in `index.html` (canonical, og:url, og:image, twitter:image, JSON-LD schema).
+- Root cause of "No information available": the site is a React SPA — Google received only `<div id="root"></div>` (3.3 kB shell). Added **prerendering**:
+  - `scripts/prerender.mjs` (new) — after `vite build`, serves `dist/` locally and renders the homepage in headless Chrome, saving the fully-rendered HTML (now 52.7 kB: logo, hero, phone, address, plans, schema).
+  - `package.json` — added `"postbuild": "node scripts/prerender.mjs"` + dev deps `puppeteer`, `@sparticuz/chromium`.
+  - Vercel build fix: build env Chrome was missing shared libs (`libnspr4.so`, exit 1) → script now uses `@sparticuz/chromium` (self-contained binary) on non-Windows, system Chrome on Windows. Prerender is best-effort and never fails the build.
+- Fixed corrupted em/en dashes in `index.html` meta tags (PowerShell ANSI→UTF-8 mojibake earlier turned `—` into `â€”`); verified with `dist/index.html` and live page.
+- Verified live: `https://www.vikingsgym.in/` serves 52,689-byte prerendered HTML with title, logo, phone, address, plan names, HealthClub schema.
+
+**Deploy status:** All deploys green (Vercel status `success`). Backend untouched.
+
+**How to verify (user did):** Search Console → www property → URL Inspection `https://www.vikingsgym.in/` → Request Indexing. Re-crawl takes 1–3 days; result should then show logo + title + description.
+
+**Ongoing SEO (recommended, not done):** Google Business Profile, reviews, on-page keyword pages (pricing/services), backlinks (JustDial etc.), Instagram→site links.
+
+---
+
 ## 2026-08-12 — Social login, reset-link fallback, editable member profile (opencode session)
 
 **Commit `767e3f0` pushed to main.** Fixes user-reported issues + new auth features.
