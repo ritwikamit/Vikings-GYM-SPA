@@ -499,7 +499,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
               <button
                 type="submit"
-                className="w-full bg-red-6/90 hover:bg-red-600 text-black py-3 rounded font-mono font-bold text-xs tracking-widest transition-all cursor-pointer"
+                className="w-full bg-red-600 hover:bg-red-700 text-black py-3 rounded font-mono font-bold text-xs tracking-widest transition-all cursor-pointer"
               >
                 COMPUTE METRIC
               </button>
