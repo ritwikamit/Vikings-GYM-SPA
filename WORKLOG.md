@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Trainer photo alignment on phones (opencode session)
+
+**Goal:** Faces were cropped by the short mobile photo banner.
+
+**What changed (one commit):** Coach photo frames are now square on phones (aspect-square, matching the square portraits - zero cropping) with object-top face priority as a safety net. Desktop/tablet row layout unchanged.
+
+**Verification:** lint + build pass; 7 square frames + face-priority crops confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Smartphone-first professionalism pass (opencode session)
 
 **Goal:** Treat phones/tablets as the primary device. Note: no UI skill pack is installed (only the opencode-config skill), so this is a direct mobile-UX pass.

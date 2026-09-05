@@ -931,9 +931,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
             {DEFAULT_TRAINERS.map((t: any, idx: number) => (
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
-                <div className="md:w-2/5 h-64 md:h-auto bg-neutral-900">
+                <div className="md:w-2/5 aspect-square md:aspect-auto md:h-auto bg-neutral-900 overflow-hidden">
                   {t.photoUrl ? (
-                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
                       <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
