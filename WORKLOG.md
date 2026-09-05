@@ -5,6 +5,16 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Trainers moved after Facilities, menus re-sequenced (opencode session)
+
+**Goal:** Trainers section sits between Facilities and BMI; every menu follows page order.
+
+**What changed (one commit):** Moved the trainers section block (verified single instance, page order facilities-trainers-calculator-pricing-gallery-review-contact-about in source and live HTML). Desktop nav core is now Facilities-Trainers-Memberships-Gallery-Contact with More holding BMI-Reviews-About; mobile strip, overlay menu, footer links and section tracker all re-sequenced identically.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - AC Custom developer credit in footer (opencode session)
 
 **Goal:** Company signature as site developer (name: AC Custom, domain: accustomlabs.com).

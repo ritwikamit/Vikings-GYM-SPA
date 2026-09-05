@@ -220,7 +220,7 @@ function isGymOpenNow(now: Date = new Date()): boolean {
 }
 
 // Anchor sections tracked for nav highlighting.
-const SECTION_IDS = ["about", "facilities", "trainers", "gallery", "pricing", "calculator", "review", "contact"];
+const SECTION_IDS = ["facilities", "trainers", "calculator", "pricing", "gallery", "review", "contact", "about"];
 
 const STORY_TILES = [
   { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=200&auto=format&fit=crop", label: "WOD" },
@@ -362,21 +362,20 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   // Nav link styling with active-section highlight (desktop + mobile variants)
   // Minimal lucid nav: 4 core links + a MORE dropdown for the rest.
   const MORE_LINKS = [
-    { id: "about", label: "ABOUT" },
-    { id: "facilities", label: "FACILITIES" },
     { id: "calculator", label: "BMI CALCULATOR" },
     { id: "review", label: "REVIEWS" },
+    { id: "about", label: "ABOUT" },
   ];
   // Visible scrollable quick links on phones (desktop uses the full navbar)
   const MOBILE_LINKS = [
+    { id: "facilities", label: "FACILITIES" },
     { id: "trainers", label: "TRAINERS" },
+    { id: "calculator", label: "BMI" },
     { id: "pricing", label: "MEMBERSHIPS" },
     { id: "gallery", label: "GALLERY" },
+    { id: "review", label: "REVIEWS" },
     { id: "contact", label: "CONTACT" },
     { id: "about", label: "ABOUT" },
-    { id: "facilities", label: "FACILITIES" },
-    { id: "calculator", label: "BMI" },
-    { id: "review", label: "REVIEWS" },
   ];
   const moreActive = MORE_LINKS.some((l) => l.id === activeSection);
 
@@ -471,6 +470,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </a>
 
           <div className="hidden lg:flex items-center gap-7">
+            <DeskLink id="facilities" label="FACILITIES" />
             <DeskLink id="trainers" label="TRAINERS" />
             <DeskLink id="pricing" label="MEMBERSHIPS" />
             <DeskLink id="gallery" label="GALLERY" />
@@ -591,14 +591,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </button>
 
             <div className="flex flex-col items-stretch text-center w-full max-w-xs px-8 text-sm font-bold font-mono">
+              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("facilities")}>FACILITIES</a>
               <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("trainers")}>TRAINERS</a>
+              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("calculator")}>BMI CALCULATOR</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("pricing")}>MEMBERSHIPS</a>
               <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("gallery")}>GALLERY</a>
+              <a href="#review" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("review")}>REVIEWS</a>
               <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("contact")}>CONTACT</a>
               <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("about")}>ABOUT</a>
-              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("facilities")}>FACILITIES</a>
-              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("calculator")}>BMI CALCULATOR</a>
-              <a href="#review" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("review")}>REVIEWS</a>
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -712,6 +712,79 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           ))}
         </div>
         </Reveal>
+        </div>
+      </section>
+
+      <section id="trainers" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <SectionHeader kicker="ELITE VALKYRIES & BERSERKERS" title="MEET YOUR MASTER COACHES" />
+
+          <Reveal delay={0.1}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
+            {DEFAULT_TRAINERS.map((t: any, idx: number) => (
+              <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
+                <div className="md:w-2/5 aspect-square md:aspect-auto md:h-auto bg-neutral-900 overflow-hidden">
+                  {t.photoUrl ? (
+                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
+                      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                      <div className="w-24 h-24 rounded-full border-2 border-red-600/60 bg-neutral-950 flex items-center justify-center relative">
+                        <span className="text-red-500 font-mono text-5xl font-black uppercase">{t.name ? t.name.charAt(0) : '?'}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="md:w-3/5 p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs font-mono font-bold text-red-500 mb-1">{t.role}</div>
+                    <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                      {t.name}
+                      {t.instagram && (
+                        <a
+                          href={t.instagram}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors"
+                          title={`Instagram ${t.instagramHandle || ""}`.trim()}
+                        >
+                          <Instagram className="w-4 h-4" />
+                        </a>
+                      )}
+                    </h3>
+                    <div className="font-mono text-[10px] text-gray-500 mb-3">{t.years}</div>
+                    <p className="text-gray-400 text-xs leading-relaxed mb-4">{t.desc}</p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-neutral-850">
+                    {Array.isArray(t.cert) ? t.cert.map((c: string, i: number) => (
+                      <span key={i} className="text-[9px] font-mono bg-neutral-950 text-gray-400 px-2 py-0.5 rounded border border-neutral-900">
+                        {c}
+                      </span>
+                    )) : t.cert ? (
+                      <span className="text-[9px] font-mono bg-neutral-950 text-gray-400 px-2 py-0.5 rounded border border-neutral-900">
+                        {t.cert}
+                      </span>
+                    ) : null}
+
+                    {t.instagram && (
+                      <a
+                        href={t.instagram}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="ml-auto text-[9px] font-mono bg-red-600/10 text-red-400 hover:text-white hover:bg-red-600/25 px-2.5 py-0.5 rounded border border-red-900/50 transition-all uppercase font-bold"
+                      >
+                        <Instagram className="w-3 h-3 inline -mt-0.5 mr-1" />
+                        {t.instagramHandle || "Instagram"}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -923,79 +996,6 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </Reveal>
         </div>
       </section>
-      <section id="trainers" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
-        <DotGrid />
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <SectionHeader kicker="ELITE VALKYRIES & BERSERKERS" title="MEET YOUR MASTER COACHES" />
-
-          <Reveal delay={0.1}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
-            {DEFAULT_TRAINERS.map((t: any, idx: number) => (
-              <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
-                <div className="md:w-2/5 aspect-square md:aspect-auto md:h-auto bg-neutral-900 overflow-hidden">
-                  {t.photoUrl ? (
-                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
-                      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
-                      <div className="w-24 h-24 rounded-full border-2 border-red-600/60 bg-neutral-950 flex items-center justify-center relative">
-                        <span className="text-red-500 font-mono text-5xl font-black uppercase">{t.name ? t.name.charAt(0) : '?'}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="md:w-3/5 p-6 flex flex-col justify-between">
-                  <div>
-                    <div className="text-xs font-mono font-bold text-red-500 mb-1">{t.role}</div>
-                    <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                      {t.name}
-                      {t.instagram && (
-                        <a
-                          href={t.instagram}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors"
-                          title={`Instagram ${t.instagramHandle || ""}`.trim()}
-                        >
-                          <Instagram className="w-4 h-4" />
-                        </a>
-                      )}
-                    </h3>
-                    <div className="font-mono text-[10px] text-gray-500 mb-3">{t.years}</div>
-                    <p className="text-gray-400 text-xs leading-relaxed mb-4">{t.desc}</p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-neutral-850">
-                    {Array.isArray(t.cert) ? t.cert.map((c: string, i: number) => (
-                      <span key={i} className="text-[9px] font-mono bg-neutral-950 text-gray-400 px-2 py-0.5 rounded border border-neutral-900">
-                        {c}
-                      </span>
-                    )) : t.cert ? (
-                      <span className="text-[9px] font-mono bg-neutral-950 text-gray-400 px-2 py-0.5 rounded border border-neutral-900">
-                        {t.cert}
-                      </span>
-                    ) : null}
-
-                    {t.instagram && (
-                      <a
-                        href={t.instagram}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="ml-auto text-[9px] font-mono bg-red-600/10 text-red-400 hover:text-white hover:bg-red-600/25 px-2.5 py-0.5 rounded border border-red-900/50 transition-all uppercase font-bold"
-                      >
-                        <Instagram className="w-3 h-3 inline -mt-0.5 mr-1" />
-                        {t.instagramHandle || "Instagram"}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* Gallery & Official Instagram Section */}
       <section id="gallery" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <DotGrid />
@@ -1546,14 +1546,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <div>
             <h4 className="font-mono text-xs font-black text-white tracking-widest uppercase mb-4">Explore</h4>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-xs font-mono text-gray-500">
-              <li><a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a></li>
               <li><a href="#facilities" className="hover:text-red-500 transition-colors">FACILITIES</a></li>
               <li><a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a></li>
-              <li><a href="#gallery" className="hover:text-red-500 transition-colors">GALLERY</a></li>
-              <li><a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a></li>
               <li><a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a></li>
+              <li><a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a></li>
+              <li><a href="#gallery" className="hover:text-red-500 transition-colors">GALLERY</a></li>
               <li><a href="#review" className="hover:text-red-500 transition-colors">REVIEWS</a></li>
               <li><a href="#contact" className="hover:text-red-500 transition-colors">CONTACT</a></li>
+              <li><a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a></li>
             </ul>
           </div>
 
