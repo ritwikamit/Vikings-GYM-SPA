@@ -5,6 +5,16 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Coaches order: Amit, Bittu, Vaishnavi, Ankit, Ali, Neha, Deepsikha (opencode session)
+
+**Goal:** Requested team sequence on the site.
+
+**What changed (one commit):** Reordered DEFAULT_TRAINERS in PublicWebsite.tsx. Verified order in source and prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Cloth-press dot field across the full site (opencode session)
 
 **Goal:** Hover animation everywhere except header/footer.
