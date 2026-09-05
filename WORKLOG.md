@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Touch support for background animations (opencode session)
+
+**Goal:** Dot field + torch glow must react on phones/tablets, including while scrolling.
+
+**What changed (one commit, hero-3.tsx):** DotGrid listens to touchstart/touchmove (passive, scroll-safe) and resets on touchend/cancel, so the cloth-press follows the finger in every section. Hero torch glow tracks touch via onTouchStart/onTouchMove. Mouse path unchanged.
+
+**Verification:** lint + build pass; touch listeners confirmed in the built bundle.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Logo wordmark restored on phones (opencode session)
 
 **Goal:** VIKINGS GYM and SPA text visible beside the logo on smartphones.

@@ -76,6 +76,18 @@ export function DotGrid() {
     };
     host.addEventListener("mousemove", onMove);
     host.addEventListener("mouseleave", onLeave);
+    // Touch support: finger position (including while scrolling) drives the field
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (!t) return;
+      const r = canvas.getBoundingClientRect();
+      mouse.tx = t.clientX - r.left;
+      mouse.ty = t.clientY - r.top;
+    };
+    host.addEventListener("touchstart", onTouch, { passive: true });
+    host.addEventListener("touchmove", onTouch, { passive: true });
+    host.addEventListener("touchend", onLeave);
+    host.addEventListener("touchcancel", onLeave);
 
     const draw = () => {
       // Ease the cursor for a liquid feel
@@ -130,6 +142,10 @@ export function DotGrid() {
       ro.disconnect();
       host.removeEventListener("mousemove", onMove);
       host.removeEventListener("mouseleave", onLeave);
+      host.removeEventListener("touchstart", onTouch);
+      host.removeEventListener("touchmove", onTouch);
+      host.removeEventListener("touchend", onLeave);
+      host.removeEventListener("touchcancel", onLeave);
     };
   }, []);
 
@@ -192,15 +208,24 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   const emberX = useTransform(glowX, [0, 1], [-14, 14]);
   const emberY = useTransform(glowY, [0, 1], [-10, 10]);
 
+  const setTorchFromPoint = (clientX: number, clientY: number, el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    mouseX.set((clientX - r.left) / r.width);
+    mouseY.set((clientY - r.top) / r.height);
+  };
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    mouseX.set((e.clientX - r.left) / r.width);
-    mouseY.set((e.clientY - r.top) / r.height);
+    setTorchFromPoint(e.clientX, e.clientY, e.currentTarget);
+  };
+  const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
+    const t = e.touches[0];
+    if (t) setTorchFromPoint(t.clientX, t.clientY, e.currentTarget);
   };
 
   return (
     <section
       onMouseMove={handleMouseMove}
+      onTouchStart={handleTouchMove}
+      onTouchMove={handleTouchMove}
       className={cn(
         "relative w-full min-h-svh overflow-hidden bg-black flex flex-col items-center justify-center text-center px-4 py-20 md:py-28 border-b border-red-950/20",
         className
