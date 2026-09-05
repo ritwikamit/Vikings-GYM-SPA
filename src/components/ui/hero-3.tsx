@@ -86,9 +86,13 @@ function DotGrid() {
         for (let gx = GAP / 2; gx < w; gx += GAP) {
           const dx = gx - mouse.x;
           const dy = gy - mouse.y;
-          const d = Math.sqrt(dx * dx + dy * dy);
+          const d = Math.sqrt(dx * dx + dy * dy) || 0.001;
           const t = Math.max(0, 1 - d / RADIUS);
           const swell = t * t;
+          // Cloth-press: dots part outward around the cursor, like weight on fabric
+          const push = swell * 16;
+          const px = gx + (dx / d) * push;
+          const py = gy + (dy / d) * push;
           const r = 1 + swell * 2.6;
           const alpha = 0.1 + swell * 0.55;
           // Fade dots toward the edges, like a masked pattern
@@ -96,7 +100,7 @@ function DotGrid() {
           const ny = gy / h - 0.42;
           const edge = Math.max(0, 1 - (nx * nx * 2.2 + ny * ny * 2.6));
           ctx.beginPath();
-          ctx.arc(gx, gy, r, 0, Math.PI * 2);
+          ctx.arc(px, py, r, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${swell > 0.25 ? "239,68,68" : "255,255,255"},${(alpha * edge).toFixed(3)})`;
           ctx.fill();
         }
@@ -197,7 +201,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
     <section
       onMouseMove={handleMouseMove}
       className={cn(
-        "relative w-full min-h-svh overflow-hidden bg-black flex flex-col items-center justify-center text-center px-4 py-28 border-b border-red-950/20",
+        "relative w-full min-h-svh overflow-hidden bg-black flex flex-col items-center justify-center text-center px-4 py-20 md:py-28 border-b border-red-950/20",
         className
       )}
     >
@@ -308,7 +312,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           {secondaryCtaText && (
             <button
               onClick={onSecondaryCtaClick}
-              className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-red-500/50 hover:text-white font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-md border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-red-500/50 hover:text-white font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
             >
               {secondaryCtaText}
             </button>

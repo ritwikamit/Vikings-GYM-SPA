@@ -5,6 +5,22 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Rectangular Explore CTA, phone menu strip, cloth-press dots (opencode session)
+
+**Goal:** Rectangular secondary CTA; menus visible on phones; dots part like weight on cloth; tighter hero on phones.
+
+**What changed (one commit):**
+- EXPLORE THE ARENA back to rectangular (kept the glass blur finish, red hover border).
+- New mobile quick-link strip under the header (phones only): all 8 sections, swipeable, active-section highlight. Hamburger overlay kept for Franchise + Join.
+- DotGrid physics upgraded to cloth-press: dots within 130px are pushed radially outward (up to 16px) while swelling red - like pressing into stretched fabric. Eased follow kept.
+- Hero vertical padding reduced on phones (py-20, md:py-28).
+
+**Verification:** lint + build pass; strip links + rectangular CTA confirmed in prerendered HTML (physics is runtime canvas).
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Interactive dot field + title reverted to site tone (opencode session)
 
 **Goal:** Dots expand near the cursor; hero title should match other texts (revert brightening).

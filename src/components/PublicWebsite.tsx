@@ -367,6 +367,17 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     { id: "calculator", label: "BMI CALCULATOR" },
     { id: "review", label: "REVIEWS" },
   ];
+  // Visible scrollable quick links on phones (desktop uses the full navbar)
+  const MOBILE_LINKS = [
+    { id: "trainers", label: "TRAINERS" },
+    { id: "pricing", label: "MEMBERSHIPS" },
+    { id: "gallery", label: "GALLERY" },
+    { id: "contact", label: "CONTACT" },
+    { id: "about", label: "ABOUT" },
+    { id: "facilities", label: "FACILITIES" },
+    { id: "calculator", label: "BMI" },
+    { id: "review", label: "REVIEWS" },
+  ];
   const moreActive = MORE_LINKS.some((l) => l.id === activeSection);
 
   const DeskLink = ({ id, label }: { id: string; label: string }) => (
@@ -542,6 +553,21 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             >
               <Menu className="w-6 h-6" />
             </button>
+          </div>
+        </div>
+
+        {/* Mobile quick-link strip: menus visible on phones without opening the overlay */}
+        <div className="lg:hidden border-t border-white/5">
+          <div className="flex items-center gap-6 overflow-x-auto whitespace-nowrap px-6 py-2.5 text-[11px] font-mono font-bold tracking-[0.18em] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {MOBILE_LINKS.map((l) => (
+              <a
+                key={l.id}
+                href={`#${l.id}`}
+                className={`transition-colors ${activeSection === l.id ? "text-red-500" : "text-gray-500 hover:text-white"}`}
+              >
+                {l.label}
+              </a>
+            ))}
           </div>
         </div>
       </nav>
