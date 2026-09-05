@@ -107,6 +107,28 @@ const DEFAULT_TRAINERS = [
   },
 ];
 
+// Renders a third-party Instagram widget snippet (SnapWidget/LightWidget/Elfsight).
+// Scripts are re-created so script-based embeds actually run; iframes render as-is.
+function InstagramWidget({ snippet }: { snippet: string }) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const box = containerRef.current;
+    if (!snippet || !box) return;
+    box.innerHTML = snippet;
+box.querySelectorAll("script").forEach((oldScript) => {
+        const newScript = document.createElement("script");
+        Array.from(oldScript.attributes).forEach((attr: Attr) =>
+          newScript.setAttribute(attr.name, attr.value)
+        );
+      newScript.text = oldScript.text;
+      oldScript.parentNode?.replaceChild(newScript, oldScript);
+    });
+  }, [snippet]);
+
+  return <div ref={containerRef} />;
+}
+
 const STORY_TILES = [
   { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=640&auto=format&fit=crop", label: "WOD" },
   { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=640&auto=format&fit=crop", label: "Training" },
@@ -760,27 +782,33 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {GALLERY_IMAGES.map((img, i) => (
-                <a
-                  key={i}
-                  href={GYM_CONFIG.instagram}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="relative h-40 md:h-52 overflow-hidden rounded-lg group border border-neutral-900 hover:border-red-900/60 transition-all"
-                >
-                  <img
-                    src={img.url}
-                    alt={img.alt}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[9px] font-mono text-white uppercase tracking-wider">{img.label}</span>
-                    <Instagram className="w-3 h-3 text-red-400 shrink-0" />
-                  </div>
-                </a>
-              ))}
+              {GYM_CONFIG.instagramWidget ? (
+                <div className="col-span-2 md:col-span-4 rounded-xl border border-neutral-900 overflow-hidden bg-neutral-950/60 p-3">
+                  <InstagramWidget snippet={GYM_CONFIG.instagramWidget} />
+                </div>
+              ) : (
+                GALLERY_IMAGES.map((img, i) => (
+                  <a
+                    key={i}
+                    href={GYM_CONFIG.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="relative h-40 md:h-52 overflow-hidden rounded-lg group border border-neutral-900 hover:border-red-900/60 transition-all"
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.alt}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[9px] font-mono text-white uppercase tracking-wider">{img.label}</span>
+                      <Instagram className="w-3 h-3 text-red-400 shrink-0" />
+                    </div>
+                  </a>
+                ))
+              )}
             </div>
           </div>
 

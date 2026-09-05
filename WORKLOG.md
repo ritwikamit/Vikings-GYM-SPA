@@ -5,6 +5,25 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Instagram widget slot ready (Option 1 prep) (opencode session)
+
+**Goal:** Prepare the GALLERY section to display the real `@vikings_fitness` feed/stories via a third-party widget (SnapWidget/LightWidget/Elfsight) the moment the owner provides the embed snippet. Backend untouched.
+
+**What changed (one commit):**
+- `src/components/PublicWebsite.tsx` — new `InstagramWidget` component that renders an uploaded widget snippet (re-creates `<script>` tags so script-based embeds run, iframes render as-is). GALLERY section now renders the live widget when `GYM_CONFIG.instagramWidget` is set; placeholder grid is kept as the fallback.
+- `src/config/gym.ts` — added `instagramWidget: ""` field.
+
+**How the owner activates it (can't be done from code):**
+1. Make `@vikings_fitness` a **public** account (Instagram app → Settings → Privacy → turn off "Private").
+2. Create a widget on snapwidget.com (or LightWidget/Elfsight/Curator) for `vikings_fitness` (photo gallery + stories widgets exist).
+3. Paste the embed snippet into `instagramWidget` in `src/config/gym.ts` (or send it to a future session) → rebuild/deploy.
+
+**Verification:** `npm run lint` + `npm run build` pass; with empty `instagramWidget` the placeholder gallery still renders.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend intact.
+
+---
+
 ## 2026-09-05 — WhatsApp leads, real coaching team + IG, Gallery & Daily Stories section (opencode session)
 
 **Goal:** Static-site conversions: every enquiry/join-now CTA opens a WhatsApp chat; feature the real coaching team with their Instagram profiles; add a gallery + daily-stories section linked to the official `@vikings_fitness` account. Backend untouched.
