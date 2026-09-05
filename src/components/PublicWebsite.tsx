@@ -74,14 +74,14 @@ const DEFAULT_PLANS = [
 
 const DEFAULT_TRAINERS = [
   {
-    name: "Ankit Kumar",
-    role: "STRENGTH & CONDITIONING COACH",
-    years: "Making members stronger, meaner & fitter",
-    desc: "Full-time strength coach at Vikings Gym & Spa. Trains members from their first lift to competition form with disciplined, measurable programming.",
-    cert: ["Strength & Conditioning"],
-    instagram: "https://www.instagram.com/ankitxn_/",
-    instagramHandle: "@ankitxn_",
-    photoUrl: photoAnkitKumar,
+    name: "Amit Singh",
+    role: "GYM COACH & MEMBER SUPPORT",
+    years: "Building the Vikings fam one rep at a time",
+    desc: "Warm, hands-on coach at Vikings Gym & Spa who supports members on the gym floor, corrects form and keeps the arena motivating every single day.",
+    cert: ["Gym Coaching"],
+    instagram: "https://www.instagram.com/amysinghca2018/",
+    instagramHandle: "@amysinghca2018",
+    photoUrl: photoAmitSingh,
   },
   {
     name: "Bittu Verma",
@@ -94,6 +94,16 @@ const DEFAULT_TRAINERS = [
     photoUrl: photoBittuVerma,
   },
   {
+    name: "Ankit Kumar",
+    role: "STRENGTH & CONDITIONING COACH",
+    years: "Making members stronger, meaner & fitter",
+    desc: "Full-time strength coach at Vikings Gym & Spa. Trains members from their first lift to competition form with disciplined, measurable programming.",
+    cert: ["Strength & Conditioning"],
+    instagram: "https://www.instagram.com/ankitxn_/",
+    instagramHandle: "@ankitxn_",
+    photoUrl: photoAnkitKumar,
+  },
+  {
     name: "Ali",
     role: "PERSONAL TRAINING & TRANSFORMATION COACH",
     years: "Personalized 1-on-1 transformation",
@@ -102,16 +112,6 @@ const DEFAULT_TRAINERS = [
     instagram: "https://www.instagram.com/ali_trainer/",
     instagramHandle: "@ali_trainer",
     photoUrl: photoAli,
-  },
-  {
-    name: "Amit Singh",
-    role: "GYM COACH & MEMBER SUPPORT",
-    years: "Building the Vikings fam one rep at a time",
-    desc: "Warm, hands-on coach at Vikings Gym & Spa who supports members on the gym floor, corrects form and keeps the arena motivating every single day.",
-    cert: ["Gym Coaching"],
-    instagram: "https://www.instagram.com/amysinghca2018/",
-    instagramHandle: "@amysinghca2018",
-    photoUrl: photoAmitSingh,
   },
 ];
 
