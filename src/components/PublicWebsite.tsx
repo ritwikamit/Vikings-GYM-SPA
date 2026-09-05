@@ -6,6 +6,7 @@ import {
   Sparkles,
   MapPin,
   Phone,
+  MessageCircle,
   Calendar,
   UserCheck,
   ArrowRight,
@@ -457,13 +458,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   };
 
   return (
-    <div id="top" className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white">
+    <div id="top" className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white pb-20 lg:pb-0">
       {/* Dynamic Header */}
       <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40"}`}>
         <div className={`max-w-7xl mx-auto px-6 flex justify-between items-center gap-6 transition-all duration-300 ${scrolled ? "h-14" : "h-[72px]"}`}>
           <a href="#top" className="flex items-center gap-3 shrink-0" aria-label="Vikings Gym & Spa — back to top">
             <img src={logoPremium} alt="Vikings Logo" className="h-8 sm:h-9 w-auto" />
-            <span className="font-mono text-base sm:text-lg font-black tracking-tighter text-white whitespace-nowrap">
+            <span className="hidden min-[400px]:block font-mono text-base sm:text-lg font-black tracking-tighter text-white whitespace-nowrap">
               VIKINGS <span className="text-red-500">GYM & SPA</span>
             </span>
           </a>
@@ -757,7 +758,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     inputMode="decimal"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
-                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
+                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-base sm:text-sm focus:border-red-650 focus:outline-none"
                     placeholder="e.g. 74"
                     required
                   />
@@ -772,7 +773,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     inputMode="decimal"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
-                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
+                    className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-base sm:text-sm focus:border-red-650 focus:outline-none"
                     placeholder="e.g. 178"
                     required
                   />
@@ -1179,13 +1180,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
 
           <div className="flex justify-center">
-            <div className="bg-neutral-900/60 border border-neutral-900 rounded-2xl p-8 flex flex-col items-center max-w-sm w-full">
+            <div className="bg-neutral-900/60 border border-neutral-900 rounded-2xl p-6 sm:p-8 flex flex-col items-center max-w-sm w-full">
               <span className="text-red-500 font-mono text-[10px] tracking-widest uppercase mb-4">SCAN · RATE · FORGE</span>
               <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="block bg-white rounded-xl p-3">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodeURIComponent(GYM_CONFIG.mapLink)}`}
                   alt="QR code — review Vikings Gym & Spa on Google Maps"
-                  className="w-56 h-56 object-contain"
+                  className="w-48 h-48 sm:w-56 sm:h-56 object-contain"
                   loading="lazy"
                 />
               </a>
@@ -1273,7 +1274,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     type="text"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
-                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
+                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-base sm:text-xs focus:border-red-650 focus:outline-none"
                     placeholder="e.g. Ritwik Singh"
                     required
                   />
@@ -1287,7 +1288,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     inputMode="tel"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
-                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
+                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-base sm:text-xs focus:border-red-650 focus:outline-none"
                     placeholder="e.g. +91 XXXXX XXXXX"
                     required
                   />
@@ -1300,7 +1301,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     rows={3}
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
-                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
+                    className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-base sm:text-xs focus:border-red-650 focus:outline-none"
                     placeholder="Want to inquire about trainers..."
                   ></textarea>
                 </div>
@@ -1358,7 +1359,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     value={franchiseData.name}
                     onChange={(e) => setFranchiseData({ ...franchiseData, name: e.target.value })}
                     required
-                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
+                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-base sm:text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
                     placeholder="e.g. Vikram Joshi"
                   />
                 </div>
@@ -1372,7 +1373,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                       value={franchiseData.city}
                       onChange={(e) => setFranchiseData({ ...franchiseData, city: e.target.value })}
                       required
-                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
+                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-base sm:text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
                       placeholder="e.g. Nanded, Jalna"
                     />
                   </div>
@@ -1382,7 +1383,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                       id="franchise-capital"
                       value={franchiseData.capital}
                       onChange={(e) => setFranchiseData({ ...franchiseData, capital: e.target.value })}
-                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-650 focus:outline-none"
+                      className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-base sm:text-xs focus:ring-1 focus:ring-red-650 focus:outline-none"
                     >
                       <option value="20L-50L">₹20 Lakhs - ₹50 Lakhs</option>
                       <option value="50L-1Cr">₹50 Lakhs - ₹1 Crore</option>
@@ -1400,7 +1401,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     value={franchiseData.phone}
                     onChange={(e) => setFranchiseData({ ...franchiseData, phone: e.target.value })}
                     required
-                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
+                    className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-base sm:text-xs focus:ring-1 focus:ring-red-600 focus:outline-none"
                     placeholder="e.g. +91 97654..."
                   />
                 </div>
@@ -1588,12 +1589,44 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             exit={{ opacity: 0, y: 16 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Back to top"
-            className="fixed bottom-6 right-6 z-50 bg-red-600 hover:bg-red-700 text-black p-3 rounded-full shadow-lg shadow-red-900/40 transition-colors cursor-pointer"
+            className="fixed bottom-24 right-4 sm:right-6 lg:bottom-6 z-50 bg-red-600 hover:bg-red-700 text-black p-3 rounded-full shadow-lg shadow-red-900/40 transition-colors cursor-pointer"
           >
             <ArrowUp className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Mobile sticky action bar: Call · WhatsApp · Join (phones/tablets only) */}
+      <div
+        className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-white/10 bg-black/92 backdrop-blur-md"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
+        <div className="grid grid-cols-3 divide-x divide-white/10">
+          <a
+            href={`tel:${GYM_CONFIG.phone}`}
+            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-bold tracking-[0.18em] text-gray-300 active:text-white transition-colors"
+          >
+            <Phone className="w-5 h-5 text-red-500" />
+            CALL
+          </a>
+          <a
+            href={`https://wa.me/${GYM_CONFIG.whatsapp}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-bold tracking-[0.18em] text-gray-300 active:text-white transition-colors"
+          >
+            <MessageCircle className="w-5 h-5 text-red-500" />
+            WHATSAPP
+          </a>
+          <button
+            onClick={() => openWhatsApp(JOIN_MESSAGE)}
+            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-black tracking-[0.18em] bg-red-600 text-black active:bg-red-500 transition-colors cursor-pointer"
+          >
+            <Dumbbell className="w-5 h-5" />
+            JOIN NOW
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

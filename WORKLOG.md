@@ -5,6 +5,22 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Smartphone-first professionalism pass (opencode session)
+
+**Goal:** Treat phones/tablets as the primary device. Note: no UI skill pack is installed (only the opencode-config skill), so this is a direct mobile-UX pass.
+
+**What changed (one commit):**
+- Sticky mobile action bar (below lg): CALL / WHATSAPP / JOIN NOW with safe-area padding; page bottom-spaced for it; back-to-top docked above it on phones.
+- No-zoom inputs: all form fields 16px on phones (iOS wont auto-zoom), desktop sizes kept.
+- Tiny-screen header: wordmark hides under 400px so logo + Join + burger never overflow; QR card shrinks to fit 320px screens.
+- Foundation: viewport-fit=cover, antialiased text, transparent tap highlight.
+
+**Verification:** lint + build pass; bar cells, 16px inputs, safe-area, viewport-fit and generated CSS all confirmed in dist.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Coaches order: Amit, Bittu, Vaishnavi, Ankit, Ali, Neha, Deepsikha (opencode session)
 
 **Goal:** Requested team sequence on the site.
