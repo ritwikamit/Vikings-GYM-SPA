@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Lucid readability: trust card + dim-text lift (opencode session)
+
+**Goal:** Hours/location line sometimes washed out over animations; brighten dim texts wherever needed.
+
+**What changed (one commit):** Hero trust cluster (stars + hours + location) now sits in a frosted dark-glass card so it reads over any background; info line lifted to gray-300. Site-wide one-step lift for dim functional micro-texts (mobile strip links, coach taglines, plan periods, BMI scale label, reviews caption, gallery note, footer lines) - hierarchy preserved, nothing restyled.
+
+**Verification:** lint + build pass; trust card + hours line confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Trainers moved after Facilities, menus re-sequenced (opencode session)
 
 **Goal:** Trainers section sits between Facilities and BMI; every menu follows page order.

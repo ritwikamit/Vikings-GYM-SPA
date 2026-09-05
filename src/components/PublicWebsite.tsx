@@ -564,7 +564,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <a
                 key={l.id}
                 href={`#${l.id}`}
-                className={`transition-colors ${activeSection === l.id ? "text-red-500" : "text-gray-500 hover:text-white"}`}
+                className={`transition-colors ${activeSection === l.id ? "text-red-500" : "text-gray-400 hover:text-white"}`}
               >
                 {l.label}
               </a>
@@ -753,7 +753,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                         </a>
                       )}
                     </h3>
-                    <div className="font-mono text-[10px] text-gray-500 mb-3">{t.years}</div>
+                    <div className="font-mono text-[10px] text-gray-400 mb-3">{t.years}</div>
                     <p className="text-gray-400 text-xs leading-relaxed mb-4">{t.desc}</p>
                   </div>
 
@@ -875,7 +875,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   </span>
                 </div>
                 <div className="mb-4">
-                  <span className="text-xs font-mono text-gray-500 uppercase block mb-1">BIOLOGY SCALE:</span>
+                  <span className="text-xs font-mono text-gray-400 uppercase block mb-1">BIOLOGY SCALE:</span>
                   <span className="text-sm font-bold text-white block">{bmiCategory}</span>
                 </div>
                 <div className="bg-black/60 border border-neutral-850 p-4 rounded text-xs text-gray-400 leading-normal">
@@ -913,7 +913,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
                 <div className="mb-6 pb-6 border-b border-neutral-850">
                   <span className="text-3xl font-mono font-black text-white">{plan.price}</span>
-                  <span className="text-xs text-gray-500 font-mono block mt-1">{plan.period}</span>
+                  <span className="text-xs text-gray-400 font-mono block mt-1">{plan.period}</span>
                 </div>
 
                 <ul className="space-y-3 mb-8">
@@ -1056,7 +1056,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 </a>
               ))}
             </div>
-            <p className="text-[10px] font-mono text-gray-600 mt-3">
+            <p className="text-[10px] font-mono text-gray-500 mt-3">
               Stories refresh every 24 hours on our official Instagram account — tap any bubble to watch live.
             </p>
           </div>
@@ -1158,7 +1158,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
               ))}
-              <span className="text-gray-500 text-xs font-mono ml-2">RATED {GYM_CONFIG.rating} / 5 BY MEMBERS</span>
+              <span className="text-gray-400 text-xs font-mono ml-2">RATED {GYM_CONFIG.rating} / 5 BY MEMBERS</span>
             </div>
             <div className="flex flex-wrap gap-4">
               <a
@@ -1575,10 +1575,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
 
         <div className="pt-6 border-t border-neutral-900">
-          <p className="text-xs text-gray-600 font-mono text-center">
+          <p className="text-xs text-gray-500 font-mono text-center">
             © {new Date().getFullYear()} Vikings Gym & Spa — MG Road, Aurangabad, Bihar. All rights reserved.
           </p>
-          <p className="text-[11px] text-gray-700 font-mono text-center mt-2">
+          <p className="text-[11px] text-gray-500 font-mono text-center mt-2">
             Designed & Developed by{" "}
             <a
               href="https://accustomlabs.com"
