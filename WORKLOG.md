@@ -5,6 +5,25 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Static-site frontend hardening: portal login hidden, all CTAs scroll on-page (opencode session)
+
+**Goal:** Convert the public-facing homepage into a clean static gym website. Portal login must not be visible, but code preserved for future backend reconnect. Backend untouched.
+
+**What changed (one commit):**
+- `src/components/PublicWebsite.tsx`
+  - Hidden **PORTAL LOGIN** buttons (desktop nav + mobile menu) via `PORTAL_ACCESS_ENABLED = false` flag — JSX kept in place, not deleted. Same for `onLoginClick`/`onJoinNow` props (preserved via `portalHandlers`).
+  - All CTAs now smooth-scroll on-page instead of routing to the login/register portal: header **JOIN NOW** + hero **INVEST IN YOURSELF** → `#pricing`; plan **SECURE SLOT NOW**, **ENQUIRE ABOUT GROUP CLASSES**, **BOOK A PERSONAL TRAINER**, **BEGIN YOUR JOURNEY** → `#contact` (guest inquiry form).
+  - Added `id="contact"` to the location/inquiry section + **CONTACT** link in desktop & mobile nav.
+  - Added `DEFAULT_TRAINERS` fallback (Arjun Reddy, Kavita Nair, Rohit Kumar — matching seed data) so the coaches section renders even when the backend API is unreachable; frontend now uses `(trainersData && trainersData.length > 0 ? trainersData : DEFAULT_TRAINERS)`.
+  - Fixed a stray `referrerPolicy='no-referrer'` that had been embedded inside a className string (moved to proper prop).
+- Backend (`backend/`), `App.tsx` auth routes, `src/api/`, all portal components — **unchanged**. Portal remains reachable only via direct URL; no public entry points.
+
+**Verification:** `npm run lint` clean, `npm run build` + prerender pass (exit 0). Prerendered `dist/index.html` (56 kB) contains **0** "PORTAL LOGIN" occurrences, includes `#contact` nav + trainer fallbacks.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend intact.
+
+---
+
 ## 2026-08-19 — Google Search Console SEO: verification, canonical www, SPA prerender (opencode session)
 
 **Goal:** Get the site to show logo + details in Google search results (was showing "No information is available for this page").

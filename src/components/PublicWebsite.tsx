@@ -67,6 +67,35 @@ const DEFAULT_PLANS = [
   },
 ];
 
+const DEFAULT_TRAINERS = [
+  {
+    name: "Arjun Reddy",
+    role: "HEAD COACH · STRENGTH & CROSSFIT",
+    years: "6+ years on the front lines",
+    desc: "ACE CPT & CrossFit L2 certified strength coach who programs heavy compound work and competitive conditioning for serious lifters.",
+    cert: ["ACE CPT", "CrossFit L2"],
+  },
+  {
+    name: "Kavita Nair",
+    role: "YOGA, MOBILITY & WEIGHT LOSS SPECIALIST",
+    years: "4+ years guiding warriors",
+    desc: "NASM CPT & Yoga Alliance RYT-200 certified. Blends mobility work and calorie-focused programming to transform body composition.",
+    cert: ["NASM CPT", "Yoga Alliance RYT-200"],
+  },
+  {
+    name: "Rohit Kumar",
+    role: "POWERLIFTING & BODYBUILDING COACH",
+    years: "8+ years of peak performance",
+    desc: "ISSA CPT with sports nutrition expertise. Bench, squat and deadlift specialist who builds strength athletes from the platform up.",
+    cert: ["ISSA CPT", "Sports Nutrition"],
+  },
+];
+
+// Static-site mode: the member portal login is intentionally hidden but fully
+// preserved (JSX marked with `PORTAL_ACCESS_ENABLED` + App.tsx routes remain)
+// so the portal can be re-enabled later without losing the integration.
+const PORTAL_ACCESS_ENABLED = false;
+
 export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsiteProps) {
   const { data: plansData } = useQuery({
     queryKey: ['public-plans'],
@@ -98,6 +127,15 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Static-site navigation: buttons scroll to on-page sections (no portal routing).
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // Portal handlers are preserved for future portal reconnect.
+  const portalHandlers = { onJoinNow, onLoginClick };
+  void portalHandlers;
 
   const calculateBMI = (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,6 +200,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a>
           <a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
           <a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
+          <a href="#contact" className="hover:text-red-500 transition-colors">CONTACT</a>
           <button
             onClick={() => setFranchiseOpen(true)}
             className="hover:text-red-500 transition-colors cursor-pointer text-left"
@@ -171,15 +210,18 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          <button
-            onClick={onLoginClick}
-            className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
-          >
-            PORTAL LOGIN
-          </button>
+          {/* PORTAL LOGIN — hidden in static-site mode; preserved for future portal reconnect */}
+          {PORTAL_ACCESS_ENABLED && (
+            <button
+              onClick={onLoginClick}
+              className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
+            >
+              PORTAL LOGIN
+            </button>
+          )}
 
           <button
-            onClick={onJoinNow}
+            onClick={() => scrollTo("pricing")}
             className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-4 py-2 sm:px-5 sm:py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
           >
             JOIN NOW
@@ -216,6 +258,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">TRAINERS</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
               <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
+              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">CONTACT</a>
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -225,16 +268,19 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               >
                 Franchise
               </button>
-              
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onLoginClick();
-                }}
-                className="mt-8 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
-              >
-                PORTAL LOGIN
-              </button>
+
+              {/* PORTAL LOGIN — hidden in static-site mode; preserved for future portal reconnect */}
+              {PORTAL_ACCESS_ENABLED && (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onLoginClick();
+                  }}
+                  className="mt-8 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
+                >
+                  PORTAL LOGIN
+                </button>
+              )}
             </div>
           </motion.div>
         )}
@@ -253,7 +299,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         }
         description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths."
         ctaText="INVEST IN YOURSELF"
-        onCtaClick={onJoinNow}
+        onCtaClick={() => scrollTo("pricing")}
         images={[
           "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
@@ -301,7 +347,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <img
                   src={f.img}
                   alt={f.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 referrerPolicy='no-referrer'"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 <div className="absolute top-4 left-4 bg-red-600 text-black p-2 rounded">
@@ -451,7 +498,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </div>
 
               <button
-                onClick={onJoinNow}
+                onClick={() => scrollTo("contact")}
                 className={`w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer ${plan.popular
                   ? "bg-red-600 hover:bg-red-700 text-black shadow-lg"
                   : "bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
@@ -477,7 +524,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               ))}
             </ul>
             <button
-              onClick={onJoinNow}
+              onClick={() => scrollTo("contact")}
               className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
             >
               ENQUIRE ABOUT GROUP CLASSES
@@ -503,7 +550,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               ))}
             </ul>
             <button
-              onClick={onJoinNow}
+              onClick={() => scrollTo("contact")}
               className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
             >
               BOOK A PERSONAL TRAINER
@@ -522,7 +569,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {trainersData && trainersData.map((t: any, idx: number) => (
+            {(trainersData && trainersData.length > 0 ? trainersData : DEFAULT_TRAINERS).map((t: any, idx: number) => (
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
                 <div className="md:w-2/5 h-64 md:h-auto bg-neutral-900">
                   {t.photoUrl ? (
@@ -560,7 +607,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Contact & Map Section */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">VISIT THE KINGDOM</span>
@@ -825,7 +872,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </li>
             </ul>
             <button
-              onClick={onJoinNow}
+              onClick={() => scrollTo("contact")}
               className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
             >
               BEGIN YOUR JOURNEY
