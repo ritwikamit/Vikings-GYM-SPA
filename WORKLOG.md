@@ -5,6 +5,26 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — WhatsApp leads, real coaching team + IG, Gallery & Daily Stories section (opencode session)
+
+**Goal:** Static-site conversions: every enquiry/join-now CTA opens a WhatsApp chat; feature the real coaching team with their Instagram profiles; add a gallery + daily-stories section linked to the official `@vikings_fitness` account. Backend untouched.
+
+**What changed (one commit):**
+- `src/components/PublicWebsite.tsx`
+  - All CTAs now open `https://wa.me/917764922023?text=<prefilled message>` via `openWhatsApp()`: header **JOIN NOW**, hero **INVEST IN YOURSELF**, plan **SECURE SLOT NOW** (message includes plan name/price), **ENQUIRE ABOUT GROUP CLASSES**, **BOOK A PERSONAL TRAINER**, **BEGIN YOUR JOURNEY**.
+  - Contact form submit and Franchise form submit now ALSO open WhatsApp with the form details (name/phone/message; franchise proposal details) while keeping the success states.
+  - Coaches updated to the real team: **Ankit Kumar** (`@ankitxn_`), **Bittu Verma** (`@get_fit_with_bittu`), **Ali** (`@ali_trainer`), **Amit Singh** (`@amysinghca2018`). Each card shows an Instagram pill + icon linking to their profile. Avatar fallback upgraded to a styled ring-initial when no photo (Instagram blocks anonymous photo scraping — see note below).
+  - New **GALLERY & DAILY STORIES** section (`id="gallery"`, added to desktop + mobile nav): a stories strip (gradient-ring bubbles linking to `instagram.com/stories/vikings_fitness`), an 8-image gallery grid, and a follow/Watch-stories CTA. Uses curated Unsplash workout/spa imagery consistent with the existing hero — real IG media can't be embedded without a logged-in account.
+- `src/config/gym.ts` — added `instagramStories` + `instagramHandle`.
+
+**Instagram limitation (important):** Instagram blocks all anonymous data access (`?__a=1` → login wall, `i.instagram.com/api/...web_profile_info` → 401 `require_login`). Real profile photos, post media and daily-story frames **cannot be extracted without account credentials/API access**. Implementation uses clean placeholders + direct links to the live profiles. To show real photos later: provide image URLs/files and set each coach's `photoUrl` / replace `GALLERY_IMAGES`.
+
+**Verification:** `npm run lint` + `npm run build` (incl. prerender) pass. Prerendered `dist/index.html` (85 kB) contains `wa.me/917764922023`, all 4 coach names, DAILY STORIES, GALLERY, and 0 PORTAL LOGIN.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend intact.
+
+---
+
 ## 2026-09-05 — Static-site frontend hardening: portal login hidden, all CTAs scroll on-page (opencode session)
 
 **Goal:** Convert the public-facing homepage into a clean static gym website. Portal login must not be visible, but code preserved for future backend reconnect. Backend untouched.

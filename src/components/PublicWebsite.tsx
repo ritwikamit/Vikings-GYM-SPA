@@ -19,7 +19,8 @@ import {
   Users,
   Instagram,
   Menu,
-  X
+  X,
+  Play
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.png";
@@ -69,26 +70,60 @@ const DEFAULT_PLANS = [
 
 const DEFAULT_TRAINERS = [
   {
-    name: "Arjun Reddy",
-    role: "HEAD COACH · STRENGTH & CROSSFIT",
-    years: "6+ years on the front lines",
-    desc: "ACE CPT & CrossFit L2 certified strength coach who programs heavy compound work and competitive conditioning for serious lifters.",
-    cert: ["ACE CPT", "CrossFit L2"],
+    name: "Ankit Kumar",
+    role: "STRENGTH & CONDITIONING COACH",
+    years: "Making members stronger, meaner & fitter",
+    desc: "Full-time strength coach at Vikings Gym & Spa. Trains members from their first lift to competition form with disciplined, measurable programming.",
+    cert: ["Strength & Conditioning"],
+    instagram: "https://www.instagram.com/ankitxn_/",
+    instagramHandle: "@ankitxn_",
   },
   {
-    name: "Kavita Nair",
-    role: "YOGA, MOBILITY & WEIGHT LOSS SPECIALIST",
-    years: "4+ years guiding warriors",
-    desc: "NASM CPT & Yoga Alliance RYT-200 certified. Blends mobility work and calorie-focused programming to transform body composition.",
-    cert: ["NASM CPT", "Yoga Alliance RYT-200"],
+    name: "Bittu Verma",
+    role: "FITNESS & WEIGHT LOSS COACH",
+    years: "Turning goals into daily habits",
+    desc: "Dedicated fitness coach at Vikings. Specializes in weight loss, cardio conditioning and instructor-led group sessions that keep every Warrior accountable.",
+    cert: ["Fitness Coaching", "Weight Loss"],
+    instagram: "https://www.instagram.com/get_fit_with_bittu/",
+    instagramHandle: "@get_fit_with_bittu",
   },
   {
-    name: "Rohit Kumar",
-    role: "POWERLIFTING & BODYBUILDING COACH",
-    years: "8+ years of peak performance",
-    desc: "ISSA CPT with sports nutrition expertise. Bench, squat and deadlift specialist who builds strength athletes from the platform up.",
-    cert: ["ISSA CPT", "Sports Nutrition"],
+    name: "Ali",
+    role: "PERSONAL TRAINING & TRANSFORMATION COACH",
+    years: "Personalized 1-on-1 transformation",
+    desc: "Vikings personal trainer who programs individual workouts, nutrition guidance and progress audits for members chasing serious body transformation.",
+    cert: ["Personal Training"],
+    instagram: "https://www.instagram.com/ali_trainer/",
+    instagramHandle: "@ali_trainer",
   },
+  {
+    name: "Amit Singh",
+    role: "GYM COACH & MEMBER SUPPORT",
+    years: "Building the Vikings fam one rep at a time",
+    desc: "Warm, hands-on coach at Vikings Gym & Spa who supports members on the gym floor, corrects form and keeps the arena motivating every single day.",
+    cert: ["Gym Coaching"],
+    instagram: "https://www.instagram.com/amysinghca2018/",
+    instagramHandle: "@amysinghca2018",
+  },
+];
+
+const STORY_TILES = [
+  { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=640&auto=format&fit=crop", label: "WOD" },
+  { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=640&auto=format&fit=crop", label: "Training" },
+  { img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=640&auto=format&fit=crop", label: "Lifts" },
+  { img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=640&auto=format&fit=crop", label: "Warriors" },
+  { img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=640&auto=format&fit=crop", label: "Steam Spa" },
+];
+
+const GALLERY_IMAGES = [
+  { url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=900&auto=format&fit=crop", alt: "Strength zone", label: "Strength" },
+  { url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=900&auto=format&fit=crop", alt: "Barbell training", label: "Barbell" },
+  { url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=900&auto=format&fit=crop", alt: "Gym floor", label: "Floor" },
+  { url: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=900&auto=format&fit=crop", alt: "Deadlift", label: "Deadlift" },
+  { url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=900&auto=format&fit=crop", alt: "Coach-led training", label: "Coaching" },
+  { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=900&auto=format&fit=crop", alt: "Conditioning", label: "Conditioning" },
+  { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=900&auto=format&fit=crop", alt: "Intense session", label: "Intensity" },
+  { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=900&auto=format&fit=crop", alt: "Steam spa recovery", label: "Steam Spa" },
 ];
 
 // Static-site mode: the member portal login is intentionally hidden but fully
@@ -128,10 +163,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Static-site navigation: buttons scroll to on-page sections (no portal routing).
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Static-site actions: every enquiry / join-now CTA opens a WhatsApp chat with a
+  // pre-filled message so leads reach the gym front desk directly.
+  const openWhatsApp = (message: string) => {
+    const url = `https://wa.me/${GYM_CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
+
+  const JOIN_MESSAGE = "Hi Vikings Gym & Spa! I want to JOIN. Please share the membership plans and timings.";
 
   // Portal handlers are preserved for future portal reconnect.
   const portalHandlers = { onJoinNow, onLoginClick };
@@ -163,6 +202,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (contactName && contactPhone) {
+      const msg = `Hi Vikings Gym & Spa! I'm ${contactName} (${contactPhone}). ${
+        contactMessage ? `My inquiry: ${contactMessage}` : "I'd like to know more about your memberships & timings."
+      }`;
+      openWhatsApp(msg);
       setContactSubmitted(true);
       setTimeout(() => {
         setContactSubmitted(false);
@@ -175,6 +218,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
   const handleFranchiseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const msg = `FRANCHISE PROPOSAL — I'm ${franchiseData.name}. Preferred city: ${franchiseData.city}. Investment range: ${franchiseData.capital}. Contact: ${franchiseData.phone}.`;
+    openWhatsApp(msg);
     setFranchiseSubmitted(true);
     setTimeout(() => {
       setFranchiseSubmitted(false);
@@ -198,6 +243,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a>
           <a href="#facilities" className="hover:text-red-500 transition-colors">FACILITIES</a>
           <a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a>
+          <a href="#gallery" className="hover:text-red-500 transition-colors">GALLERY</a>
           <a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
           <a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
           <a href="#contact" className="hover:text-red-500 transition-colors">CONTACT</a>
@@ -221,7 +267,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           )}
 
           <button
-            onClick={() => scrollTo("pricing")}
+            onClick={() => openWhatsApp(JOIN_MESSAGE)}
             className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-4 py-2 sm:px-5 sm:py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
           >
             JOIN NOW
@@ -256,6 +302,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">ABOUT</a>
               <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">FACILITIES</a>
               <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">TRAINERS</a>
+              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">GALLERY</a>
               <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
               <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
               <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">CONTACT</a>
@@ -299,7 +346,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         }
         description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths."
         ctaText="INVEST IN YOURSELF"
-        onCtaClick={() => scrollTo("pricing")}
+        onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
         images={[
           "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
@@ -498,7 +545,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </div>
 
               <button
-                onClick={() => scrollTo("contact")}
+                onClick={() => openWhatsApp(`Hi Vikings Gym & Spa! I want to secure the ${plan.name} (${plan.price} / ${plan.period}). Please confirm availability.`)}
                 className={`w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer ${plan.popular
                   ? "bg-red-600 hover:bg-red-700 text-black shadow-lg"
                   : "bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
@@ -524,7 +571,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               ))}
             </ul>
             <button
-              onClick={() => scrollTo("contact")}
+              onClick={() => openWhatsApp("Hi Vikings Gym & Spa! I'd like to enquire about GROUP CLASSES (Zumba / Dance / Yoga). Please share details.")}
               className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
             >
               ENQUIRE ABOUT GROUP CLASSES
@@ -550,7 +597,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               ))}
             </ul>
             <button
-              onClick={() => scrollTo("contact")}
+              onClick={() => openWhatsApp("Hi Vikings Gym & Spa! I'd like to BOOK A PERSONAL TRAINER session. Please share availability & pricing.")}
               className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600"
             >
               BOOK A PERSONAL TRAINER
@@ -575,15 +622,31 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   {t.photoUrl ? (
                     <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   ) : (
-                    <div className="w-full h-full bg-neutral-800 flex items-center justify-center">
-                      <span className="text-gray-500 font-mono text-4xl">{t.name ? t.name.charAt(0) : '?'}</span>
+                    <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
+                      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+                      <div className="w-24 h-24 rounded-full border-2 border-red-600/60 bg-neutral-950 flex items-center justify-center relative">
+                        <span className="text-red-500 font-mono text-5xl font-black uppercase">{t.name ? t.name.charAt(0) : '?'}</span>
+                      </div>
                     </div>
                   )}
                 </div>
                 <div className="md:w-3/5 p-6 flex flex-col justify-between">
                   <div>
                     <div className="text-xs font-mono font-bold text-red-500 mb-1">{t.role}</div>
-                    <h3 className="text-lg font-bold text-white mb-2">{t.name}</h3>
+                    <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                      {t.name}
+                      {t.instagram && (
+                        <a
+                          href={t.instagram}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[10px] font-mono font-bold text-gray-400 hover:text-white transition-colors"
+                          title={`Instagram ${t.instagramHandle || ""}`.trim()}
+                        >
+                          <Instagram className="w-4 h-4" />
+                        </a>
+                      )}
+                    </h3>
                     <div className="font-mono text-[10px] text-gray-500 mb-3">{t.years}</div>
                     <p className="text-gray-400 text-xs leading-relaxed mb-4">{t.desc}</p>
                   </div>
@@ -598,10 +661,153 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                         {t.cert}
                       </span>
                     ) : null}
+
+                    {t.instagram && (
+                      <a
+                        href={t.instagram}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="ml-auto text-[9px] font-mono bg-red-600/10 text-red-400 hover:text-white hover:bg-red-600/25 px-2.5 py-0.5 rounded border border-red-900/50 transition-all uppercase font-bold"
+                      >
+                        <Instagram className="w-3 h-3 inline -mt-0.5 mr-1" />
+                        {t.instagramHandle || "Instagram"}
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery & Official Instagram Section */}
+      <section id="gallery" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">LIVE FROM THE ARENA</p>
+            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
+              GALLERY & DAILY STORIES
+            </h2>
+            <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
+            <p className="text-gray-400 text-sm mt-6 max-w-xl mx-auto leading-relaxed">
+              Training clips, member transformations and steam-spa energy — posted every day on our official account{" "}
+              <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="text-red-500 hover:underline">@{GYM_CONFIG.instagramHandle}</a>.
+              Tap today's stories below to watch the action live on Instagram.
+            </p>
+          </div>
+
+          {/* Daily Stories strip */}
+          <div className="mb-14">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-red-600/10 border border-red-500/30 flex items-center justify-center">
+                  <Play className="w-3 h-3 text-red-500 fill-red-500" />
+                </span>
+                DAILY STORIES
+              </h3>
+              <a
+                href={GYM_CONFIG.instagramStories}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] font-mono text-red-500 hover:text-white uppercase font-bold transition-colors"
+              >
+                View on Instagram →
+              </a>
+            </div>
+
+            <div className="flex gap-5 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {STORY_TILES.map((s, i) => (
+                <a
+                  key={i}
+                  href={GYM_CONFIG.instagramStories}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex flex-col items-center shrink-0 group"
+                  title={`Watch today's stories`}
+                >
+                  <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full p-[3px] bg-gradient-to-tr from-red-600 via-rose-500 to-amber-400 group-hover:scale-105 transition-transform">
+                    <div className="w-full h-full rounded-full overflow-hidden border-4 border-black">
+                      <img src={s.img} alt={s.label} loading="lazy" className="w-full h-full object-cover" />
+                    </div>
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="w-8 h-8 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                        <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+                      </span>
+                    </span>
+                  </div>
+                  <span className="mt-2 text-[9px] font-mono text-gray-400 uppercase tracking-wider">{s.label}</span>
+                </a>
+              ))}
+            </div>
+            <p className="text-[10px] font-mono text-gray-600 mt-3">
+              Stories refresh every 24 hours on our official Instagram account — tap any bubble to watch live.
+            </p>
+          </div>
+
+          {/* Gallery grid */}
+          <div>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest">GALLERY</h3>
+              <a
+                href={GYM_CONFIG.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[10px] font-mono text-red-500 hover:text-white uppercase font-bold transition-colors"
+              >
+                Follow @{GYM_CONFIG.instagramHandle} →
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {GALLERY_IMAGES.map((img, i) => (
+                <a
+                  key={i}
+                  href={GYM_CONFIG.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="relative h-40 md:h-52 overflow-hidden rounded-lg group border border-neutral-900 hover:border-red-900/60 transition-all"
+                >
+                  <img
+                    src={img.url}
+                    alt={img.alt}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[9px] font-mono text-white uppercase tracking-wider">{img.label}</span>
+                    <Instagram className="w-3 h-3 text-red-400 shrink-0" />
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Follow CTA */}
+          <div className="mt-12 bg-neutral-900/40 border border-neutral-900 rounded-xl p-8 text-center">
+            <h4 className="font-mono font-black text-white uppercase tracking-widest mb-2">DON'T MISS TODAY'S ACTION</h4>
+            <p className="text-xs text-gray-400 mb-6 max-w-lg mx-auto leading-relaxed">
+              Follow us for daily training clips, member transformation updates and behind-the-scenes energy from the gym floor.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href={GYM_CONFIG.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer flex items-center gap-2"
+              >
+                <Instagram className="w-4 h-4" /> FOLLOW @{GYM_CONFIG.instagramHandle.toUpperCase()}
+              </a>
+              <a
+                href={GYM_CONFIG.instagramStories}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer"
+              >
+                WATCH TODAY'S STORIES
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -872,7 +1078,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </li>
             </ul>
             <button
-              onClick={() => scrollTo("contact")}
+              onClick={() => openWhatsApp(JOIN_MESSAGE)}
               className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
             >
               BEGIN YOUR JOURNEY
