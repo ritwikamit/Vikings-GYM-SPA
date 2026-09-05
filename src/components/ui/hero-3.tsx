@@ -5,7 +5,6 @@ import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Star, Clock, MapPin } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { GYM_CONFIG } from "../../config/gym";
-import DotPattern from "./dot-pattern-1";
 
 // Props interface for the component
 export interface AnimatedMarqueeHeroProps {
@@ -31,6 +30,106 @@ const ActionButton = ({ children, onClick }: { children: React.ReactNode, onClic
     {children}
   </motion.button>
 );
+
+// Interactive dot field: dots swell and ignite red near the cursor.
+function DotGrid() {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let raf = 0;
+    let running = false;
+    let w = 0;
+    let h = 0;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const GAP = coarse ? 44 : 30;
+    const RADIUS = 130;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      w = rect.width;
+      h = rect.height;
+      canvas.width = Math.max(1, Math.round(w * dpr));
+      canvas.height = Math.max(1, Math.round(h * dpr));
+    };
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    const host = canvas.closest("section") ?? canvas;
+    const onMove = (e: MouseEvent) => {
+      const r = canvas.getBoundingClientRect();
+      mouse.tx = e.clientX - r.left;
+      mouse.ty = e.clientY - r.top;
+    };
+    const onLeave = () => {
+      mouse.tx = -9999;
+      mouse.ty = -9999;
+    };
+    host.addEventListener("mousemove", onMove);
+    host.addEventListener("mouseleave", onLeave);
+
+    const draw = () => {
+      // Ease the cursor for a liquid feel
+      mouse.x += (mouse.tx - mouse.x) * 0.12;
+      mouse.y += (mouse.ty - mouse.y) * 0.12;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      for (let gy = GAP / 2; gy < h; gy += GAP) {
+        for (let gx = GAP / 2; gx < w; gx += GAP) {
+          const dx = gx - mouse.x;
+          const dy = gy - mouse.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          const t = Math.max(0, 1 - d / RADIUS);
+          const swell = t * t;
+          const r = 1 + swell * 2.6;
+          const alpha = 0.1 + swell * 0.55;
+          // Fade dots toward the edges, like a masked pattern
+          const nx = gx / w - 0.5;
+          const ny = gy / h - 0.42;
+          const edge = Math.max(0, 1 - (nx * nx * 2.2 + ny * ny * 2.6));
+          ctx.beginPath();
+          ctx.arc(gx, gy, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${swell > 0.25 ? "239,68,68" : "255,255,255"},${(alpha * edge).toFixed(3)})`;
+          ctx.fill();
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !running) {
+          running = true;
+          raf = requestAnimationFrame(draw);
+        } else if (!entry.isIntersecting && running) {
+          running = false;
+          cancelAnimationFrame(raf);
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+      host.removeEventListener("mousemove", onMove);
+      host.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full" />;
+}
 
 // The main hero component
 export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
@@ -142,7 +241,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             />
           ))}
         </motion.div>
-        <DotPattern className="fill-red-500/[0.07] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,black,transparent)]" />
+        <DotGrid />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
@@ -169,7 +268,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="text-4xl sm:text-6xl md:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-6 drop-shadow-[0_2px_28px_rgba(220,38,38,0.35)]"
+          className="text-4xl sm:text-6xl md:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-6"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (

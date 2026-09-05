@@ -615,7 +615,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         title={
           <>
             CARVE YOUR BODY <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-500 to-red-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-800">
               FOR VALHALLA
             </span>
           </>

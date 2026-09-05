@@ -5,6 +5,20 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Interactive dot field + title reverted to site tone (opencode session)
+
+**Goal:** Dots expand near the cursor; hero title should match other texts (revert brightening).
+
+**What changed (one commit):**
+- **Title reverted:** "FOR VALHALLA" gradient back to red-500/rose-600/red-800; removed the h1 red drop-shadow glow.
+- **New DotGrid canvas (src/components/ui/hero-3.tsx):** replaces the static SVG dot pattern. Dots near the cursor swell ~3.5x and ignite red with liquid eased follow; calm white pin-dots elsewhere, edge-faded. Pauses off-screen, coarser grid on touch devices, disabled under reduced-motion, aria-hidden.
+
+**Verification:** lint + build pass; canvas + restored gradient confirmed in prerendered HTML. Also verified via codepoint inspection that all Unicode copy (en-dashes, middots, rupee) is intact in source and dist - earlier odd glyphs were console display artifacts only.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Interactive hero: cursor torch + parallax, glass Explore CTA (opencode session)
 
 **Goal:** Background reacts to the mouse; EXPLORE THE ARENA matches the Google-reviews pill.
