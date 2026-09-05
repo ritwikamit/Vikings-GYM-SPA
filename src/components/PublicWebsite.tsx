@@ -1584,9 +1584,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               href="https://accustomlabs.com"
               target="_blank"
               rel="noreferrer"
-              className="text-gray-500 hover:text-red-500 transition-colors"
+              className="transition-colors hover:opacity-80"
             >
-              AC Custom
+              <span className="text-red-500 font-bold">AC</span>{" "}
+              <span className="text-white font-bold">Custom</span>
             </a>
           </p>
         </div>
