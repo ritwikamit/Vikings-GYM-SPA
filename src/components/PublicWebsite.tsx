@@ -516,7 +516,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
             <button
               onClick={() => openWhatsApp(JOIN_MESSAGE)}
-              className="inline-flex items-center h-10 px-5 sm:px-6 bg-red-600 hover:bg-red-500 text-black font-mono font-black text-xs tracking-[0.2em] rounded-md hover:shadow-lg hover:shadow-red-600/40 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center h-10 px-5 sm:px-6 bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs tracking-[0.2em] rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer whitespace-nowrap"
             >
               JOIN NOW
             </button>
@@ -573,7 +573,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   setIsMobileMenuOpen(false);
                   openWhatsApp(JOIN_MESSAGE);
                 }}
-                className="mt-8 w-full py-3.5 bg-red-600 hover:bg-red-500 text-black font-mono font-black text-sm tracking-[0.2em] rounded-md transition-all cursor-pointer"
+                className="mt-8 w-full py-3.5 bg-red-600 hover:bg-red-700 text-black font-mono font-black text-sm tracking-[0.2em] rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
               >
                 JOIN NOW
               </button>
