@@ -5,6 +5,35 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Hero forge ambiance + social-proof redesign (opencode session)
+
+**Goal:** Animated theme-aligned hero background; fix the weak-looking Google-review text row.
+
+**What changed (one commit):**
+- **Background (`src/components/ui/hero-3.tsx`):** three drifting red aurora glows + 16 rising ember particles (deterministic, transform/opacity only) + faint red dot texture with radial mask + readability vignette. All hidden under `prefers-reduced-motion`.
+- **Text:** title gets a red drop-shadow glow; "FOR VALHALLA" gradient brightened within the red family (`red-400 → rose-500 → red-600`); description lifted to `gray-300`.
+- **Trust row rebuilt:** glassmorphic pill with 5 stars (4 filled per 4.4 rating) + bold white rating + review count, linking to the Google Maps listing; hours/location moved to a brighter icon-led line (Clock/MapPin).
+
+**Verification:** `npm run lint` + `npm run build` pass; prerendered HTML contains pill, stars, gradient; `motion-reduce` CSS confirmed.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
+## 2026-09-05 — Responsive pass for phone + tablet (opencode session)
+
+**Goal:** Make the whole page comfortable on small screens and 768px tablets.
+
+**What changed (same commit):**
+- All 8 sections: `py-16` on mobile, `py-24` from `md` up; split-layout gaps `gap-10 → lg:gap-16`.
+- Grids gain tablet steps: facilities `1 → sm:2 → lg:3`, plans `1 → sm:2 → lg:4`, gallery `2 → sm:3 → lg:4`, trainers single-column until `lg` (was cramped 2-col at 768px); popular-plan `scale-105` now `lg`-only (no mobile overflow).
+- Hero: `text-4xl → sm:6xl → md:7xl`, full-width stacked CTAs on phones, wrapping tagline pill.
+- Touch/polish: stories strip snap-scroll, shorter map on phones, roomier franchise modal (stacked fields), compact cards/modal padding on mobile, smaller nav logo/type on phones, 2-col footer from `sm`.
+
+**Verification:** `npm run lint` + `npm run build` pass; responsive classes confirmed in output.
+
+---
+
 ## 2026-09-05 — Hero enhancement + lucid site-wide headers (opencode session)
 
 **Goal:** Richer hero and a consistent, minimal ("lucid") rhythm across the whole site. Theme untouched.

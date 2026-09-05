@@ -452,8 +452,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40"}`}>
         <div className={`max-w-7xl mx-auto px-6 flex justify-between items-center gap-6 transition-all duration-300 ${scrolled ? "h-14" : "h-[72px]"}`}>
           <a href="#top" className="flex items-center gap-3 shrink-0" aria-label="Vikings Gym & Spa — back to top">
-            <img src={logoPremium} alt="Vikings Logo" className="h-9 w-auto" />
-            <span className="font-mono text-lg font-black tracking-tighter text-white whitespace-nowrap">
+            <img src={logoPremium} alt="Vikings Logo" className="h-8 sm:h-9 w-auto" />
+            <span className="font-mono text-base sm:text-lg font-black tracking-tighter text-white whitespace-nowrap">
               VIKINGS <span className="text-red-500">GYM & SPA</span>
             </span>
           </a>
@@ -615,7 +615,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         title={
           <>
             CARVE YOUR BODY <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-800">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-500 to-red-600">
               FOR VALHALLA
             </span>
           </>
@@ -637,11 +637,11 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       />
 
       {/* Facilities Showcase */}
-<section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+<section id="facilities" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
         <SectionHeader kicker="ROYAL EXPERIENCE" title="WORLD-CLASS WELLNESS FACILITIES" />
 
         <Reveal delay={0.1}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
               title: "Imported Strength Station",
@@ -686,8 +686,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* BMI Calculator Section */}
-      <section id="calculator" className="py-24 bg-neutral-950/70 border-b border-red-950/20 px-6 scroll-mt-24">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section id="calculator" className="py-16 md:py-24 bg-neutral-950/70 border-b border-red-950/20 px-6 scroll-mt-24">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <Reveal>
           <div>
             <div className="flex items-center gap-2 bg-red-650/10 border border-red-900/30 px-3 py-1 rounded-full text-red-500 text-xs font-mono w-max mb-6">
@@ -711,7 +711,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </Reveal>
 
           <Reveal delay={0.1}>
-          <div className="bg-neutral-900/50 border border-red-950/20 p-8 rounded-xl backdrop-blur-md relative overflow-hidden">
+          <div className="bg-neutral-900/50 border border-red-950/20 p-6 sm:p-8 rounded-xl backdrop-blur-md relative overflow-hidden">
             <h3 className="text-lg font-mono font-bold tracking-wider text-white mb-6 uppercase flex items-center gap-2">
               <Compass className="text-red-500 w-5 h-5" /> BMI AUDIT ENGINE
             </h3>
@@ -785,15 +785,15 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Pricing / Memberships */}
-      <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="pricing" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
         <SectionHeader kicker="SHIELD WALL PLANS" title="MEMBERSHIP TIERS & PRICING" />
 
         <Reveal delay={0.1}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {(plansData && plansData.length > 0 ? plansData : DEFAULT_PLANS).map((plan: any, index: number) => (
             <div
               key={index}
-              className={`bg-neutral-900/40 rounded-xl relative border ${plan.popular ? "border-red-600 shadow-xl shadow-red-900/10 scale-105" : "border-neutral-850"} p-6 flex flex-col justify-between`}
+              className={`bg-neutral-900/40 rounded-xl relative border ${plan.popular ? "border-red-600 shadow-xl shadow-red-900/10 lg:scale-105" : "border-neutral-850"} p-6 flex flex-col justify-between`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-red-600 text-black text-[10px] font-mono font-black py-1 px-3 rounded uppercase tracking-wider">
@@ -842,7 +842,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         {/* Group Classes & Personal Training */}
         <Reveal delay={0.05}>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-8">
+          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 sm:p-8">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-4">GROUP CLASSES · ₹1,500 / 30 DAYS</p>
             <h3 className="text-white font-sans font-bold text-lg mb-4">TRAIN IN THE PACK</h3>
             <ul className="space-y-3 mb-6">
@@ -861,7 +861,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </button>
           </div>
 
-          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-8">
+          <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-6 sm:p-8">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-4">PERSONAL TRAINING · 1-ON-1 COACHING</p>
             <h3 className="text-white font-sans font-bold text-lg mb-4">TRAIN LIKE A BERSERKER</h3>
             <ul className="space-y-3 mb-6">
@@ -889,12 +889,12 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
         </Reveal>
       </section>
-      <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+      <section id="trainers" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <SectionHeader kicker="ELITE VALKYRIES & BERSERKERS" title="MEET YOUR MASTER COACHES" />
 
           <Reveal delay={0.1}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 max-w-4xl mx-auto">
             {DEFAULT_TRAINERS.map((t: any, idx: number) => (
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
                 <div className="md:w-2/5 h-64 md:h-auto bg-neutral-900">
@@ -962,7 +962,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Gallery & Official Instagram Section */}
-      <section id="gallery" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+      <section id="gallery" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <SectionHeader
             kicker="LIVE FROM THE ARENA"
@@ -996,14 +996,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </a>
             </div>
 
-            <div className="flex gap-5 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex gap-5 overflow-x-auto pb-3 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {STORY_TILES.map((s, i) => (
                 <a
                   key={i}
                   href={GYM_CONFIG.instagramStories}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex flex-col items-center shrink-0 group"
+                  className="flex flex-col items-center shrink-0 snap-start group"
                   title={`Watch today's stories`}
                 >
                   <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full p-[3px] bg-gradient-to-tr from-red-600 via-rose-500 to-amber-400 group-hover:scale-105 transition-transform">
@@ -1041,7 +1041,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </a>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {GYM_CONFIG.instagramWidget ? (
                 <div className="col-span-2 md:col-span-4 rounded-xl border border-neutral-900 overflow-hidden bg-neutral-950/60 p-3">
                   <InstagramWidget snippet={GYM_CONFIG.instagramWidget} />
@@ -1104,9 +1104,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Review us on Google Maps */}
-      <section id="review" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+      <section id="review" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <Reveal>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">SHARE THE EXPERIENCE</span>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-4">
@@ -1165,9 +1165,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Contact & Map Section */}
-      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+      <section id="contact" className="py-16 md:py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
         <Reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">VISIT THE KINGDOM</span>
             <h2 className="text-3xl font-sans font-black text-white uppercase tracking-tight mb-6">
@@ -1211,7 +1211,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           </div>
 
-          <div className="bg-neutral-900/50 border border-neutral-900 rounded-xl p-8 backdrop-blur-md">
+          <div className="bg-neutral-900/50 border border-neutral-900 rounded-xl p-6 sm:p-8 backdrop-blur-md">
             <h3 className="text-lg font-mono font-bold text-white mb-6 uppercase flex items-center gap-2">
               <Compass className="text-red-500 w-5 h-5" /> EXPEDITE GUEST INQUIRY
             </h3>
@@ -1288,7 +1288,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-lg bg-neutral-950 border border-red-950/80 p-8 rounded-xl shadow-2xl relative"
+            className="w-full max-w-lg bg-neutral-950 border border-red-950/80 p-5 sm:p-8 rounded-xl shadow-2xl relative"
           >
             <button
               onClick={() => setFranchiseOpen(false)}
@@ -1327,7 +1327,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="franchise-city" className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Proposed City/Location</label>
                     <input
@@ -1382,9 +1382,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       )}
 
       {/* About Section (bottom of page) */}
-      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="about" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
         <Reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
@@ -1453,7 +1453,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             <iframe
               src={GYM_CONFIG.mapEmbed}
               title="VIKINGS GYM Location"
-              className="w-full h-[400px] border-0"
+              className="w-full h-[300px] sm:h-[400px] border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
@@ -1480,7 +1480,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
       {/* Footer */}
       <footer className="bg-neutral-950/80 border-t border-neutral-900 px-6 pt-14 pb-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mb-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
