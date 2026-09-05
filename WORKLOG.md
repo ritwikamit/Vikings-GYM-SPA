@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Logo wordmark restored on phones (opencode session)
+
+**Goal:** VIKINGS GYM and SPA text visible beside the logo on smartphones.
+
+**What changed (one commit):** Wordmark stacks in two lines on phones (VIKINGS over red GYM and SPA) and stays single-line on sm+. Header compacted on mobile (tighter padding, gaps, Join button) so everything fits 320px screens.
+
+**Verification:** lint + build pass; stacked wordmark confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Trainer photo alignment on phones (opencode session)
 
 **Goal:** Faces were cropped by the short mobile photo banner.

@@ -461,11 +461,12 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     <div id="top" className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white pb-20 lg:pb-0">
       {/* Dynamic Header */}
       <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40"}`}>
-        <div className={`max-w-7xl mx-auto px-6 flex justify-between items-center gap-6 transition-all duration-300 ${scrolled ? "h-14" : "h-[72px]"}`}>
-          <a href="#top" className="flex items-center gap-3 shrink-0" aria-label="Vikings Gym & Spa — back to top">
-            <img src={logoPremium} alt="Vikings Logo" className="h-8 sm:h-9 w-auto" />
-            <span className="hidden min-[400px]:block font-mono text-base sm:text-lg font-black tracking-tighter text-white whitespace-nowrap">
-              VIKINGS <span className="text-red-500">GYM & SPA</span>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center gap-3 sm:gap-6 transition-all duration-300 ${scrolled ? "h-14" : "h-[72px]"}`}>
+          <a href="#top" className="flex items-center gap-2 sm:gap-3 shrink-0" aria-label="Vikings Gym & Spa — back to top">
+            <img src={logoPremium} alt="Vikings Logo" className="h-8 sm:h-9 w-auto shrink-0" />
+            <span className="font-mono font-black text-white whitespace-nowrap leading-none sm:leading-normal">
+              <span className="block sm:inline text-[13px] sm:text-lg tracking-tight sm:tracking-tighter">VIKINGS</span>{" "}
+              <span className="block sm:inline text-[10px] sm:text-lg tracking-[0.12em] sm:tracking-tighter text-red-500">GYM & SPA</span>
             </span>
           </a>
 
@@ -541,7 +542,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
             <button
               onClick={() => openWhatsApp(JOIN_MESSAGE)}
-              className="inline-flex items-center h-10 px-5 sm:px-6 bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs tracking-[0.2em] rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center h-9 sm:h-10 px-3.5 sm:px-6 bg-red-600 hover:bg-red-700 text-black font-mono font-black text-[10px] sm:text-xs tracking-[0.2em] rounded-md hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer whitespace-nowrap"
             >
               JOIN NOW
             </button>
