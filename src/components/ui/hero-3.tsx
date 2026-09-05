@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Star, Clock, MapPin } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { GYM_CONFIG } from "../../config/gym";
@@ -75,8 +75,28 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
     [emberCount]
   );
 
+  // Interactive torch: springs smooth the cursor so a red glow trails it,
+  // while the aurora + ember layers drift on parallax against it.
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.38);
+  const glowX = useSpring(mouseX, { stiffness: 55, damping: 18 });
+  const glowY = useSpring(mouseY, { stiffness: 55, damping: 18 });
+  const torchLeft = useTransform(glowX, (v) => `${v * 100}%`);
+  const torchTop = useTransform(glowY, (v) => `${v * 100}%`);
+  const auraX = useTransform(glowX, [0, 1], [24, -24]);
+  const auraY = useTransform(glowY, [0, 1], [18, -18]);
+  const emberX = useTransform(glowX, [0, 1], [-14, 14]);
+  const emberY = useTransform(glowY, [0, 1], [-10, 10]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - r.left) / r.width);
+    mouseY.set((e.clientY - r.top) / r.height);
+  };
+
   return (
     <section
+      onMouseMove={handleMouseMove}
       className={cn(
         "relative w-full min-h-svh overflow-hidden bg-black flex flex-col items-center justify-center text-center px-4 py-28 border-b border-red-950/20",
         className
@@ -84,35 +104,44 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
     >
       {/* Forge ambiance: drifting red glows + rising embers + dot texture + vignette */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden">
-        <motion.div
-          className="absolute -top-32 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-red-600/15 blur-[130px]"
-          animate={{ x: ["-6%", "6%", "-6%"], opacity: [0.7, 1, 0.7] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 -left-24 h-80 w-80 rounded-full bg-red-800/20 blur-[110px]"
-          animate={{ y: ["0%", "-12%", "0%"] }}
-          transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-10 -right-24 h-80 w-80 rounded-full bg-rose-700/15 blur-[110px]"
-          animate={{ y: ["0%", "12%", "0%"] }}
-          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {embers.map((e, i) => (
-          <motion.span
-            key={i}
-            className="absolute bottom-[-10px] rounded-full bg-red-500"
-            style={{
-              left: e.left,
-              width: e.size,
-              height: e.size,
-              boxShadow: "0 0 8px 2px rgba(239,68,68,0.55)",
-            }}
-            animate={{ y: [0, "-105vh"], x: [0, e.drift], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: e.duration, delay: e.delay, repeat: Infinity, ease: "linear", times: [0, 0.15, 0.85, 1] }}
+        <motion.div style={{ x: auraX, y: auraY }} className="absolute inset-0">
+          <motion.div
+            className="absolute -top-32 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-red-600/15 blur-[130px]"
+            animate={{ x: ["-6%", "6%", "-6%"], opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
           />
-        ))}
+          <motion.div
+            className="absolute bottom-0 -left-24 h-80 w-80 rounded-full bg-red-800/20 blur-[110px]"
+            animate={{ y: ["0%", "-12%", "0%"] }}
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-10 -right-24 h-80 w-80 rounded-full bg-rose-700/15 blur-[110px]"
+            animate={{ y: ["0%", "12%", "0%"] }}
+            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+        {/* Cursor torch: a soft red glow that trails the mouse */}
+        <motion.div
+          className="absolute h-[34rem] w-[34rem] rounded-full bg-red-600/[0.13] blur-[130px]"
+          style={{ left: torchLeft, top: torchTop, x: "-50%", y: "-50%" }}
+        />
+        <motion.div style={{ x: emberX, y: emberY }} className="absolute inset-0">
+          {embers.map((e, i) => (
+            <motion.span
+              key={i}
+              className="absolute bottom-[-10px] rounded-full bg-red-500"
+              style={{
+                left: e.left,
+                width: e.size,
+                height: e.size,
+                boxShadow: "0 0 8px 2px rgba(239,68,68,0.55)",
+              }}
+              animate={{ y: [0, "-105vh"], x: [0, e.drift], opacity: [0, 1, 1, 0] }}
+              transition={{ duration: e.duration, delay: e.delay, repeat: Infinity, ease: "linear", times: [0, 0.15, 0.85, 1] }}
+            />
+          ))}
+        </motion.div>
         <DotPattern className="fill-red-500/[0.07] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,black,transparent)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
@@ -180,7 +209,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           {secondaryCtaText && (
             <button
               onClick={onSecondaryCtaClick}
-              className="w-full sm:w-auto px-8 py-4 rounded-md border border-neutral-700 hover:border-red-600 text-gray-300 hover:text-white font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-red-500/50 hover:text-white font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
             >
               {secondaryCtaText}
             </button>

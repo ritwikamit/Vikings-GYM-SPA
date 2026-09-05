@@ -5,6 +5,20 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Interactive hero: cursor torch + parallax, glass Explore CTA (opencode session)
+
+**Goal:** Background reacts to the mouse; EXPLORE THE ARENA matches the Google-reviews pill.
+
+**What changed (one commit, `src/components/ui/hero-3.tsx` only):**
+- Cursor-tracked red torch glow follows the mouse with spring smoothing; aurora + ember layers parallax against the cursor. Motion values only (no re-renders), transform/opacity-only, `motion-reduce` respected, calm centered state on touch devices.
+- EXPLORE THE ARENA restyled to the glass pill (`rounded-full`, white/5 blur, red border on hover) — same language as the reviews badge.
+
+**Verification:** `npm run lint` + `npm run build` pass; torch + pill confirmed in prerendered HTML (interaction itself is runtime).
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Mobile performance optimization (opencode session)
 
 **Goal:** Faster loads on phones/tablets (slower networks, weaker CPUs).
