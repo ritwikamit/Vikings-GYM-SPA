@@ -5,6 +5,21 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Added Deepsikha (dance), Vaishnavi (ambassador), Neha (female trainer) (opencode session)
+
+**Goal:** Add 3 new team members from `Trainers/` photos + Instagram profiles.
+
+**What changed (one commit):**
+- Copied `Trainers/Deepsikha.jpg`, `Trainers/Neha Singh.jpg`, `Trainers/Vaishnavi Singh.jpg` → `assets/trainers/` (`deepsikha.jpg`, `neha-singh.jpg`, `vaishnavi-singh.jpg`).
+- Added `photoUrl` + full profile entries to `DEFAULT_TRAINERS` after Ali: Deepsikha (DANCE COACH & CHOREOGRAPHER, @wanderbiharan), Vaishnavi Singh (GYM BRAND AMBASSADOR, @chawal.to.choorma), Neha Singh (FEMALE FITNESS TRAINER, @smiley_lily02). Instagram URLs cleaned of tracking query params.
+- Two more members pending (1 dance teacher, 1 female trainer) — user will provide later.
+
+**Verification:** `npm run lint` + `npm run build` pass; all 3 photos bundled + present in prerendered HTML.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Trainer photos attached (real coaching team) (opencode session)
 
 **Goal:** Show the actual photos of the coaching team (Ankit Kumar, Bittu Verma, Ali, Amit Singh) that were dropped into `Trainers/`.

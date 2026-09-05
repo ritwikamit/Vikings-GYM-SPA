@@ -28,6 +28,9 @@ import photoAnkitKumar from "../../assets/trainers/ankit-kumar.jpg";
 import photoBittuVerma from "../../assets/trainers/bittu-verma.jpg";
 import photoAli from "../../assets/trainers/ali.jpg";
 import photoAmitSingh from "../../assets/trainers/amit-singh.jpg";
+import photoDeepsikha from "../../assets/trainers/deepsikha.jpg";
+import photoVaishnavi from "../../assets/trainers/vaishnavi-singh.jpg";
+import photoNeha from "../../assets/trainers/neha-singh.jpg";
 import { AnimatedMarqueeHero } from "./ui/hero-3";
 import DotPattern from "./ui/dot-pattern-1";
 import { GYM_CONFIG } from "../config/gym";
@@ -112,6 +115,36 @@ const DEFAULT_TRAINERS = [
     instagram: "https://www.instagram.com/ali_trainer/",
     instagramHandle: "@ali_trainer",
     photoUrl: photoAli,
+  },
+  {
+    name: "Deepsikha",
+    role: "DANCE COACH & CHOREOGRAPHER",
+    years: "Fitness that moves to the beat",
+    desc: "Energetic dance coach at Vikings Gym & Spa who leads high-energy dance, Zumba-style and choreography sessions — making cardio fun, rhythmic and addictive for every member.",
+    cert: ["Dance", "Choreography", "Cardio"],
+    instagram: "https://www.instagram.com/wanderbiharan/",
+    instagramHandle: "@wanderbiharan",
+    photoUrl: photoDeepsikha,
+  },
+  {
+    name: "Vaishnavi Singh",
+    role: "GYM BRAND AMBASSADOR",
+    years: "The face of the Vikings lifestyle",
+    desc: "Official gym brand ambassador for Vikings Gym & Spa — representing the energy, community and warrior mindset of the Vikings family across every platform.",
+    cert: ["Brand Ambassador"],
+    instagram: "https://www.instagram.com/chawal.to.choorma/",
+    instagramHandle: "@chawal.to.choorma",
+    photoUrl: photoVaishnavi,
+  },
+  {
+    name: "Neha Singh",
+    role: "FEMALE FITNESS TRAINER",
+    years: "Empowering every warrior",
+    desc: "Female fitness trainer at Vikings Gym & Spa who coaches strength, conditioning and confidence — supporting members of all levels on their fitness journey.",
+    cert: ["Strength", "Conditioning"],
+    instagram: "https://www.instagram.com/smiley_lily02/",
+    instagramHandle: "@smiley_lily02",
+    photoUrl: photoNeha,
   },
 ];
 
