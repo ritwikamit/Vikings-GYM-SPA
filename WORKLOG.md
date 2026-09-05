@@ -5,6 +5,20 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Cloth-press dot field across the full site (opencode session)
+
+**Goal:** Hover animation everywhere except header/footer.
+
+**What changed (one commit):**
+- DotGrid exported from hero-3 and mounted in all 8 content sections (facilities, calculator, pricing, trainers, gallery, review, contact, about). Each section is now relative with content layered above (relative z-10) so dots never cover text. Header, footer and overlays untouched.
+- Each canvas runs its own loop but pauses off-screen; coarse-pointer devices use a sparser grid. Removed the dead dot-pattern-1 file.
+
+**Verification:** lint + build pass; 9 canvases confirmed in prerendered HTML (hero + 8 sections).
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Rectangular Explore CTA, phone menu strip, cloth-press dots (opencode session)
 
 **Goal:** Rectangular secondary CTA; menus visible on phones; dots part like weight on cloth; tighter hero on phones.

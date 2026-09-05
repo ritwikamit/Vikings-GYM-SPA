@@ -31,8 +31,9 @@ const ActionButton = ({ children, onClick }: { children: React.ReactNode, onClic
   </motion.button>
 );
 
-// Interactive dot field: dots swell and ignite red near the cursor.
-function DotGrid() {
+// Interactive dot field (shared across the whole site): dots swell, ignite red
+// and part outward near the cursor, like pressing weight into stretched cloth.
+export function DotGrid() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {

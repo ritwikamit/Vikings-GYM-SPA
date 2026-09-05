@@ -33,8 +33,7 @@ import photoAmitSingh from "../../assets/trainers/amit-singh.webp";
 import photoDeepsikha from "../../assets/trainers/deepsikha.webp";
 import photoVaishnavi from "../../assets/trainers/vaishnavi-singh.webp";
 import photoNeha from "../../assets/trainers/neha-singh.webp";
-import { AnimatedMarqueeHero } from "./ui/hero-3";
-import DotPattern from "./ui/dot-pattern-1";
+import { AnimatedMarqueeHero, DotGrid } from "./ui/hero-3";
 import { GYM_CONFIG } from "../config/gym";
 
 interface PublicWebsiteProps {
@@ -663,7 +662,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       />
 
       {/* Facilities Showcase */}
-<section id="facilities" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+<section id="facilities" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10">
         <SectionHeader kicker="ROYAL EXPERIENCE" title="WORLD-CLASS WELLNESS FACILITIES" />
 
         <Reveal delay={0.1}>
@@ -709,11 +710,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           ))}
         </div>
         </Reveal>
+        </div>
       </section>
 
       {/* BMI Calculator Section */}
-      <section id="calculator" className="py-16 md:py-24 bg-neutral-950/70 border-b border-red-950/20 px-6 scroll-mt-24">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <section id="calculator" className="relative py-16 md:py-24 bg-neutral-950/70 border-b border-red-950/20 px-6 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10 max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <Reveal>
           <div>
             <div className="flex items-center gap-2 bg-red-650/10 border border-red-900/30 px-3 py-1 rounded-full text-red-500 text-xs font-mono w-max mb-6">
@@ -811,7 +814,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Pricing / Memberships */}
-      <section id="pricing" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="pricing" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10">
         <SectionHeader kicker="SHIELD WALL PLANS" title="MEMBERSHIP TIERS & PRICING" />
 
         <Reveal delay={0.1}>
@@ -914,9 +919,11 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
         </div>
         </Reveal>
+        </div>
       </section>
-      <section id="trainers" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
+      <section id="trainers" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10 max-w-7xl mx-auto">
           <SectionHeader kicker="ELITE VALKYRIES & BERSERKERS" title="MEET YOUR MASTER COACHES" />
 
           <Reveal delay={0.1}>
@@ -988,8 +995,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Gallery & Official Instagram Section */}
-      <section id="gallery" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
+      <section id="gallery" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
+        <div className="relative z-10 max-w-7xl mx-auto">
           <SectionHeader
             kicker="LIVE FROM THE ARENA"
             title="GALLERY & DAILY STORIES"
@@ -1130,9 +1138,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Review us on Google Maps */}
-      <section id="review" className="py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+      <section id="review" className="relative py-16 md:py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
         <Reveal>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">SHARE THE EXPERIENCE</span>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-4">
@@ -1191,9 +1200,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
 
       {/* Contact & Map Section */}
-      <section id="contact" className="py-16 md:py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+      <section id="contact" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+        <DotGrid />
         <Reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">VISIT THE KINGDOM</span>
             <h2 className="text-3xl font-sans font-black text-white uppercase tracking-tight mb-6">
@@ -1408,9 +1418,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       )}
 
       {/* About Section (bottom of page) */}
-      <section id="about" className="py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="about" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <DotGrid />
         <Reveal>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-6">
