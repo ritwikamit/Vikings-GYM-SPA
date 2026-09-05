@@ -1578,6 +1578,17 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <p className="text-xs text-gray-600 font-mono text-center">
             © {new Date().getFullYear()} Vikings Gym & Spa — MG Road, Aurangabad, Bihar. All rights reserved.
           </p>
+          <p className="text-[11px] text-gray-700 font-mono text-center mt-2">
+            Designed & Developed by{" "}
+            <a
+              href="https://accustomlabs.com"
+              target="_blank"
+              rel="noreferrer"
+              className="text-gray-500 hover:text-red-500 transition-colors"
+            >
+              AC Custom
+            </a>
+          </p>
         </div>
       </footer>
 

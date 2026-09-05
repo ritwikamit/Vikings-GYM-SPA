@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - AC Custom developer credit in footer (opencode session)
+
+**Goal:** Company signature as site developer (name: AC Custom, domain: accustomlabs.com).
+
+**What changed (one commit):** Subtle second line in the footer bottom bar - Designed and Developed by AC Custom, linked to https://accustomlabs.com in a new tab. Gray tone with red hover, hierarchy preserved.
+
+**Verification:** lint + build pass; credit + link confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Touch support for background animations (opencode session)
 
 **Goal:** Dot field + torch glow must react on phones/tablets, including while scrolling.
