@@ -5,6 +5,23 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Mobile performance optimization (opencode session)
+
+**Goal:** Faster loads on phones/tablets (slower networks, weaker CPUs).
+
+**What changed (one commit):**
+- **Code-split portal:** `AuthGateway`, `ResetPassword`, `ERPModules`, `MemberDashboard` now `React.lazy` + themed Suspense fallback. Main JS **1094KB → 564KB** (gzip 318KB → 177KB); ERP (476KB) only downloads on `/erp`.
+- **WebP images:** 7 trainer photos (1080px JPG) → 640px WebP + logo PNG → WebP. Images **~1092KB → ~266KB** (−76%). Old JPG/PNG removed from `assets/`.
+- **Responsive remote images:** hero marquee serves 480w srcset on phones (was 1470w × 14); story bubbles `w=640 → w=200`; gallery `w=900 → w=600`.
+- **Loading hygiene:** trainer photos `loading="lazy" + decoding="async"`; preconnect to Unsplash/QR hosts + dns-prefetch `wa.me` in `index.html`.
+- **Cheaper animation:** 8 ember particles on phones (16 on desktop).
+
+**Verification:** `npm run lint` + `npm run build` pass; dist confirms WebP (9 refs), srcset (14), preconnect, lazy attrs.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Hero forge ambiance + social-proof redesign (opencode session)
 
 **Goal:** Animated theme-aligned hero background; fix the weak-looking Google-review text row.

@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
-import AuthGateway from "./components/AuthGateway";
-import ResetPassword from "./components/ResetPassword";
-import ERPModules from "./components/ERPModules";
-import MemberDashboard from "./components/MemberDashboard";
+// Portal consoles are code-split: public visitors only download the landing page.
+const AuthGateway = lazy(() => import("./components/AuthGateway"));
+const ResetPassword = lazy(() => import("./components/ResetPassword"));
+const ERPModules = lazy(() => import("./components/ERPModules"));
+const MemberDashboard = lazy(() => import("./components/MemberDashboard"));
 import { UserRole } from "./types";
 
 import { 
@@ -29,7 +30,7 @@ import {
   Menu,
   X
 } from "lucide-react";
-import logoPremium from "../assets/l.png";
+import logoPremium from "../assets/l.webp";
 import { membersAPI } from "./api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -263,6 +264,13 @@ export default function App() {
   };
 
   return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-black">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-red-500" />
+        </div>
+      }
+    >
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<PublicWebsite onJoinNow={() => navigate("/login?view=register")} onLoginClick={() => navigate("/login")} />} />
@@ -297,6 +305,7 @@ export default function App() {
         } 
       />
     </Routes>
+    </Suspense>
   );
 }
 

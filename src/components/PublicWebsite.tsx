@@ -25,14 +25,14 @@ import {
   Play
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import logoPremium from "../../assets/l.png";
-import photoAnkitKumar from "../../assets/trainers/ankit-kumar.jpg";
-import photoBittuVerma from "../../assets/trainers/bittu-verma.jpg";
-import photoAli from "../../assets/trainers/ali.jpg";
-import photoAmitSingh from "../../assets/trainers/amit-singh.jpg";
-import photoDeepsikha from "../../assets/trainers/deepsikha.jpg";
-import photoVaishnavi from "../../assets/trainers/vaishnavi-singh.jpg";
-import photoNeha from "../../assets/trainers/neha-singh.jpg";
+import logoPremium from "../../assets/l.webp";
+import photoAnkitKumar from "../../assets/trainers/ankit-kumar.webp";
+import photoBittuVerma from "../../assets/trainers/bittu-verma.webp";
+import photoAli from "../../assets/trainers/ali.webp";
+import photoAmitSingh from "../../assets/trainers/amit-singh.webp";
+import photoDeepsikha from "../../assets/trainers/deepsikha.webp";
+import photoVaishnavi from "../../assets/trainers/vaishnavi-singh.webp";
+import photoNeha from "../../assets/trainers/neha-singh.webp";
 import { AnimatedMarqueeHero } from "./ui/hero-3";
 import DotPattern from "./ui/dot-pattern-1";
 import { GYM_CONFIG } from "../config/gym";
@@ -223,22 +223,22 @@ function isGymOpenNow(now: Date = new Date()): boolean {
 const SECTION_IDS = ["about", "facilities", "trainers", "gallery", "pricing", "calculator", "review", "contact"];
 
 const STORY_TILES = [
-  { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=640&auto=format&fit=crop", label: "WOD" },
-  { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=640&auto=format&fit=crop", label: "Training" },
-  { img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=640&auto=format&fit=crop", label: "Lifts" },
-  { img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=640&auto=format&fit=crop", label: "Warriors" },
-  { img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=640&auto=format&fit=crop", label: "Steam Spa" },
+  { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=200&auto=format&fit=crop", label: "WOD" },
+  { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=200&auto=format&fit=crop", label: "Training" },
+  { img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=200&auto=format&fit=crop", label: "Lifts" },
+  { img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=200&auto=format&fit=crop", label: "Warriors" },
+  { img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=200&auto=format&fit=crop", label: "Steam Spa" },
 ];
 
 const GALLERY_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=900&auto=format&fit=crop", alt: "Strength zone", label: "Strength" },
-  { url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=900&auto=format&fit=crop", alt: "Barbell training", label: "Barbell" },
-  { url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=900&auto=format&fit=crop", alt: "Gym floor", label: "Floor" },
-  { url: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=900&auto=format&fit=crop", alt: "Deadlift", label: "Deadlift" },
-  { url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=900&auto=format&fit=crop", alt: "Coach-led training", label: "Coaching" },
-  { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=900&auto=format&fit=crop", alt: "Conditioning", label: "Conditioning" },
-  { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=900&auto=format&fit=crop", alt: "Intense session", label: "Intensity" },
-  { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=900&auto=format&fit=crop", alt: "Steam spa recovery", label: "Steam Spa" },
+  { url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=600&auto=format&fit=crop", alt: "Strength zone", label: "Strength" },
+  { url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop", alt: "Barbell training", label: "Barbell" },
+  { url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop", alt: "Gym floor", label: "Floor" },
+  { url: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop", alt: "Deadlift", label: "Deadlift" },
+  { url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600&auto=format&fit=crop", alt: "Coach-led training", label: "Coaching" },
+  { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop", alt: "Conditioning", label: "Conditioning" },
+  { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop", alt: "Intense session", label: "Intensity" },
+  { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600&auto=format&fit=crop", alt: "Steam spa recovery", label: "Steam Spa" },
 ];
 
 // Static-site mode: the member portal login is intentionally hidden but fully
@@ -899,7 +899,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
                 <div className="md:w-2/5 h-64 md:h-auto bg-neutral-900">
                   {t.photoUrl ? (
-                    <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
                       <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>

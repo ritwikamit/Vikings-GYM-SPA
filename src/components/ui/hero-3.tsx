@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { Star, Clock, MapPin } from "lucide-react";
 import { cn } from "../../lib/utils";
@@ -53,17 +53,26 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   // Duplicate images for a seamless loop
   const duplicatedImages = [...images, ...images];
 
+  // Fewer particles on phones to keep old devices smooth.
+  const [emberCount] = useState(() =>
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(max-width: 640px)").matches
+      ? 8
+      : 16
+  );
+
   // Deterministic rising-ember particles (stable across renders)
   const embers = useMemo(
     () =>
-      Array.from({ length: 16 }, (_, i) => ({
+      Array.from({ length: emberCount }, (_, i) => ({
         left: `${(i * 61 + 7) % 100}%`,
         size: 2 + ((i * 7) % 3),
         duration: 7 + ((i * 13) % 7),
         delay: (i * 1.7) % 8,
         drift: (i % 2 === 0 ? 1 : -1) * (10 + ((i * 11) % 30)),
       })),
-    []
+    [emberCount]
   );
 
   return (
@@ -231,7 +240,10 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             },
           }}
         >
-          {duplicatedImages.map((src, index) => (
+          {duplicatedImages.map((src, index) => {
+            // Small variant for phones; full-size for larger screens.
+            const smallSrc = src.replace("w=1470", "w=480").replace("w=1469", "w=480");
+            return (
             <div
               key={index}
               className="relative aspect-[3/4] h-48 md:h-64 flex-shrink-0"
@@ -241,7 +253,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             >
               {src ? (
                 <img
-                  src={src}
+                  src={smallSrc}
+                  srcSet={`${smallSrc} 480w, ${src} 1470w`}
+                  sizes="(max-width: 768px) 45vw, 220px"
                   alt={`Showcase image ${index + 1}`}
                   loading="lazy"
                   referrerPolicy="no-referrer"
@@ -251,7 +265,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                 <div className="w-full h-full bg-neutral-900 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.2)] border border-red-950/50" />
               )}
             </div>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
     </section>
