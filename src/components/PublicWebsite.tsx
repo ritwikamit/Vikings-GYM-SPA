@@ -879,7 +879,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   <h4 className="text-white text-sm font-mono font-bold uppercase mb-1">DIRECT INQUIRIES:</h4>
                   <p className="text-xs text-gray-400">
                     <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500">{GYM_CONFIG.phoneDisplay}</a> ·{" "}
-                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp</a> · {GYM_CONFIG.email}
+                    <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500">WhatsApp</a>
                   </p>
                 </div>
               </div>
