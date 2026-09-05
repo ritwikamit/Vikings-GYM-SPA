@@ -368,7 +368,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.75 }}
-          className="mt-10 flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-black/45 px-6 py-5 backdrop-blur-md max-w-full"
+          className="mt-10 flex flex-col items-center gap-4"
         >
           <a
             href={GYM_CONFIG.mapLink}
@@ -389,7 +389,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               · {GYM_CONFIG.reviews} GOOGLE REVIEWS
             </span>
           </a>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-mono font-bold tracking-[0.2em] text-gray-300">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-full border border-white/10 bg-black/45 px-5 py-2.5 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.2em] text-gray-300">
             <span className="inline-flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-red-500" />
               MON–SAT · 5 AM – 10 PM

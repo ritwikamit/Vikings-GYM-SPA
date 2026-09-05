@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Cylindrical strip for hours/location line (opencode session)
+
+**Goal:** Outer trust card removed; hours/location gets its own pill strip.
+
+**What changed (one commit, hero-3.tsx):** Trust cluster back to open layout; MON-SAT hours + location now sit in a frosted cylindrical pill (rounded-full, dark blur) so the text stays visible over animations.
+
+**Verification:** lint + build pass.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Snappier dot field + always-alive idle roam (opencode session)
 
 **Goal:** Field felt laggy and died when the pointer stopped moving.
