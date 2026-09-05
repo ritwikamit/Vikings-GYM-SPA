@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { membershipsAPI, trainersAPI } from "../api";
 import {
@@ -9,6 +9,7 @@ import {
   Calendar,
   UserCheck,
   ArrowRight,
+  ArrowUp,
   ShieldAlert,
   Calculator,
   Award,
@@ -170,6 +171,42 @@ box.querySelectorAll("script").forEach((oldScript) => {
   return <div ref={containerRef} />;
 }
 
+// Scroll-reveal wrapper: subtle fade + rise when a block first enters the viewport.
+function Reveal({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// Live open/closed status derived from gym hours (Mon–Sat, 5 AM – 10 PM IST).
+function isGymOpenNow(now: Date = new Date()): boolean {
+  try {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Kolkata",
+      weekday: "short",
+      hour: "numeric",
+      hourCycle: "h23",
+    });
+    const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
+    const day = parts.weekday ?? "";
+    const hour = Number(parts.hour ?? "0");
+    return day !== "Sun" && hour >= 5 && hour < 22;
+  } catch {
+    return true;
+  }
+}
+
+// Anchor sections tracked for nav highlighting.
+const SECTION_IDS = ["about", "facilities", "trainers", "gallery", "pricing", "calculator", "review", "contact"];
+
 const STORY_TILES = [
   { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=640&auto=format&fit=crop", label: "WOD" },
   { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=640&auto=format&fit=crop", label: "Training" },
@@ -228,6 +265,55 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // UI polish state: scrolled navbar, active nav section, back-to-top visibility
+  const [scrolled, setScrolled] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      setShowBackToTop(window.scrollY > 700);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
+        });
+      },
+      { rootMargin: "-35% 0px -60% 0px" }
+    );
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  // Lock background scroll + close on Escape while an overlay is open
+  useEffect(() => {
+    if (!isMobileMenuOpen && !franchiseOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+        setFranchiseOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [isMobileMenuOpen, franchiseOpen]);
+
   // Static-site actions: every enquiry / join-now CTA opens a WhatsApp chat with a
   // pre-filled message so leads reach the gym front desk directly.
   const openWhatsApp = (message: string) => {
@@ -236,6 +322,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   };
 
   const JOIN_MESSAGE = "Hi Vikings Gym & Spa! I want to JOIN. Please share the membership plans and timings.";
+
+  const gymOpen = isGymOpenNow();
+
+  // Nav link styling with active-section highlight (desktop + mobile variants)
+  const navLinkClass = (id: string) =>
+    `transition-colors ${activeSection === id ? "text-red-500" : "text-gray-400 hover:text-red-500"}`;
+  const mobileNavLinkClass = (id: string) =>
+    `transition-colors ${activeSection === id ? "text-red-500" : "text-gray-300 hover:text-red-500"}`;
 
   // Portal handlers are preserved for future portal reconnect.
   const portalHandlers = { onJoinNow, onLoginClick };
@@ -294,27 +388,28 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   };
 
   return (
-    <div className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white">
+    <div id="top" className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white">
       {/* Dynamic Header */}
-      <nav className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-red-950/40 px-6 py-4 flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
+      <nav className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 flex justify-between items-center max-w-7xl mx-auto transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 py-3 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40 py-4"}`}>
+        <a href="#top" className="flex items-center gap-3" aria-label="Vikings Gym & Spa — back to top">
           <img src={logoPremium} alt="Vikings Logo" className="h-10 w-auto" />
           <span className="font-mono text-xl font-black tracking-tighter text-white">
             VIKINGS <span className="text-red-500">GYM & SPA</span>
           </span>
-        </div>
+        </a>
 
-        <div className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide text-gray-400">
-          <a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a>
-          <a href="#facilities" className="hover:text-red-500 transition-colors">FACILITIES</a>
-          <a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a>
-          <a href="#gallery" className="hover:text-red-500 transition-colors">GALLERY</a>
-          <a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
-          <a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
-          <a href="#contact" className="hover:text-red-500 transition-colors">CONTACT</a>
+        <div className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide">
+          <a href="#about" className={navLinkClass("about")}>ABOUT</a>
+          <a href="#facilities" className={navLinkClass("facilities")}>FACILITIES</a>
+          <a href="#trainers" className={navLinkClass("trainers")}>TRAINERS</a>
+          <a href="#gallery" className={navLinkClass("gallery")}>GALLERY</a>
+          <a href="#pricing" className={navLinkClass("pricing")}>MEMBERSHIPS</a>
+          <a href="#calculator" className={navLinkClass("calculator")}>BMI CALCULATOR</a>
+          <a href="#review" className={navLinkClass("review")}>REVIEWS</a>
+          <a href="#contact" className={navLinkClass("contact")}>CONTACT</a>
           <button
             onClick={() => setFranchiseOpen(true)}
-            className="hover:text-red-500 transition-colors cursor-pointer text-left"
+            className="hover:text-red-500 text-gray-400 transition-colors cursor-pointer text-left"
           >
             FRANCHISE
           </button>
@@ -339,8 +434,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </button>
 
           <button 
-            className="lg:hidden text-white p-2"
+            className="lg:hidden text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
             onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open menu"
           >
             <Menu className="w-6 h-6" />
           </button>
@@ -359,18 +455,20 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             <button 
               className="absolute top-6 right-6 text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
             >
               <X className="w-8 h-8" />
             </button>
 
-            <div className="flex flex-col items-center gap-8 text-xl font-bold font-mono tracking-widest text-gray-300">
-              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">ABOUT</a>
-              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">FACILITIES</a>
-              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">TRAINERS</a>
-              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">GALLERY</a>
-              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">MEMBERSHIPS</a>
-              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">BMI CALCULATOR</a>
-              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">CONTACT</a>
+            <div className="flex flex-col items-center gap-8 text-xl font-bold font-mono tracking-widest">
+              <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("about")}>ABOUT</a>
+              <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("facilities")}>FACILITIES</a>
+              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("trainers")}>TRAINERS</a>
+              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("gallery")}>GALLERY</a>
+              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("pricing")}>MEMBERSHIPS</a>
+              <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("calculator")}>BMI CALCULATOR</a>
+              <a href="#review" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("review")}>REVIEWS</a>
+              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("contact")}>CONTACT</a>
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
@@ -424,15 +522,16 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       />
 
       {/* Facilities Showcase */}
-<section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
-        <div className="text-center mb-16">
+<section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <Reveal className="text-center mb-16">
           <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ROYAL EXPERIENCE</p>
           <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
             WORLD-CLASS WELLNESS FACILITIES
           </h2>
           <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
-        </div>
+        </Reveal>
 
+        <Reveal delay={0.1}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
@@ -474,11 +573,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           ))}
         </div>
+        </Reveal>
       </section>
 
       {/* BMI Calculator Section */}
-      <section id="calculator" className="py-24 bg-neutral-950/70 border-b border-red-950/20 px-6">
+      <section id="calculator" className="py-24 bg-neutral-950/70 border-b border-red-950/20 px-6 scroll-mt-24">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <Reveal>
           <div>
             <div className="flex items-center gap-2 bg-red-650/10 border border-red-900/30 px-3 py-1 rounded-full text-red-500 text-xs font-mono w-max mb-6">
               <Calculator className="w-3.5 h-3.5" />
@@ -498,7 +599,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </p>
             </div>
           </div>
+          </Reveal>
 
+          <Reveal delay={0.1}>
           <div className="bg-neutral-900/50 border border-red-950/20 p-8 rounded-xl backdrop-blur-md relative overflow-hidden">
             <h3 className="text-lg font-mono font-bold tracking-wider text-white mb-6 uppercase flex items-center gap-2">
               <Compass className="text-red-500 w-5 h-5" /> BMI AUDIT ENGINE
@@ -507,9 +610,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             <form onSubmit={calculateBMI} className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-2 uppercase">Weight (KG)</label>
+                  <label htmlFor="bmi-weight" className="block text-xs font-mono text-gray-400 mb-2 uppercase">Weight (KG)</label>
                   <input
+                    id="bmi-weight"
                     type="number"
+                    min={1}
+                    max={500}
+                    inputMode="decimal"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
                     className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
@@ -518,9 +625,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-2 uppercase">Height (CM)</label>
+                  <label htmlFor="bmi-height" className="block text-xs font-mono text-gray-400 mb-2 uppercase">Height (CM)</label>
                   <input
+                    id="bmi-height"
                     type="number"
+                    min={50}
+                    max={250}
+                    inputMode="decimal"
                     value={height}
                     onChange={(e) => setHeight(e.target.value)}
                     className="w-full bg-neutral-950 border border-neutral-850 px-4 py-3 rounded text-white text-sm focus:border-red-650 focus:outline-none"
@@ -560,19 +671,21 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </motion.div>
             )}
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Pricing / Memberships */}
-      <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
-        <div className="text-center mb-16">
+      <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <Reveal className="text-center mb-16">
           <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">SHIELD WALL PLANS</p>
           <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
             MEMBERSHIP TIERS & PRICING
           </h2>
           <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded animate-pulse"></div>
-        </div>
+        </Reveal>
 
+        <Reveal delay={0.1}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {(plansData && plansData.length > 0 ? plansData : DEFAULT_PLANS).map((plan: any, index: number) => (
             <div
@@ -621,8 +734,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           ))}
         </div>
+        </Reveal>
 
         {/* Group Classes & Personal Training */}
+        <Reveal delay={0.05}>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-neutral-900/30 border border-neutral-900 rounded-xl p-8">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-4">GROUP CLASSES · ₹1,500 / 30 DAYS</p>
@@ -669,17 +784,19 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </button>
           </div>
         </div>
+        </Reveal>
       </section>
-      <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
+      <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <Reveal className="text-center mb-16">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ELITE VALKYRIES & BERSERKERS</p>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
               MEET YOUR master COACHES
             </h2>
             <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
-          </div>
+          </Reveal>
 
+          <Reveal delay={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             {DEFAULT_TRAINERS.map((t: any, idx: number) => (
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
@@ -743,13 +860,14 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </div>
             ))}
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Gallery & Official Instagram Section */}
-      <section id="gallery" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
+      <section id="gallery" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
+          <Reveal className="text-center mb-14">
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">LIVE FROM THE ARENA</p>
             <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
               GALLERY & DAILY STORIES
@@ -760,9 +878,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="text-red-500 hover:underline">@{GYM_CONFIG.instagramHandle}</a>.
               Tap today's stories below to watch the action live on Instagram.
             </p>
-          </div>
+          </Reveal>
 
           {/* Daily Stories strip */}
+          <Reveal delay={0.1}>
           <div className="mb-14">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
@@ -809,8 +928,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               Stories refresh every 24 hours on our official Instagram account — tap any bubble to watch live.
             </p>
           </div>
+          </Reveal>
 
           {/* Gallery grid */}
+          <Reveal delay={0.05}>
           <div>
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest">GALLERY</h3>
@@ -854,8 +975,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               )}
             </div>
           </div>
+          </Reveal>
 
           {/* Follow CTA */}
+          <Reveal delay={0.05}>
           <div className="mt-12 bg-neutral-900/40 border border-neutral-900 rounded-xl p-8 text-center">
             <h4 className="font-mono font-black text-white uppercase tracking-widest mb-2">DON'T MISS TODAY'S ACTION</h4>
             <p className="text-xs text-gray-400 mb-6 max-w-lg mx-auto leading-relaxed">
@@ -880,11 +1003,13 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </a>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Review us on Google Maps */}
-      <section id="review" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
+      <section id="review" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
+        <Reveal>
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">SHARE THE EXPERIENCE</span>
@@ -940,10 +1065,12 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           </div>
         </div>
+        </Reveal>
       </section>
 
       {/* Contact & Map Section */}
-      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
+      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto scroll-mt-24">
+        <Reveal>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
             <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">VISIT THE KINGDOM</span>
@@ -1008,8 +1135,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             ) : (
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Full Name</label>
+                  <label htmlFor="contact-name" className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Full Name</label>
                   <input
+                    id="contact-name"
                     type="text"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
@@ -1020,9 +1148,11 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Phone Number</label>
+                  <label htmlFor="contact-phone" className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Phone Number</label>
                   <input
+                    id="contact-phone"
                     type="tel"
+                    inputMode="tel"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
                     className="w-full bg-black/50 border border-neutral-850 px-4 py-2.5 rounded text-white text-xs focus:border-red-650 focus:outline-none"
@@ -1032,8 +1162,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Message (What are your fitness limits?)</label>
+                  <label htmlFor="contact-message" className="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Message (What are your fitness limits?)</label>
                   <textarea
+                    id="contact-message"
                     rows={3}
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
@@ -1052,6 +1183,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             )}
           </div>
         </div>
+        </Reveal>
       </section>
 
       {/* Franchise Query Modal */}
@@ -1087,8 +1219,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             ) : (
               <form onSubmit={handleFranchiseSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Full Name</label>
+                  <label htmlFor="franchise-name" className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Full Name</label>
                   <input
+                    id="franchise-name"
                     type="text"
                     value={franchiseData.name}
                     onChange={(e) => setFranchiseData({ ...franchiseData, name: e.target.value })}
@@ -1100,8 +1233,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Proposed City/Location</label>
+                    <label htmlFor="franchise-city" className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Proposed City/Location</label>
                     <input
+                      id="franchise-city"
                       type="text"
                       value={franchiseData.city}
                       onChange={(e) => setFranchiseData({ ...franchiseData, city: e.target.value })}
@@ -1111,8 +1245,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Available Investment Capital</label>
+                    <label htmlFor="franchise-capital" className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Available Investment Capital</label>
                     <select
+                      id="franchise-capital"
                       value={franchiseData.capital}
                       onChange={(e) => setFranchiseData({ ...franchiseData, capital: e.target.value })}
                       className="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded text-white text-xs focus:ring-1 focus:ring-red-650 focus:outline-none"
@@ -1125,9 +1260,11 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Direct Phone Number</label>
+                  <label htmlFor="franchise-phone" className="block text-[10px] font-mono text-gray-400 mb-1 uppercase">Direct Phone Number</label>
                   <input
+                    id="franchise-phone"
                     type="tel"
+                    inputMode="tel"
                     value={franchiseData.phone}
                     onChange={(e) => setFranchiseData({ ...franchiseData, phone: e.target.value })}
                     required
@@ -1149,7 +1286,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       )}
 
       {/* About Section (bottom of page) */}
-      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+      <section id="about" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+        <Reveal>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ABOUT THE KINGDOM</p>
@@ -1225,8 +1363,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             />
             <div className="p-5 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-xs font-mono text-emerald-400">OPEN NOW · {GYM_CONFIG.hours}</span>
+                <span className={`inline-block w-2 h-2 rounded-full animate-pulse ${gymOpen ? "bg-emerald-500" : "bg-red-500"}`}></span>
+                <span className={`text-xs font-mono ${gymOpen ? "text-emerald-400" : "text-red-400"}`}>
+                  {gymOpen ? `OPEN NOW · ${GYM_CONFIG.hours}` : `CURRENTLY CLOSED · ${GYM_CONFIG.hours}`}
+                </span>
               </div>
               <a
                 href={GYM_CONFIG.mapLink}
@@ -1239,35 +1379,88 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </div>
           </div>
         </div>
+        </Reveal>
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-950/80 border-t border-neutral-900 px-6 py-12 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-3">
-            <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
-            <span className="font-mono text-sm font-black text-white tracking-widest">
-              VIKINGS <span className="text-red-500">GYM & SPA</span>
-            </span>
+      <footer className="bg-neutral-950/80 border-t border-neutral-900 px-6 pt-14 pb-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
+              <span className="font-mono text-sm font-black text-white tracking-widest">
+                VIKINGS <span className="text-red-500">GYM & SPA</span>
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed max-w-xs mb-5">
+              Aurangabad's premium commercial gym & Moroccan steam spa — imported machines, Olympic powerlifting, Zumba, dance & yoga.
+            </p>
+            <div className="flex gap-3">
+              <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" aria-label="Vikings on Instagram" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" aria-label="Vikings on Google Maps" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+                <MapPin className="w-4 h-4" />
+              </a>
+              <a href={`tel:${GYM_CONFIG.phone}`} aria-label="Call Vikings Gym" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
+                <Phone className="w-4 h-4" />
+              </a>
+            </div>
           </div>
 
-          <p className="text-xs text-gray-500 font-mono text-center md:text-left">
-            © 2026 Vikings Gym & Spa - MG Road, Aurangabad, Bihar. All rights reserved.
-          </p>
+          <div>
+            <h4 className="font-mono text-xs font-black text-white tracking-widest uppercase mb-4">Explore</h4>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-xs font-mono text-gray-500">
+              <li><a href="#about" className="hover:text-red-500 transition-colors">ABOUT</a></li>
+              <li><a href="#facilities" className="hover:text-red-500 transition-colors">FACILITIES</a></li>
+              <li><a href="#trainers" className="hover:text-red-500 transition-colors">TRAINERS</a></li>
+              <li><a href="#gallery" className="hover:text-red-500 transition-colors">GALLERY</a></li>
+              <li><a href="#pricing" className="hover:text-red-500 transition-colors">MEMBERSHIPS</a></li>
+              <li><a href="#calculator" className="hover:text-red-500 transition-colors">BMI CALCULATOR</a></li>
+              <li><a href="#review" className="hover:text-red-500 transition-colors">REVIEWS</a></li>
+              <li><a href="#contact" className="hover:text-red-500 transition-colors">CONTACT</a></li>
+            </ul>
+          </div>
 
-          <div className="flex gap-4">
-            <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <MapPin className="w-4 h-4" />
-            </a>
-            <a href={`tel:${GYM_CONFIG.phone}`} className="p-2 bg-neutral-900 hover:bg-neutral-850 rounded text-gray-400 hover:text-white transition-all">
-              <Phone className="w-4 h-4" />
-            </a>
+          <div>
+            <h4 className="font-mono text-xs font-black text-white tracking-widest uppercase mb-4">Reach the Kingdom</h4>
+            <ul className="space-y-2.5 text-xs text-gray-500">
+              <li>{GYM_CONFIG.address}</li>
+              <li>
+                <a href={`tel:${GYM_CONFIG.phone}`} className="hover:text-red-500 transition-colors">{GYM_CONFIG.phoneDisplay}</a>
+                {" · "}
+                <a href={`https://wa.me/${GYM_CONFIG.whatsapp}`} target="_blank" rel="noreferrer" className="hover:text-red-500 transition-colors">WhatsApp</a>
+              </li>
+              <li className="font-mono">{GYM_CONFIG.hours}</li>
+              <li>
+                <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="hover:text-red-500 transition-colors">@{GYM_CONFIG.instagramHandle}</a>
+              </li>
+            </ul>
           </div>
         </div>
+
+        <div className="pt-6 border-t border-neutral-900">
+          <p className="text-xs text-gray-600 font-mono text-center">
+            © {new Date().getFullYear()} Vikings Gym & Spa — MG Road, Aurangabad, Bihar. All rights reserved.
+          </p>
+        </div>
       </footer>
+
+      {/* Back to top */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Back to top"
+            className="fixed bottom-6 right-6 z-50 bg-red-600 hover:bg-red-700 text-black p-3 rounded-full shadow-lg shadow-red-900/40 transition-colors cursor-pointer"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

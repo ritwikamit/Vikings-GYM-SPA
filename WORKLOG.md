@@ -5,6 +5,27 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — UI/UX enhancement pass, theme untouched (opencode session)
+
+**Goal:** Polish UI/UX while keeping the black/red Vikings theme exactly as-is.
+
+**What changed (one commit):**
+- **Fixed silently-broken styles:** `red-650` / `neutral-850` (27 usages) generated zero CSS under Tailwind v4 — registered them in `src/index.css` via `@theme` so dividers, borders, hovers and focus rings now actually render.
+- **Global CSS:** smooth anchor scrolling, slim dark scrollbar with red hover, red `:focus-visible` ring, reduced-motion fallback.
+- **Navigation:** sticky bar compresses + gains shadow on scroll; active section highlighted in red (desktop + mobile, via IntersectionObserver); added REVIEWS link; logo links to top; aria-labels on icon buttons.
+- **Motion:** new `Reveal` wrapper — every section header and content block fades/rises in once on scroll.
+- **UX correctness:** map-card "OPEN NOW" badge is now live (Mon–Sat 5AM–10PM IST → shows CURRENTLY CLOSED otherwise); fixed stale Sunday hours in `index.html` SEO schema.
+- **Overlays:** body scroll locks + Escape closes the mobile menu and franchise modal.
+- **Footer:** 3-column layout (brand + Explore quick links + contact info) with dynamic year.
+- **Forms:** labels wired via htmlFor/id, BMI min/max + numeric keyboards, tel keyboards on phone fields.
+- **Back-to-top** floating button appears after scrolling.
+
+**Verification:** `npm run lint` + `npm run build` pass; custom shades confirmed in built CSS; 16 balanced Reveal pairs; prerendered HTML verified (all 8 sections, labels, live open badge).
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Added Deepsikha (dance), Vaishnavi (ambassador), Neha (female trainer) (opencode session)
 
 **Goal:** Add 3 new team members from `Trainers/` photos + Instagram profiles.
