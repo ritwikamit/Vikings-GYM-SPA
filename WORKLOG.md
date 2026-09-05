@@ -5,6 +5,23 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Minimal lucid navbar: core links + MORE dropdown (opencode session)
+
+**Goal:** Declutter the crowded 9-link navbar; align header; refine JOIN NOW.
+
+**What changed (one commit, `src/components/PublicWebsite.tsx` only):**
+- Desktop nav condensed to 4 core links (TRAINERS · MEMBERSHIPS · GALLERY · CONTACT) + a **MORE ▾ dropdown** (About, Facilities, BMI Calculator, Reviews, Franchise) with hover/click open, outside-click + Escape dismiss, active-section dot.
+- Lucid link style: smaller mono type, wide tracking, animated red underline (persists on the active section).
+- Header realigned: full-width bar with inner `max-w-7xl` container and fixed heights (72px → 56px on scroll) so logo, links and CTA stay perfectly centered.
+- JOIN NOW refined: fixed height, wider tracking, red glow on hover, no layout-shifting scale.
+- Mobile menu: condensed divided-list style with the core links first and a full-width JOIN NOW CTA at the bottom.
+
+**Verification:** `npm run lint` + `npm run build` pass; prerendered HTML contains new nav structure.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — UI/UX enhancement pass, theme untouched (opencode session)
 
 **Goal:** Polish UI/UX while keeping the black/red Vikings theme exactly as-is.

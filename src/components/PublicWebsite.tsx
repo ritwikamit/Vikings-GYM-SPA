@@ -10,6 +10,7 @@ import {
   UserCheck,
   ArrowRight,
   ArrowUp,
+  ChevronDown,
   ShieldAlert,
   Calculator,
   Award,
@@ -269,6 +270,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => {
@@ -279,6 +282,23 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Dismiss the MORE dropdown on outside click / Escape
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setMoreOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMoreOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [moreOpen]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -326,10 +346,35 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const gymOpen = isGymOpenNow();
 
   // Nav link styling with active-section highlight (desktop + mobile variants)
-  const navLinkClass = (id: string) =>
-    `transition-colors ${activeSection === id ? "text-red-500" : "text-gray-400 hover:text-red-500"}`;
+  // Minimal lucid nav: 4 core links + a MORE dropdown for the rest.
+  const MORE_LINKS = [
+    { id: "about", label: "ABOUT" },
+    { id: "facilities", label: "FACILITIES" },
+    { id: "calculator", label: "BMI CALCULATOR" },
+    { id: "review", label: "REVIEWS" },
+  ];
+  const moreActive = MORE_LINKS.some((l) => l.id === activeSection);
+
+  const DeskLink = ({ id, label }: { id: string; label: string }) => (
+    <a
+      href={`#${id}`}
+      className={`group relative py-2 text-[13px] font-mono font-bold tracking-[0.18em] transition-colors ${
+        activeSection === id ? "text-red-500" : "text-gray-400 hover:text-white"
+      }`}
+    >
+      {label}
+      <span
+        className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-red-500 transition-transform duration-300 ${
+          activeSection === id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+        }`}
+      />
+    </a>
+  );
+
   const mobileNavLinkClass = (id: string) =>
-    `transition-colors ${activeSection === id ? "text-red-500" : "text-gray-300 hover:text-red-500"}`;
+    `block py-3.5 border-b border-white/5 transition-colors tracking-[0.2em] ${
+      activeSection === id ? "text-red-500" : "text-gray-300 hover:text-white"
+    }`;
 
   // Portal handlers are preserved for future portal reconnect.
   const portalHandlers = { onJoinNow, onLoginClick };
@@ -390,56 +435,100 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   return (
     <div id="top" className="bg-black text-gray-200 min-h-screen font-sans selection:bg-red-600 selection:text-white">
       {/* Dynamic Header */}
-      <nav className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 flex justify-between items-center max-w-7xl mx-auto transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 py-3 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40 py-4"}`}>
-        <a href="#top" className="flex items-center gap-3" aria-label="Vikings Gym & Spa — back to top">
-          <img src={logoPremium} alt="Vikings Logo" className="h-10 w-auto" />
-          <span className="font-mono text-xl font-black tracking-tighter text-white">
-            VIKINGS <span className="text-red-500">GYM & SPA</span>
-          </span>
-        </a>
+      <nav className={`sticky top-0 z-50 backdrop-blur-md border-b transition-all duration-300 ${scrolled ? "bg-black/95 border-red-950/60 shadow-lg shadow-black/60" : "bg-black/90 border-red-950/40"}`}>
+        <div className={`max-w-7xl mx-auto px-6 flex justify-between items-center gap-6 transition-all duration-300 ${scrolled ? "h-14" : "h-[72px]"}`}>
+          <a href="#top" className="flex items-center gap-3 shrink-0" aria-label="Vikings Gym & Spa — back to top">
+            <img src={logoPremium} alt="Vikings Logo" className="h-9 w-auto" />
+            <span className="font-mono text-lg font-black tracking-tighter text-white whitespace-nowrap">
+              VIKINGS <span className="text-red-500">GYM & SPA</span>
+            </span>
+          </a>
 
-        <div className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide">
-          <a href="#about" className={navLinkClass("about")}>ABOUT</a>
-          <a href="#facilities" className={navLinkClass("facilities")}>FACILITIES</a>
-          <a href="#trainers" className={navLinkClass("trainers")}>TRAINERS</a>
-          <a href="#gallery" className={navLinkClass("gallery")}>GALLERY</a>
-          <a href="#pricing" className={navLinkClass("pricing")}>MEMBERSHIPS</a>
-          <a href="#calculator" className={navLinkClass("calculator")}>BMI CALCULATOR</a>
-          <a href="#review" className={navLinkClass("review")}>REVIEWS</a>
-          <a href="#contact" className={navLinkClass("contact")}>CONTACT</a>
-          <button
-            onClick={() => setFranchiseOpen(true)}
-            className="hover:text-red-500 text-gray-400 transition-colors cursor-pointer text-left"
-          >
-            FRANCHISE
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* PORTAL LOGIN — hidden in static-site mode; preserved for future portal reconnect */}
-          {PORTAL_ACCESS_ENABLED && (
-            <button
-              onClick={onLoginClick}
-              className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
+          <div className="hidden lg:flex items-center gap-7">
+            <DeskLink id="trainers" label="TRAINERS" />
+            <DeskLink id="pricing" label="MEMBERSHIPS" />
+            <DeskLink id="gallery" label="GALLERY" />
+            <DeskLink id="contact" label="CONTACT" />
+            <div
+              ref={moreRef}
+              className="relative"
+              onMouseEnter={() => setMoreOpen(true)}
+              onMouseLeave={() => setMoreOpen(false)}
             >
-              PORTAL LOGIN
+              <button
+                onClick={() => setMoreOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={moreOpen}
+                className={`flex items-center gap-1.5 py-2 text-[13px] font-mono font-bold tracking-[0.18em] transition-colors cursor-pointer ${moreActive || moreOpen ? "text-red-500" : "text-gray-400 hover:text-white"}`}
+              >
+                MORE
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${moreOpen ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {moreOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute right-0 top-full pt-3"
+                  >
+                    <div className="w-60 rounded-xl border border-neutral-800/80 bg-neutral-950/95 backdrop-blur-xl p-2 shadow-2xl shadow-black/60">
+                      {MORE_LINKS.map((l) => (
+                        <a
+                          key={l.id}
+                          href={`#${l.id}`}
+                          onClick={() => setMoreOpen(false)}
+                          className={`flex items-center justify-between rounded-lg px-4 py-2.5 text-[12px] font-mono font-bold tracking-[0.18em] transition-colors ${activeSection === l.id ? "bg-red-600/10 text-red-500" : "text-gray-400 hover:bg-white/5 hover:text-white"}`}
+                        >
+                          {l.label}
+                          <span className={`h-1 w-1 rounded-full ${activeSection === l.id ? "bg-red-500" : "bg-transparent"}`} />
+                        </a>
+                      ))}
+                      <div className="my-1.5 h-px bg-white/5" />
+                      <button
+                        onClick={() => {
+                          setMoreOpen(false);
+                          setFranchiseOpen(true);
+                        }}
+                        className="w-full flex items-center justify-between rounded-lg px-4 py-2.5 text-[12px] font-mono font-bold tracking-[0.18em] text-gray-400 hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
+                      >
+                        FRANCHISE
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            {/* PORTAL LOGIN — hidden in static-site mode; preserved for future portal reconnect */}
+            {PORTAL_ACCESS_ENABLED && (
+              <button
+                onClick={onLoginClick}
+                className="hidden sm:block text-xs font-mono font-bold text-gray-300 hover:text-white border border-gray-800 hover:border-gray-600 px-4 py-2 rounded-md transition-all cursor-pointer"
+              >
+                PORTAL LOGIN
+              </button>
+            )}
+
+            <button
+              onClick={() => openWhatsApp(JOIN_MESSAGE)}
+              className="inline-flex items-center h-10 px-5 sm:px-6 bg-red-600 hover:bg-red-500 text-black font-mono font-black text-xs tracking-[0.2em] rounded-md hover:shadow-lg hover:shadow-red-600/40 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+            >
+              JOIN NOW
             </button>
-          )}
 
-          <button
-            onClick={() => openWhatsApp(JOIN_MESSAGE)}
-            className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-4 py-2 sm:px-5 sm:py-2.5 rounded hover:scale-105 active:scale-95 transition-all shadow-lg shadow-red-600/20 cursor-pointer"
-          >
-            JOIN NOW
-          </button>
-
-          <button 
-            className="lg:hidden text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
+            <button
+              className="lg:hidden text-white p-2 cursor-pointer hover:text-red-500 transition-colors"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -460,23 +549,33 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <X className="w-8 h-8" />
             </button>
 
-            <div className="flex flex-col items-center gap-8 text-xl font-bold font-mono tracking-widest">
+            <div className="flex flex-col items-stretch text-center w-full max-w-xs px-8 text-sm font-bold font-mono">
+              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("trainers")}>TRAINERS</a>
+              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("pricing")}>MEMBERSHIPS</a>
+              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("gallery")}>GALLERY</a>
+              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("contact")}>CONTACT</a>
               <a href="#about" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("about")}>ABOUT</a>
               <a href="#facilities" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("facilities")}>FACILITIES</a>
-              <a href="#trainers" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("trainers")}>TRAINERS</a>
-              <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("gallery")}>GALLERY</a>
-              <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("pricing")}>MEMBERSHIPS</a>
               <a href="#calculator" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("calculator")}>BMI CALCULATOR</a>
               <a href="#review" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("review")}>REVIEWS</a>
-              <a href="#contact" onClick={() => setIsMobileMenuOpen(false)} className={mobileNavLinkClass("contact")}>CONTACT</a>
               <button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   setFranchiseOpen(true);
                 }}
-                className="hover:text-red-500 transition-colors cursor-pointer text-center uppercase"
+                className="block py-3.5 border-b border-white/5 transition-colors tracking-[0.2em] text-gray-300 hover:text-white cursor-pointer"
               >
-                Franchise
+                FRANCHISE
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openWhatsApp(JOIN_MESSAGE);
+                }}
+                className="mt-8 w-full py-3.5 bg-red-600 hover:bg-red-500 text-black font-mono font-black text-sm tracking-[0.2em] rounded-md transition-all cursor-pointer"
+              >
+                JOIN NOW
               </button>
 
               {/* PORTAL LOGIN — hidden in static-site mode; preserved for future portal reconnect */}
@@ -486,7 +585,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     setIsMobileMenuOpen(false);
                     onLoginClick();
                   }}
-                  className="mt-8 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
+                  className="mt-4 text-sm font-mono font-bold text-white border border-red-900 bg-red-950/20 px-8 py-3 rounded-md transition-all cursor-pointer"
                 >
                   PORTAL LOGIN
                 </button>
