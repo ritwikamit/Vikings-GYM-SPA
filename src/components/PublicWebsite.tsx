@@ -266,7 +266,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       />
 
       {/* Facilities Showcase */}
-      <section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
+<section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20">
         <div className="text-center mb-16">
           <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ROYAL EXPERIENCE</p>
           <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
@@ -275,7 +275,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
               title: "Imported Strength Station",
@@ -296,22 +296,21 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600"
             }
           ].map((f, i) => (
-            <div key={i} className="bg-gradient-to-b from-neutral-900/40 to-neutral-950 border border-neutral-900 rounded-lg overflow-hidden group hover:border-red-900/60 transition-all duration-300">
+            <div key={i} className="bg-neutral-900/50 rounded-2xl overflow-hidden border border-neutral-800/30 group-hover:border-red-600/30 transition-all duration-300 flex flex-col h-full">
               <div className="relative h-48 overflow-hidden bg-neutral-900">
                 <img
                   src={f.img}
                   alt={f.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80"
-                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 referrerPolicy='no-referrer'"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 <div className="absolute top-4 left-4 bg-red-600 text-black p-2 rounded">
-                  <f.icon className="w-5 h-5 stroke-[2.5]" />
+                  <div className="w-2 h-2 rounded-full bg-red-300 animate-pulse" />
                 </div>
               </div>
-              <div className="p-6">
+              <div className="p-5 flex flex-col">
                 <h3 className="text-lg font-mono font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{f.description}</p>
+                <p className="text-gray-300 text-sm leading-relaxed">{f.description}</p>
               </div>
             </div>
           ))}
