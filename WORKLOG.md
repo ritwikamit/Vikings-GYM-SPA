@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Phone tuning for hero trust pills (opencode session)
+
+**Goal:** Pill strip + rating pill must sit cleanly on narrow phones.
+
+**What changed (one commit, hero-3.tsx):** Hours strip becomes a soft rounded box on phones (capsule only from sm up), tighter tracking/padding/gaps on mobile; rating pill wraps centered with phone padding so stars + count never overflow 320px screens.
+
+**Verification:** lint + build pass.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Cylindrical strip for hours/location line (opencode session)
 
 **Goal:** Outer trust card removed; hours/location gets its own pill strip.

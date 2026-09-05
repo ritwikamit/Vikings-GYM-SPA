@@ -374,7 +374,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             href={GYM_CONFIG.mapLink}
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-5 py-2.5 backdrop-blur-md transition-colors hover:border-amber-400/40"
+            className="group inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 sm:px-5 py-2.5 backdrop-blur-md transition-colors hover:border-amber-400/40"
           >
             <span className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -389,7 +389,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               · {GYM_CONFIG.reviews} GOOGLE REVIEWS
             </span>
           </a>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 rounded-full border border-white/10 bg-black/45 px-5 py-2.5 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.2em] text-gray-300">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/10 bg-black/45 px-4 sm:px-5 py-2.5 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-300 max-w-full">
             <span className="inline-flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-red-500" />
               MON–SAT · 5 AM – 10 PM
