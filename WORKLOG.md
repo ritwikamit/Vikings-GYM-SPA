@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Snappier dot field + always-alive idle roam (opencode session)
+
+**Goal:** Field felt laggy and died when the pointer stopped moving.
+
+**What changed (one commit, hero-3.tsx):** Cursor follow tightened (0.12 to 0.28 easing, torch springs stiffened) for near-instant response. After 2.5s idle the hotspot roams on its own so the cloth-press keeps breathing during reads and momentum scrolls. Dots also shimmer gently at all times. Phone canvas resolution capped lower for weaker GPUs.
+
+**Verification:** lint + build pass.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Lucid readability: trust card + dim-text lift (opencode session)
 
 **Goal:** Hours/location line sometimes washed out over animations; brighten dim texts wherever needed.

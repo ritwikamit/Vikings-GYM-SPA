@@ -50,8 +50,10 @@ export function DotGrid() {
     const coarse = window.matchMedia("(pointer: coarse)").matches;
     const GAP = coarse ? 44 : 30;
     const RADIUS = 130;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
     const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999 };
+    // Last live-pointer time; when idle the hotspot roams on its own
+    const seen = { t: -1e9 };
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -69,10 +71,12 @@ export function DotGrid() {
       const r = canvas.getBoundingClientRect();
       mouse.tx = e.clientX - r.left;
       mouse.ty = e.clientY - r.top;
+      seen.t = performance.now();
     };
     const onLeave = () => {
       mouse.tx = -9999;
       mouse.ty = -9999;
+      seen.t = -1e9;
     };
     host.addEventListener("mousemove", onMove);
     host.addEventListener("mouseleave", onLeave);
@@ -83,6 +87,7 @@ export function DotGrid() {
       const r = canvas.getBoundingClientRect();
       mouse.tx = t.clientX - r.left;
       mouse.ty = t.clientY - r.top;
+      seen.t = performance.now();
     };
     host.addEventListener("touchstart", onTouch, { passive: true });
     host.addEventListener("touchmove", onTouch, { passive: true });
@@ -90,13 +95,21 @@ export function DotGrid() {
     host.addEventListener("touchcancel", onLeave);
 
     const draw = () => {
-      // Ease the cursor for a liquid feel
-      mouse.x += (mouse.tx - mouse.x) * 0.12;
-      mouse.y += (mouse.ty - mouse.y) * 0.12;
+      const now = performance.now();
+      // Idle >2.5s: hotspot roams on its own so the field stays alive
+      const idle = now - seen.t > 2500;
+      const rt = now / 1000;
+      const tx = idle ? w * (0.5 + 0.32 * Math.sin(rt * 0.35)) : mouse.tx;
+      const ty = idle ? h * (0.42 + 0.28 * Math.sin(rt * 0.27 + 1.3)) : mouse.ty;
+      // Tight follow: responsive, with just a whisper of smoothing
+      mouse.x += (tx - mouse.x) * 0.28;
+      mouse.y += (ty - mouse.y) * 0.28;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      for (let gy = GAP / 2; gy < h; gy += GAP) {
-        for (let gx = GAP / 2; gx < w; gx += GAP) {
+      let iy = 0;
+      for (let gy = GAP / 2; gy < h; gy += GAP, iy++) {
+        let ix = 0;
+        for (let gx = GAP / 2; gx < w; gx += GAP, ix++) {
           const dx = gx - mouse.x;
           const dy = gy - mouse.y;
           const d = Math.sqrt(dx * dx + dy * dy) || 0.001;
@@ -104,8 +117,12 @@ export function DotGrid() {
           const swell = t * t;
           // Cloth-press: dots part outward around the cursor, like weight on fabric
           const push = swell * 16;
-          const px = gx + (dx / d) * push;
-          const py = gy + (dy / d) * push;
+          // Gentle ambient breathing so dots shimmer even with no pointer
+          const phase = ix * 0.9 + iy * 1.7;
+          const bx = Math.sin(rt * 0.9 + phase) * 2.2;
+          const by = Math.cos(rt * 0.7 + phase * 1.3) * 2.2;
+          const px = gx + (dx / d) * push + bx;
+          const py = gy + (dy / d) * push + by;
           const r = 1 + swell * 2.6;
           const alpha = 0.1 + swell * 0.55;
           // Fade dots toward the edges, like a masked pattern
@@ -199,8 +216,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   // while the aurora + ember layers drift on parallax against it.
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.38);
-  const glowX = useSpring(mouseX, { stiffness: 55, damping: 18 });
-  const glowY = useSpring(mouseY, { stiffness: 55, damping: 18 });
+  const glowX = useSpring(mouseX, { stiffness: 120, damping: 20 });
+  const glowY = useSpring(mouseY, { stiffness: 120, damping: 20 });
   const torchLeft = useTransform(glowX, (v) => `${v * 100}%`);
   const torchTop = useTransform(glowY, (v) => `${v * 100}%`);
   const auraX = useTransform(glowX, [0, 1], [24, -24]);
