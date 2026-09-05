@@ -8,7 +8,7 @@ export const GYM_CONFIG = {
   address: "Q92C+M8J, MG Rd, Aurangabad, Bihar 824101",
   rating: 4.4,
   reviews: 27,
-  hours: "Mon–Sat 5 AM – 10 PM · Sun 5 PM – 10 PM",
+  hours: "Mon–Sat 5 AM – 10 PM",
   instagram: "https://www.instagram.com/vikings_fitness",
   instagramStories: "https://www.instagram.com/stories/vikings_fitness/",
   instagramHandle: "vikings_fitness",
