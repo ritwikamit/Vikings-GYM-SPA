@@ -883,6 +883,65 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         </div>
       </section>
 
+      {/* Review us on Google Maps */}
+      <section id="review" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="text-red-500 font-mono text-xs tracking-widest uppercase block mb-2">SHARE THE EXPERIENCE</span>
+            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight mb-4">
+              REVIEW US ON GOOGLE MAPS
+            </h2>
+            <div className="w-16 h-1 bg-red-650 rounded mb-6"></div>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-xl mb-6">
+              Loved your session at Vikings Gym & Spa? A quick review keeps our warriors fired up and
+              helps more legends find their way to the kingdom. It takes less than 30 seconds.
+            </p>
+            <div className="flex items-center gap-1.5 mb-8">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 text-amber-400 fill-amber-400" />
+              ))}
+              <span className="text-gray-500 text-xs font-mono ml-2">RATED {GYM_CONFIG.rating} / 5 BY MEMBERS</span>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={GYM_CONFIG.mapLink}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-red-600 hover:bg-red-700 text-black font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer flex items-center gap-2"
+              >
+                <Star className="w-4 h-4" /> LEAVE A REVIEW
+              </a>
+              <a
+                href={GYM_CONFIG.mapLink}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-neutral-950 hover:bg-neutral-900 text-gray-300 border border-neutral-800 hover:border-gray-600 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer flex items-center gap-2"
+              >
+                <MapPin className="w-4 h-4" /> OPEN IN GOOGLE MAPS
+              </a>
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="bg-neutral-900/60 border border-neutral-900 rounded-2xl p-8 flex flex-col items-center max-w-sm w-full">
+              <span className="text-red-500 font-mono text-[10px] tracking-widest uppercase mb-4">SCAN · RATE · FORGE</span>
+              <a href={GYM_CONFIG.mapLink} target="_blank" rel="noreferrer" className="block bg-white rounded-xl p-3">
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodeURIComponent(GYM_CONFIG.mapLink)}`}
+                  alt="QR code — review Vikings Gym & Spa on Google Maps"
+                  className="w-56 h-56 object-contain"
+                  loading="lazy"
+                />
+              </a>
+              <span className="text-gray-500 text-xs font-mono mt-4 text-center">
+                Point your camera at the QR code
+                <br />to open & review us on Google Maps
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact & Map Section */}
       <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
