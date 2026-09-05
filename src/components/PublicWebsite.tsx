@@ -1586,8 +1586,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               rel="noreferrer"
               className="transition-colors hover:opacity-80"
             >
-              <span className="text-red-500 font-bold">AC</span>{" "}
-              <span className="text-white font-bold">Custom</span>
+              <span className="text-white font-bold">AC</span>{" "}
+              <span className="text-red-500 font-bold">Custom</span>
             </a>
           </p>
         </div>
