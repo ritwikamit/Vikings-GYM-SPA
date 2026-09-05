@@ -187,6 +187,20 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
   );
 }
 
+// Unified lucid section header: kicker + title + red rule + optional description.
+function SectionHeader({ kicker, title, desc }: { kicker: string; title: React.ReactNode; desc?: React.ReactNode }) {
+  return (
+    <Reveal className="text-center mb-14 md:mb-16 max-w-2xl mx-auto">
+      <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">{kicker}</p>
+      <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
+        {title}
+      </h2>
+      <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
+      {desc && <p className="text-gray-400 text-sm mt-6 leading-relaxed">{desc}</p>}
+    </Reveal>
+  );
+}
+
 // Live open/closed status derived from gym hours (Mon–Sat, 5 AM – 10 PM IST).
 function isGymOpenNow(now: Date = new Date()): boolean {
   try {
@@ -609,6 +623,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths."
         ctaText="INVEST IN YOURSELF"
         onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
+        secondaryCtaText="EXPLORE THE ARENA"
+        onSecondaryCtaClick={() => document.getElementById("facilities")?.scrollIntoView({ behavior: "smooth" })}
         images={[
           "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
@@ -622,13 +638,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
       {/* Facilities Showcase */}
 <section id="facilities" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
-        <Reveal className="text-center mb-16">
-          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ROYAL EXPERIENCE</p>
-          <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-            WORLD-CLASS WELLNESS FACILITIES
-          </h2>
-          <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
-        </Reveal>
+        <SectionHeader kicker="ROYAL EXPERIENCE" title="WORLD-CLASS WELLNESS FACILITIES" />
 
         <Reveal delay={0.1}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -776,13 +786,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
       {/* Pricing / Memberships */}
       <section id="pricing" className="py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
-        <Reveal className="text-center mb-16">
-          <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">SHIELD WALL PLANS</p>
-          <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-            MEMBERSHIP TIERS & PRICING
-          </h2>
-          <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded animate-pulse"></div>
-        </Reveal>
+        <SectionHeader kicker="SHIELD WALL PLANS" title="MEMBERSHIP TIERS & PRICING" />
 
         <Reveal delay={0.1}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -887,13 +891,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       </section>
       <section id="trainers" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <Reveal className="text-center mb-16">
-            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">ELITE VALKYRIES & BERSERKERS</p>
-            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-              MEET YOUR master COACHES
-            </h2>
-            <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
-          </Reveal>
+          <SectionHeader kicker="ELITE VALKYRIES & BERSERKERS" title="MEET YOUR MASTER COACHES" />
 
           <Reveal delay={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
@@ -966,18 +964,17 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       {/* Gallery & Official Instagram Section */}
       <section id="gallery" className="py-24 bg-neutral-950/40 px-6 border-b border-red-950/20 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
-          <Reveal className="text-center mb-14">
-            <p className="text-red-500 font-mono text-xs tracking-widest uppercase mb-2">LIVE FROM THE ARENA</p>
-            <h2 className="text-3xl md:text-4xl font-sans font-black text-white uppercase tracking-tight">
-              GALLERY & DAILY STORIES
-            </h2>
-            <div className="w-16 h-1 bg-red-650 mx-auto mt-4 rounded"></div>
-            <p className="text-gray-400 text-sm mt-6 max-w-xl mx-auto leading-relaxed">
-              Training clips, member transformations and steam-spa energy — posted every day on our official account{" "}
-              <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="text-red-500 hover:underline">@{GYM_CONFIG.instagramHandle}</a>.
-              Tap today's stories below to watch the action live on Instagram.
-            </p>
-          </Reveal>
+          <SectionHeader
+            kicker="LIVE FROM THE ARENA"
+            title="GALLERY & DAILY STORIES"
+            desc={
+              <>
+                Training clips, member transformations and steam-spa energy — posted every day on our official account{" "}
+                <a href={GYM_CONFIG.instagram} target="_blank" rel="noreferrer" className="text-red-500 hover:underline">@{GYM_CONFIG.instagramHandle}</a>.
+                Tap today's stories below to watch the action live on Instagram.
+              </>
+            }
+          />
 
           {/* Daily Stories strip */}
           <Reveal delay={0.1}>

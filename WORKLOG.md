@@ -5,6 +5,20 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Hero enhancement + lucid site-wide headers (opencode session)
+
+**Goal:** Richer hero and a consistent, minimal ("lucid") rhythm across the whole site. Theme untouched.
+
+**What changed (one commit):**
+- **Hero (`src/components/ui/hero-3.tsx`):** dual CTA (INVEST IN YOURSELF + ghost EXPLORE THE ARENA scrolling to facilities); trust-signals row (4.4★ · 27 Google reviews / Mon–Sat hours / MG Road); calmer type scale (`base` on mobile); `min-h-svh` + breathing padding instead of fixed `h-screen`; CTA restyled to match site buttons; marquee images lazy-load.
+- **Shared `SectionHeader`** (`PublicWebsite.tsx`): one kicker + title + red-rule (+ optional desc) component now used by Facilities, Pricing, Trainers, Gallery — identical rhythm everywhere. Also fixed the "MEET YOUR master COACHES" casing and dropped the pulsing divider.
+
+**Verification:** `npm run lint` + `npm run build` pass; prerendered HTML contains new CTAs, trust row, fixed heading.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Minimal lucid navbar: core links + MORE dropdown (opencode session)
 
 **Goal:** Declutter the crowded 9-link navbar; align header; refine JOIN NOW.
