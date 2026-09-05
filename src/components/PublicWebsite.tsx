@@ -24,6 +24,10 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.png";
+import photoAnkitKumar from "../../assets/trainers/ankit-kumar.jpg";
+import photoBittuVerma from "../../assets/trainers/bittu-verma.jpg";
+import photoAli from "../../assets/trainers/ali.jpg";
+import photoAmitSingh from "../../assets/trainers/amit-singh.jpg";
 import { AnimatedMarqueeHero } from "./ui/hero-3";
 import DotPattern from "./ui/dot-pattern-1";
 import { GYM_CONFIG } from "../config/gym";
@@ -77,6 +81,7 @@ const DEFAULT_TRAINERS = [
     cert: ["Strength & Conditioning"],
     instagram: "https://www.instagram.com/ankitxn_/",
     instagramHandle: "@ankitxn_",
+    photoUrl: photoAnkitKumar,
   },
   {
     name: "Bittu Verma",
@@ -86,6 +91,7 @@ const DEFAULT_TRAINERS = [
     cert: ["Fitness Coaching", "Weight Loss"],
     instagram: "https://www.instagram.com/get_fit_with_bittu/",
     instagramHandle: "@get_fit_with_bittu",
+    photoUrl: photoBittuVerma,
   },
   {
     name: "Ali",
@@ -95,6 +101,7 @@ const DEFAULT_TRAINERS = [
     cert: ["Personal Training"],
     instagram: "https://www.instagram.com/ali_trainer/",
     instagramHandle: "@ali_trainer",
+    photoUrl: photoAli,
   },
   {
     name: "Amit Singh",
@@ -104,6 +111,7 @@ const DEFAULT_TRAINERS = [
     cert: ["Gym Coaching"],
     instagram: "https://www.instagram.com/amysinghca2018/",
     instagramHandle: "@amysinghca2018",
+    photoUrl: photoAmitSingh,
   },
 ];
 
@@ -163,6 +171,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     queryKey: ['public-trainers'],
     queryFn: () => trainersAPI.getAll().then(res => res.data.data)
   });
+  // Note: the coaches section always renders DEFAULT_TRAINERS (real team + photos).
+  // The API query above is preserved for future backend reconnect.
 
   // BMI Calculator States
   const [weight, setWeight] = useState<string>("70");
@@ -638,7 +648,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {(trainersData && trainersData.length > 0 ? trainersData : DEFAULT_TRAINERS).map((t: any, idx: number) => (
+            {DEFAULT_TRAINERS.map((t: any, idx: number) => (
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
                 <div className="md:w-2/5 h-64 md:h-auto bg-neutral-900">
                   {t.photoUrl ? (

@@ -5,6 +5,21 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 — Trainer photos attached (real coaching team) (opencode session)
+
+**Goal:** Show the actual photos of the coaching team (Ankit Kumar, Bittu Verma, Ali, Amit Singh) that were dropped into `Trainers/`.
+
+**What changed (one commit):**
+- Copied `Trainers/*.jpg` → `assets/trainers/` (cleaned filenames: `ankit-kumar.jpg`, `bittu-verma.jpg`, `ali.jpg`, `amit-singh.jpg`) and imported them in `src/components/PublicWebsite.tsx`.
+- Added `photoUrl` to each `DEFAULT_TRAINERS` entry so every coach card shows their photo (avatar-initial fallback remains for trainers without a photo).
+- Coaches section now always renders `DEFAULT_TRAINERS` (the real team + photos); the `trainersAPI.getAll()` query is kept intact for future backend reconnect.
+
+**Verification:** `npm run lint` + `npm run build` pass; all 4 photos bundled into `dist/assets/` and referenced from the prerendered HTML.
+
+**Deploy status:** Pushed to `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 — Instagram widget slot ready (Option 1 prep) (opencode session)
 
 **Goal:** Prepare the GALLERY section to display the real `@vikings_fitness` feed/stories via a third-party widget (SnapWidget/LightWidget/Elfsight) the moment the owner provides the embed snippet. Backend untouched.
