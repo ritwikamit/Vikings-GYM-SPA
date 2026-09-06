@@ -1580,15 +1580,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </p>
           <div className="flex items-center justify-center gap-2.5 mt-3">
             <span className="text-[11px] text-gray-500 font-mono">Designed & Developed by</span>
-            <a
-              href="https://accustomlabs.com"
-              target="_blank"
-              rel="noreferrer"
-              className="transition-opacity hover:opacity-80"
-              aria-label="AC Custom Labs"
-            >
-              <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-5 w-auto" />
-            </a>
+            {/* TODO: link logo to https://accustomlabs.com once the site is live */}
+            <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-5 w-auto" />
           </div>
         </div>
       </footer>
