@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Logo background removed + trimmed (opencode session)
+
+**Goal:** AC Custom Labs mark floats cleanly on the dark footer, aligned with credit text.
+
+**What changed (one commit):** Stripped the solid black backdrop to true transparency (luminance-keyed alpha, smooth edges), auto-cropped the dead padding, re-exported as WebP. Footer row already centers mark with text.
+
+**Verification:** lint + build pass; transparent cutout visually inspected.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - AC Custom Labs logo in footer (opencode session)
 
 **Goal:** Company logo beside the developer credit.
