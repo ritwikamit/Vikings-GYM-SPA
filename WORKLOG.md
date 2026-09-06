@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Smooth full-cover ice hover via overlay (opencode session)
+
+**Goal:** Gradient snapped in harshly and looked patchy - gradients cannot transition.
+
+**What changed (one commit):** New .btn-ice CSS engine - a full-cover blue gradient overlay crossfades in smoothly behind the text on hover and tap, with inherited rounding. All 6 ghost CTAs switched to it; red primaries and body copy untouched.
+
+**Verification:** lint + build pass; engine + all 8 usages confirmed in dist.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Ice-blue gradient hover on outline CTAs (opencode session)
 
 **Goal:** White-bordered highlight buttons ignite blue on hover; body copy untouched.

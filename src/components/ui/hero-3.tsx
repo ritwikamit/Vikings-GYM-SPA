@@ -343,7 +343,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           {secondaryCtaText && (
             <button
               onClick={onSecondaryCtaClick}
-              className="w-full sm:w-auto px-8 py-4 rounded-md border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-transparent hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
+              className="btn-ice w-full sm:w-auto px-8 py-4 rounded-md border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
             >
               {secondaryCtaText}
             </button>

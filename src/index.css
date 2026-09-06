@@ -49,6 +49,28 @@ button {
   outline-offset: 2px;
 }
 
+/* Smooth full-cover ice-blue hover for ghost buttons.
+   (CSS gradients can't transition, so we crossfade an overlay instead.) */
+.btn-ice {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.btn-ice::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(100deg, #1d4ed8 0%, #2563eb 45%, #06b6d4 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  z-index: -1;
+}
+.btn-ice:hover::before,
+.btn-ice:active::before {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

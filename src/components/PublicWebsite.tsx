@@ -934,7 +934,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 onClick={() => openWhatsApp(`Hi Vikings Gym & Spa! I want to secure the ${plan.name} (${plan.price} / ${plan.period}). Please confirm availability.`)}
                 className={`w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer ${plan.popular
                   ? "bg-red-600 hover:bg-red-700 text-black shadow-lg"
-                  : "bg-neutral-950 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
+                  : "btn-ice bg-neutral-950 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
                   }`}
               >
                 SECURE SLOT NOW
@@ -960,7 +960,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </ul>
             <button
               onClick={() => openWhatsApp("Hi Vikings Gym & Spa! I'd like to enquire about GROUP CLASSES (Zumba / Dance / Yoga). Please share details.")}
-              className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
+              className="btn-ice w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
             >
               ENQUIRE ABOUT GROUP CLASSES
             </button>
@@ -986,7 +986,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </ul>
             <button
               onClick={() => openWhatsApp("Hi Vikings Gym & Spa! I'd like to BOOK A PERSONAL TRAINER session. Please share availability & pricing.")}
-              className="w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
+              className="btn-ice w-full py-3 rounded-md font-mono font-bold text-xs tracking-wider transition-all cursor-pointer bg-neutral-950 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30"
             >
               BOOK A PERSONAL TRAINER
             </button>
@@ -1128,7 +1128,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 href={GYM_CONFIG.instagramStories}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-neutral-950 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer"
+                className="btn-ice bg-neutral-950 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer"
               >
                 WATCH TODAY'S STORIES
               </a>
@@ -1172,7 +1172,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 href={GYM_CONFIG.mapLink}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-neutral-950 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer flex items-center gap-2"
+                className="btn-ice bg-neutral-950 text-gray-300 hover:text-white border border-neutral-800 hover:border-transparent hover:shadow-lg hover:shadow-blue-600/30 font-mono font-black text-xs px-6 py-3 rounded transition-all cursor-pointer flex items-center gap-2"
               >
                 <MapPin className="w-4 h-4" /> OPEN IN GOOGLE MAPS
               </a>
