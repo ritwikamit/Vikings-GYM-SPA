@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vikingsgymspa.vercel.app/sitemap.xml
+Sitemap: https://www.vikingsgym.in/sitemap.xml
