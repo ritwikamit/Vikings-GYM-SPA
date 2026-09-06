@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Ice-blue gradient hover on outline CTAs (opencode session)
+
+**Goal:** White-bordered highlight buttons ignite blue on hover; body copy untouched.
+
+**What changed (one commit):** All 6 ghost CTAs (Explore the Arena, Watch Stories, Open in Maps, Enquire Group Classes, Book Trainer, non-popular Secure Slot) now fill with a blue-to-cyan gradient + glow on hover. Solid red primaries unchanged.
+
+**Verification:** lint + build pass; gradient + glow utilities confirmed in built CSS.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Human hero tagline + live badge pill (opencode session)
 
 **Goal:** Replace the AI-sounding tagline; upgrade the pill.
