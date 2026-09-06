@@ -298,8 +298,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
-          className="mb-6 inline-flex items-center gap-2 bg-red-650/10 border border-red-900/30 px-4 py-1.5 rounded-full text-red-500 text-[11px] font-mono font-bold tracking-[0.2em] text-center leading-relaxed max-w-full"
+          className="mb-6 inline-flex items-center gap-2.5 bg-red-650/10 border border-red-900/30 px-4 py-1.5 rounded-full text-red-500 text-[11px] font-mono font-bold tracking-[0.2em] text-center leading-relaxed max-w-full"
         >
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shrink-0" />
           {tagline}
         </motion.div>
 

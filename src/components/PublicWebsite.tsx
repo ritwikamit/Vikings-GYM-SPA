@@ -638,7 +638,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
 
       {/* Hero Section */}
       <AnimatedMarqueeHero
-        tagline="AURANGABAD'S ULTIMATE COMMERCIAL FITNESS & STEAM SPA"
+        tagline="AURANGABAD'S HOME OF IRON & STEAM"
         title={
           <>
             CARVE YOUR BODY <br />

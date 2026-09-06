@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Human hero tagline + live badge pill (opencode session)
+
+**Goal:** Replace the AI-sounding tagline; upgrade the pill.
+
+**What changed (one commit):** Tagline is now AURANGABAD'S HOME OF IRON and STEAM - short, local, human. Pill upgraded with a pulsing live dot so it reads as an active badge.
+
+**Verification:** lint + build pass.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Glassmorphic dark-blur header (opencode session)
 
 **Goal:** Lucid header that refracts scrolling page light.
