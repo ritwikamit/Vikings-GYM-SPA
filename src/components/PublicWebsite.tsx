@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.webp";
+import devLogo from "../../assets/ac-custom-labs.webp";
 import photoAnkitKumar from "../../assets/trainers/ankit-kumar.webp";
 import photoBittuVerma from "../../assets/trainers/bittu-verma.webp";
 import photoAli from "../../assets/trainers/ali.webp";
@@ -1577,18 +1578,18 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <p className="text-xs text-gray-500 font-mono text-center">
             © {new Date().getFullYear()} Vikings Gym & Spa — MG Road, Aurangabad, Bihar. All rights reserved.
           </p>
-          <p className="text-[11px] text-gray-500 font-mono text-center mt-2">
-            Designed & Developed by{" "}
+          <div className="flex items-center justify-center gap-2.5 mt-3">
+            <span className="text-[11px] text-gray-500 font-mono">Designed & Developed by</span>
             <a
               href="https://accustomlabs.com"
               target="_blank"
               rel="noreferrer"
-              className="transition-colors hover:opacity-80"
+              className="transition-opacity hover:opacity-80"
+              aria-label="AC Custom Labs"
             >
-              <span className="text-white font-bold">AC</span>{" "}
-              <span className="text-red-500 font-bold">Custom</span>
+              <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-7 w-auto" />
             </a>
-          </p>
+          </div>
         </div>
       </footer>
 

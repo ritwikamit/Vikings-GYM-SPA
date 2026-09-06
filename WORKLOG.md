@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - AC Custom Labs logo in footer (opencode session)
+
+**Goal:** Company logo beside the developer credit.
+
+**What changed (one commit):** Converted Developer/ACCustomLabs.png (397KB) to 480px WebP (4KB) in assets; footer credit now shows Designed and Developed by + the linked logo mark (new tab to accustomlabs.com).
+
+**Verification:** lint + build pass; logo + credit confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Smooth full-cover ice hover via overlay (opencode session)
 
 **Goal:** Gradient snapped in harshly and looked patchy - gradients cannot transition.
