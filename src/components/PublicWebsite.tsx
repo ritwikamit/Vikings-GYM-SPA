@@ -647,7 +647,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </span>
           </>
         }
-        description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths."
+        description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths — located on MG Road, Aurangabad, Bihar."
         ctaText="INVEST IN YOURSELF"
         onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
         secondaryCtaText="EXPLORE THE ARENA"
@@ -693,9 +693,9 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           ].map((f, i) => (
             <div key={i} className="bg-neutral-900/50 rounded-2xl overflow-hidden border border-neutral-800/30 group-hover:border-red-600/30 transition-all duration-300 flex flex-col h-full">
               <div className="relative h-48 overflow-hidden bg-neutral-900">
-                <img
-                  src={f.img}
-                  alt={f.title}
+                  <img
+                    src={f.img}
+                    alt={`Vikings Gym Aurangabad ${f.title}`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
                   referrerPolicy="no-referrer"
                 />
@@ -726,7 +726,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               <div key={idx} className="bg-neutral-900/30 border border-neutral-900 rounded-xl overflow-hidden flex flex-col md:flex-row group hover:border-red-950 transition-all duration-300">
                 <div className="md:w-2/5 aspect-square md:aspect-auto md:h-auto bg-neutral-900 overflow-hidden">
                   {t.photoUrl ? (
-                    <img src={t.photoUrl} alt={t.name} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
+                    <img src={t.photoUrl} alt={`${t.name} — coach at Vikings Gym Aurangabad`} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
                       <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
@@ -1044,7 +1044,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 >
                   <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full p-[3px] bg-gradient-to-tr from-red-600 via-rose-500 to-amber-400 group-hover:scale-105 transition-transform">
                     <div className="w-full h-full rounded-full overflow-hidden border-4 border-black">
-                      <img src={s.img} alt={s.label} loading="lazy" className="w-full h-full object-cover" />
+                      <img src={s.img} alt={`Vikings Gym ${s.label} story`} loading="lazy" className="w-full h-full object-cover" />
                     </div>
                     <span className="absolute inset-0 flex items-center justify-center">
                       <span className="w-8 h-8 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
@@ -1093,7 +1093,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   >
                     <img
                       src={img.url}
-                      alt={img.alt}
+                      alt={`Vikings Gym Aurangabad ${img.alt}`}
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />

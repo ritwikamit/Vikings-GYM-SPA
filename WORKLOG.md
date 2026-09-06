@@ -5,6 +5,16 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - On-page SEO for vikingsgym.in rankings (opencode session)
+
+**Goal:** Maximize on-page signals for gym-in-Aurangabad queries. Domain untouched (all URLs stay on www.vikingsgym.in).
+
+**What changed (one commit):** Keyword-led title/description/OG/Twitter (Best Gym in Aurangabad, Bihar), location clause in hero copy, keyword-rich alts on all 32 images (coaches, gallery, facilities, marquee, stories), geo meta + areaServed + hasMap in schema, max-image-preview. Verified single h1, zero vercel.app refs.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - REVERTED: www.vikingsgym.in is the live domain (opencode session)
 
 **Correction:** www.vikingsgym.in is the connected custom domain (vercel.app URL is only the default). Fully reverted the previous SEO commit - canonical, OG, schema, robots and sitemap point to www.vikingsgym.in again, exact prior state restored.
