@@ -5,6 +5,22 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - SEO correction + enrichment (opencode session)
+
+**Goal:** Fix signals pointing at a non-live domain; strengthen discoverability.
+
+**What changed (one commit):**
+- Critical fix: canonical, og:url, og/twitter images, JSON-LD url/image, robots sitemap and sitemap locs all pointed to www.vikingsgym.in (not the live site) - repointed everything to https://vikingsgymspa.vercel.app. If a custom domain is connected later, one find-replace updates it.
+- Dropped /login from sitemap (auth screen, no index value).
+- Added geo meta (IN-BR, Aurangabad, coordinates), og:image alt + dimensions, max-image-preview:large, JSON-LD hasMap.
+- Verified: single h1 site-wide, all images have alt text, prerendered body text is crawler-readable.
+
+**Verification:** lint + build pass; 5 live-domain refs, 0 stale refs in dist output.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Logo background removed + trimmed (opencode session)
 
 **Goal:** AC Custom Labs mark floats cleanly on the dark footer, aligned with credit text.
