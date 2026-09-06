@@ -1587,7 +1587,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               className="transition-opacity hover:opacity-80"
               aria-label="AC Custom Labs"
             >
-              <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-7 w-auto" />
+              <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-5 w-auto" />
             </a>
           </div>
         </div>
