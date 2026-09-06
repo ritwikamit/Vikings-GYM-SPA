@@ -8,7 +8,6 @@ import { GYM_CONFIG } from "../../config/gym";
 
 // Props interface for the component
 export interface AnimatedMarqueeHeroProps {
-  tagline: string;
   title: React.ReactNode;
   description: string;
   ctaText: string;
@@ -171,7 +170,6 @@ export function DotGrid() {
 
 // The main hero component
 export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
-  tagline,
   title,
   description,
   ctaText,
@@ -293,17 +291,6 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       <div className="z-10 flex flex-col items-center max-w-4xl mt-[-6vh]">
-        {/* Tagline */}
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          className="mb-6 inline-flex items-center gap-2.5 bg-red-650/10 border border-red-900/30 px-4 py-1.5 rounded-full text-red-500 text-[11px] font-mono font-bold tracking-[0.2em] text-center leading-relaxed max-w-full"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shrink-0" />
-          {tagline}
-        </motion.div>
-
         {/* Main Title */}
         <motion.h1
           initial="hidden"
