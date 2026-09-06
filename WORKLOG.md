@@ -5,6 +5,18 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-05 - Glassmorphic dark-blur header (opencode session)
+
+**Goal:** Lucid header that refracts scrolling page light.
+
+**What changed (one commit):** Navbar background dropped from near-opaque to translucent dark glass (55-70 percent) with stronger blur + saturation boost, so content glows through blurred while scrolling. Solid-black fallback kept for browsers without backdrop-filter; scrolled state deepens slightly with shadow.
+
+**Verification:** lint + build pass; blur, saturate and supports-query confirmed in built CSS.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - Phone tuning for hero trust pills (opencode session)
 
 **Goal:** Pill strip + rating pill must sit cleanly on narrow phones.
