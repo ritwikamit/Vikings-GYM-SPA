@@ -70,15 +70,21 @@ export {
   groupClassEquipment,
 };
 
-// Hero Carousel Images (7 powerful, diverse wide & vertical compositions)
+// Hero Ambient Background Image
+export const HERO_BACKGROUND_IMAGE = mainArenaPanoramic;
+
+// Hero Carousel Images (10 high-impact, vertically framed authentic gym photos with zone labels)
 export const HERO_CAROUSEL_IMAGES = [
-  entranceSign,
-  deadliftPlatform,
-  mainArenaPanoramic,
-  receptionClose,
-  powerSquatRack,
-  yogaStudioClean,
-  cardioRowingWide,
+  { src: entranceSign, label: "MAIN ENTRANCE" },
+  { src: deadliftPlatform, label: "OLYMPIC DEADLIFT" },
+  { src: sprintTrackFloor, label: "AGILITY TRACK" },
+  { src: receptionDesk, label: "RECEPTION LOUNGE" },
+  { src: powerSquatRack, label: "POWER SQUAT CAGE" },
+  { src: freeWeightsBenches, label: "FREE WEIGHTS ARENA" },
+  { src: cardioTreadmillLine, label: "CARDIO SUITE" },
+  { src: yogaStudioClean, label: "YOGA & DANCE STUDIO" },
+  { src: plateLoadedRow, label: "PLATE-LOADED ROWS" },
+  { src: boxingHeavyBag, label: "COMBAT ZONE" },
 ];
 
 // Curated 8-image Gallery

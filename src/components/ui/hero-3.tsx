@@ -6,6 +6,8 @@ import { Star, Clock, MapPin } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { GYM_CONFIG } from "../../config/gym";
 
+export type HeroMarqueeImage = string | { src: string; label?: string };
+
 // Props interface for the component
 export interface AnimatedMarqueeHeroProps {
   title: React.ReactNode;
@@ -14,7 +16,8 @@ export interface AnimatedMarqueeHeroProps {
   onCtaClick?: () => void;
   secondaryCtaText?: string;
   onSecondaryCtaClick?: () => void;
-  images: string[];
+  images: HeroMarqueeImage[];
+  backgroundImage?: string;
   className?: string;
 }
 
@@ -177,6 +180,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   secondaryCtaText,
   onSecondaryCtaClick,
   images,
+  backgroundImage,
   className,
 }) => {
   // Animation variants for the text content
@@ -246,6 +250,21 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         className
       )}
     >
+      {/* Real gym ambient backdrop with cinematic dark vignette */}
+      {backgroundImage && (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <motion.img
+            src={backgroundImage}
+            alt=""
+            className="w-full h-full object-cover object-center opacity-20 filter contrast-125 saturate-75 brightness-75 scale-105"
+            animate={{ scale: [1.05, 1.09, 1.05] }}
+            transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_50%_38%,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.88)_70%,#000000_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        </div>
+      )}
+
       {/* Forge ambiance: drifting red glows + rising embers + dot texture + vignette */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden">
         <motion.div style={{ x: auraX, y: auraY }} className="absolute inset-0">
@@ -391,43 +410,58 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       {/* Animated Image Marquee */}
-      <div className="absolute bottom-0 left-0 w-full h-1/3 md:h-2/5 [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
+      <div className="absolute bottom-0 left-0 w-full h-44 sm:h-56 md:h-64 [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] pointer-events-auto">
         <motion.div
-          className="flex gap-4"
+          className="flex gap-4 sm:gap-5 items-center px-4"
           animate={{
-            x: ["-100%", "0%"],
+            x: ["0%", "-50%"],
             transition: {
               ease: "linear",
-              duration: 40,
+              duration: 45,
               repeat: Infinity,
             },
           }}
         >
-          {duplicatedImages.map((src, index) => {
+          {duplicatedImages.map((item, index) => {
+            const src = typeof item === "string" ? item : item.src;
+            const label = typeof item === "string" ? undefined : item.label;
             const isRemote = typeof src === "string" && src.startsWith("http");
             const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
+            const tilt = index % 3 === 0 ? -1.5 : index % 3 === 1 ? 1.5 : 0;
+
             return (
-            <div
-              key={index}
-              className="relative aspect-[3/4] h-48 md:h-64 flex-shrink-0"
-              style={{
-                rotate: `${(index % 2 === 0 ? -2 : 5)}deg`,
-              }}
-            >
-              {src ? (
-                <img
-                  src={smallSrc}
-                  {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                  sizes="(max-width: 768px) 45vw, 220px"
-                  alt={`Vikings Gym Aurangabad training facility ${index + 1}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.2)] border border-red-950/50"
-                />
-              ) : (
-                <div className="w-full h-full bg-neutral-900 rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.2)] border border-red-950/50" />
-              )}
-            </div>
+              <div
+                key={index}
+                className="group relative aspect-[4/5] h-36 sm:h-48 md:h-56 flex-shrink-0 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:z-20 border border-white/10 hover:border-red-500/70 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(220,38,38,0.5)]"
+                style={{
+                  transform: `rotate(${tilt}deg)`,
+                }}
+              >
+                {src ? (
+                  <>
+                    <img
+                      src={smallSrc}
+                      {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
+                      sizes="(max-width: 768px) 180px, 240px"
+                      alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+                    {label && (
+                      <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.16em] text-white shadow-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                          {label}
+                        </span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-full bg-neutral-900" />
+                )}
+              </div>
             );
           })}
         </motion.div>

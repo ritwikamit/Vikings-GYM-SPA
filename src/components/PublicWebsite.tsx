@@ -39,6 +39,7 @@ import photoNeha from "../../assets/trainers/neha-singh.webp";
 import { AnimatedMarqueeHero, DotGrid } from "./ui/hero-3";
 import { GYM_CONFIG } from "../config/gym";
 import {
+  HERO_BACKGROUND_IMAGE,
   HERO_CAROUSEL_IMAGES,
   REAL_GALLERY_IMAGES,
   REAL_STORY_TILES,
@@ -647,6 +648,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         secondaryCtaText="EXPLORE THE ARENA"
         onSecondaryCtaClick={() => document.getElementById("facilities")?.scrollIntoView({ behavior: "smooth" })}
         images={HERO_CAROUSEL_IMAGES}
+        backgroundImage={HERO_BACKGROUND_IMAGE}
       />
 
       {/* Facilities Showcase */}

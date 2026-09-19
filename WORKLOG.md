@@ -5,6 +5,22 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-19 — Hero section images & presentation upgrade (Antigravity session)
+
+**Goal:** Improve the hero section images with a real gym ambient backdrop, vertically composed 4:5 cards, zone-labeled glassmorphic badges, and premium glowing hover interactions.
+
+**What changed (one commit):**
+- **Hero Ambient Backdrop:** Integrated `HERO_BACKGROUND_IMAGE` (`mainArenaPanoramic`) into `AnimatedMarqueeHero` with a slow cinematic zoom animation, radial contrast mask, and linear top/bottom vignette, creating a rich atmospheric depth behind the red forge ambiance.
+- **Hero Marquee Cards:** Upgraded marquee card presentation in `src/components/ui/hero-3.tsx` to support `{ src: string; label?: string }` objects with `aspect-[4/5]` portrait framing, gentle alternating tilt, glassmorphic pill badges with pulsating red beacon indicators, and interactive red-glow hover states (`hover:scale-105 hover:z-20`).
+- **Zone Coverage:** Replaced generic crop marquee with 10 authentic, vertical facility shots in `src/assets/gymImages.ts` covering: `MAIN ENTRANCE`, `OLYMPIC DEADLIFT`, `AGILITY TRACK`, `RECEPTION LOUNGE`, `POWER SQUAT CAGE`, `FREE WEIGHTS ARENA`, `CARDIO SUITE`, `YOGA & DANCE STUDIO`, `PLATE-LOADED ROWS`, and `COMBAT ZONE`.
+- **Marquee Mask & Physics:** Adjusted mask gradient from harsh 20% cutoffs to smooth `12%..88%` fade so images remain crisp and vibrant. Updated motion animation to a mathematically seamless `0%..-50%` infinite loop.
+
+**Verification:** `npm run lint` clean; `npm run build` succeeds (5.41s); `prerender.mjs` outputs 139,952-byte prerendered HTML with the ambient backdrop and labeled marquee.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Real gym photography enhancement & website integration (Antigravity session)
 
 **Goal:** Professionally review and enhance real gym photos from `assets/GymPhotos/` and replace all generic Unsplash placeholders across the website with the real, premium gym photographs.
