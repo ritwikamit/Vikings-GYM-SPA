@@ -3,6 +3,24 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Remove red cube and apply blue gradient borders to wellness facilities photos (Antigravity session)
+
+**Goal:** Remove the red cube indicator badge from the photos in the "World-Class Wellness Facilities" section and style the cards/photos with a modern blue gradient border and cyan accents.
+
+**What changed:**
+- **Facilities Showcase (`src/components/PublicWebsite.tsx`):**
+  - Removed the red cube overlay (`div.bg-red-600` with pulsating dot) from all 4 facility showcase photos.
+  - Wrapped each facility card in a sleek blue-to-cyan gradient border (`bg-gradient-to-br from-blue-500 via-cyan-400/80 to-blue-700 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500`) with blue ambient glow effects (`shadow-[0_4px_25px_rgba(37,99,235,0.18)]`).
+  - Set crisp photo framing with an interior blue border line (`border-b border-blue-500/25`) and full image vibrancy.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.52s); prerender outputs 128,968-byte HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Add all 36 images to gallery with Vikings reception first, 6-image homepage preview, and dedicated /gallery page (Antigravity session)
 
 **Goal:** Implement user request to include all photos in the gallery with the Vikings reception placed first, display exactly 6 curated highlight images on the homepage gallery section, and add a link to a dedicated page to view all images.

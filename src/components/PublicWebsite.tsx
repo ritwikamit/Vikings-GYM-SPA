@@ -698,23 +698,29 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               img: yogaStudioClean
             }
           ].map((f, i) => (
-            <div key={i} className="bg-neutral-900/50 rounded-2xl overflow-hidden border border-neutral-800/30 group hover:border-red-600/30 transition-all duration-300 flex flex-col h-full">
-              <div className="relative h-48 overflow-hidden bg-neutral-900">
-                <img
-                  src={f.img}
-                  alt={`Vikings Gym Aurangabad ${f.title}`}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                <div className="absolute top-4 left-4 bg-red-600 text-black p-2 rounded">
-                  <div className="w-2 h-2 rounded-full bg-red-300 animate-pulse" />
+            <div
+              key={i}
+              className="relative p-[1.5px] rounded-2xl bg-gradient-to-br from-blue-500 via-cyan-400/80 to-blue-700 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 shadow-[0_4px_25px_rgba(37,99,235,0.18)] hover:shadow-[0_8px_35px_rgba(59,130,246,0.35)] transition-all duration-300 flex flex-col h-full group"
+            >
+              <div className="bg-[#0c0c0c] rounded-[15px] overflow-hidden flex flex-col h-full">
+                <div className="relative h-52 overflow-hidden bg-neutral-900 border-b border-blue-500/25">
+                  <img
+                    src={f.img}
+                    alt={`Vikings Gym Aurangabad ${f.title}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
                 </div>
-              </div>
-              <div className="p-5 flex flex-col flex-1">
-                <h3 className="text-lg font-mono font-bold text-white mb-2">{f.title}</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">{f.description}</p>
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="text-lg font-mono font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                    {f.title}
+                  </h3>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    {f.description}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
