@@ -5,6 +5,24 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-19 — Real gym photography enhancement & website integration (Antigravity session)
+
+**Goal:** Professionally review and enhance real gym photos from `assets/GymPhotos/` and replace all generic Unsplash placeholders across the website with the real, premium gym photographs.
+
+**What changed (one commit):**
+- **Image Pipeline:** Evaluated all 51 raw camera photographs in `assets/GymPhotos/`. Enhanced 35 high-resolution photos into `assets/GymPhotos/enhanced/` using adaptive CLAHE contrast mapping, bilateral noise filtering, custom neutral-cool white balance, signature Vikings red vibrance boost, and unsharp masking. Documented 16 rejected photos (unfinished service hallways, mirror selfies, extreme underexposure duplicates).
+- **Asset Module:** Created `src/assets/gymImages.ts` exporting organized, typed references for Hero marquee, Facilities cards, Gallery grid, and Daily Stories.
+- **Hero:** Replaced 7 generic Unsplash URLs in `<AnimatedMarqueeHero />` with 7 real photographs (illuminated entrance signage, competition deadlift platform, panoramic training arena, luxury reception lounge, Olympic power rack, yoga/dance studio, cardio rowers).
+- **Facilities Showcase:** Replaced 3 generic cards with 4 authentic facility showcases: Olympic Powerlifting Center, Imported Strength Station, Cardio & Functional Floor, and Yoga, Aerobics & Dance Studio — each with real photos.
+- **Gallery & Stories:** Replaced 8 Unsplash gallery images and 5 story bubbles with real photos of the reception, sprint track, dumbbell racks, deadlift platform, incline bench, spin bikes, heavy bag, and yoga studio.
+- **Marquee Engine:** Cleaned up `src/components/ui/hero-3.tsx` to handle local WebP imports and remote images safely with `decoding="async"`.
+
+**Verification:** `npm run lint` clean; `npm run build` succeeds (6.14s); `prerender.mjs` outputs 121,010-byte static HTML with 31 embedded enhanced gym photos.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-05 - On-page SEO for vikingsgym.in rankings (opencode session)
 
 **Goal:** Maximize on-page signals for gym-in-Aurangabad queries. Domain untouched (all URLs stay on www.vikingsgym.in).

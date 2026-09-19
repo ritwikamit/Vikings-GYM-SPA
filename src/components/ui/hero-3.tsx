@@ -404,8 +404,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           }}
         >
           {duplicatedImages.map((src, index) => {
-            // Small variant for phones; full-size for larger screens.
-            const smallSrc = src.replace("w=1470", "w=480").replace("w=1469", "w=480");
+            const isRemote = typeof src === "string" && src.startsWith("http");
+            const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
             return (
             <div
               key={index}
@@ -417,11 +417,11 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               {src ? (
                 <img
                   src={smallSrc}
-                  srcSet={`${smallSrc} 480w, ${src} 1470w`}
+                  {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
                   sizes="(max-width: 768px) 45vw, 220px"
                   alt={`Vikings Gym Aurangabad training facility ${index + 1}`}
                   loading="lazy"
-                  referrerPolicy="no-referrer"
+                  decoding="async"
                   className="w-full h-full object-cover rounded-2xl shadow-[0_0_15px_rgba(220,38,38,0.2)] border border-red-950/50"
                 />
               ) : (

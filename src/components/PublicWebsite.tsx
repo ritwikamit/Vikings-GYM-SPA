@@ -23,7 +23,8 @@ import {
   Instagram,
   Menu,
   X,
-  Play
+  Play,
+  Flame
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.webp";
@@ -37,6 +38,15 @@ import photoVaishnavi from "../../assets/trainers/vaishnavi-singh.webp";
 import photoNeha from "../../assets/trainers/neha-singh.webp";
 import { AnimatedMarqueeHero, DotGrid } from "./ui/hero-3";
 import { GYM_CONFIG } from "../config/gym";
+import {
+  HERO_CAROUSEL_IMAGES,
+  REAL_GALLERY_IMAGES,
+  REAL_STORY_TILES,
+  deadliftPlatform,
+  strengthPanoramic,
+  cardioRowingWide,
+  yogaStudioClean,
+} from "../assets/gymImages";
 
 interface PublicWebsiteProps {
   onJoinNow: () => void;
@@ -223,24 +233,8 @@ function isGymOpenNow(now: Date = new Date()): boolean {
 // Anchor sections tracked for nav highlighting.
 const SECTION_IDS = ["facilities", "trainers", "calculator", "pricing", "gallery", "review", "contact", "about"];
 
-const STORY_TILES = [
-  { img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=200&auto=format&fit=crop", label: "WOD" },
-  { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=200&auto=format&fit=crop", label: "Training" },
-  { img: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=200&auto=format&fit=crop", label: "Lifts" },
-  { img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=200&auto=format&fit=crop", label: "Warriors" },
-  { img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=200&auto=format&fit=crop", label: "Steam Spa" },
-];
-
-const GALLERY_IMAGES = [
-  { url: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=600&auto=format&fit=crop", alt: "Strength zone", label: "Strength" },
-  { url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop", alt: "Barbell training", label: "Barbell" },
-  { url: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop", alt: "Gym floor", label: "Floor" },
-  { url: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop", alt: "Deadlift", label: "Deadlift" },
-  { url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600&auto=format&fit=crop", alt: "Coach-led training", label: "Coaching" },
-  { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop", alt: "Conditioning", label: "Conditioning" },
-  { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop", alt: "Intense session", label: "Intensity" },
-  { url: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600&auto=format&fit=crop", alt: "Steam spa recovery", label: "Steam Spa" },
-];
+const STORY_TILES = REAL_STORY_TILES;
+const GALLERY_IMAGES = REAL_GALLERY_IMAGES;
 
 // Static-site mode: the member portal login is intentionally hidden but fully
 // preserved (JSX marked with `PORTAL_ACCESS_ENABLED` + App.tsx routes remain)
@@ -652,59 +646,58 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
         secondaryCtaText="EXPLORE THE ARENA"
         onSecondaryCtaClick={() => document.getElementById("facilities")?.scrollIntoView({ behavior: "smooth" })}
-        images={[
-          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1469&auto=format&fit=crop"
-        ]}
+        images={HERO_CAROUSEL_IMAGES}
       />
 
       {/* Facilities Showcase */}
-<section id="facilities" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="facilities" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
         <DotGrid />
         <div className="relative z-10">
         <SectionHeader kicker="ROYAL EXPERIENCE" title="WORLD-CLASS WELLNESS FACILITIES" />
 
         <Reveal delay={0.1}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             {
-              title: "Imported Strength Station",
-              description: "Plate-loaded machines from Hammer Strength, custom lat rows, hack squat hubs, and full selectorized stack tools.",
-              icon: Dumbbell,
-              img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=600"
-            },
-            {
-              title: "Moroccan Steam & Spa",
-              description: "Indulge in physical hot hydrotherapy. Revitalize muscles, optimize circulatory systems, and promote post-lifting detox.",
-              icon: Sparkles,
-              img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80&w=600"
-            },
-            {
               title: "Olympic Powerlifting Center",
-              description: "Premium competition bars, calibrated plates, heavy drop deadlift platforms, and competition squat racks.",
+              description: "Viva Fitness competition deadlift platform, calibrated bumper plates, Olympic bars, and power squat cages.",
               icon: Award,
-              img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600"
+              img: deadliftPlatform
+            },
+            {
+              title: "Imported Strength Station",
+              description: "Plate-loaded chest rows, custom lat stations, cable crossovers, and complete Viva Fitness selectorized stacks.",
+              icon: Dumbbell,
+              img: strengthPanoramic
+            },
+            {
+              title: "Cardio & Functional Floor",
+              description: "Commercial treadmills, Concept air rowers, Cult spin bikes, numbered sprint sled lanes, and boxing heavy bags.",
+              icon: Flame,
+              img: cardioRowingWide
+            },
+            {
+              title: "Yoga, Aerobics & Dance Studio",
+              description: "Dedicated group fitness hall with full mirror walls, Om mandala art, climate control, kettlebells, and studio sound.",
+              icon: Sparkles,
+              img: yogaStudioClean
             }
           ].map((f, i) => (
-            <div key={i} className="bg-neutral-900/50 rounded-2xl overflow-hidden border border-neutral-800/30 group-hover:border-red-600/30 transition-all duration-300 flex flex-col h-full">
+            <div key={i} className="bg-neutral-900/50 rounded-2xl overflow-hidden border border-neutral-800/30 group hover:border-red-600/30 transition-all duration-300 flex flex-col h-full">
               <div className="relative h-48 overflow-hidden bg-neutral-900">
-                  <img
-                    src={f.img}
-                    alt={`Vikings Gym Aurangabad ${f.title}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
-                  referrerPolicy="no-referrer"
+                <img
+                  src={f.img}
+                  alt={`Vikings Gym Aurangabad ${f.title}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 <div className="absolute top-4 left-4 bg-red-600 text-black p-2 rounded">
                   <div className="w-2 h-2 rounded-full bg-red-300 animate-pulse" />
                 </div>
               </div>
-              <div className="p-5 flex flex-col">
+              <div className="p-5 flex flex-col flex-1">
                 <h3 className="text-lg font-mono font-bold text-white mb-2">{f.title}</h3>
                 <p className="text-gray-300 text-sm leading-relaxed">{f.description}</p>
               </div>
