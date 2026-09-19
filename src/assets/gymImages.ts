@@ -39,9 +39,8 @@ import yogaStudioMats from "../../assets/GymPhotos/enhanced/gym-yoga-dance-studi
 import yogaStudioSpacious from "../../assets/GymPhotos/enhanced/gym-yoga-studio-spacious.webp";
 import groupClassEquipment from "../../assets/GymPhotos/enhanced/gym-group-class-equipment-studio.webp";
 
-// Restroom & Moroccan Steam Spa
+// Restroom & Executive Lounge
 import restroomsChangingSuite from "../../assets/GymPhotos/enhanced/gym-restrooms-changing-suite.webp";
-import moroccanSteamSpa from "../../assets/GymPhotos/enhanced/gym-moroccan-steam-spa.webp";
 
 export {
   entranceSign,
@@ -73,13 +72,12 @@ export {
   yogaStudioSpacious,
   groupClassEquipment,
   restroomsChangingSuite,
-  moroccanSteamSpa,
 };
 
 // Hero Ambient Background Image
 export const HERO_BACKGROUND_IMAGE = mainArenaPanoramic;
 
-// Hero Carousel Images (strength, cardio, functional, yoga studio, Moroccan spa & executive restrooms)
+// Hero Carousel Images (pure workout & training floor)
 export const HERO_CAROUSEL_IMAGES = [
   { src: deadliftPlatform, label: "OLYMPIC DEADLIFT" },
   { src: freeWeightsBenches, label: "FREE WEIGHTS ARENA" },
@@ -90,9 +88,6 @@ export const HERO_CAROUSEL_IMAGES = [
   { src: inclineBenchStation, label: "OLYMPIC BENCH PRESS" },
   { src: dumbbellRackClose, label: "DUMBBELL ARSENAL" },
   { src: boxingHeavyBag, label: "COMBAT ZONE" },
-  { src: yogaStudioClean, label: "YOGA STUDIO" },
-  { src: moroccanSteamSpa, label: "MOROCCAN STEAM SPA" },
-  { src: restroomsChangingSuite, label: "RESTROOMS & LOUNGE" },
   { src: cardioSpinBikes, label: "SPIN BIKE FLEET" },
 ];
 
@@ -100,10 +95,10 @@ export interface GalleryItem {
   url: string;
   alt: string;
   label: string;
-  category: "all" | "strength" | "cardio" | "studio" | "spa" | "restroom";
+  category: "all" | "strength" | "cardio" | "studio" | "restroom";
 }
 
-// Curated 12-image Gallery including Spa and Restroom
+// Curated Gallery including Restrooms and Clean Training Zones
 export const REAL_GALLERY_IMAGES: GalleryItem[] = [
   {
     url: deadliftPlatform,
@@ -152,12 +147,6 @@ export const REAL_GALLERY_IMAGES: GalleryItem[] = [
     alt: "Mirror-lined yoga, aerobics and dance studio with clean hardwood flooring and halo lighting",
     label: "Yoga & Dance Studio",
     category: "studio",
-  },
-  {
-    url: moroccanSteamSpa,
-    alt: "Moroccan steam spa bath with relaxing ambient hydrotherapy",
-    label: "Moroccan Steam Spa",
-    category: "spa",
   },
   {
     url: restroomsChangingSuite,

@@ -49,6 +49,16 @@ import {
   yogaStudioClean,
 } from "../assets/gymImages";
 
+const DEFAULT_HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1469&auto=format&fit=crop",
+];
+
 interface PublicWebsiteProps {
   onJoinNow: () => void;
   onLoginClick: () => void;
@@ -648,8 +658,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
         secondaryCtaText="EXPLORE THE ARENA"
         onSecondaryCtaClick={() => document.getElementById("facilities")?.scrollIntoView({ behavior: "smooth" })}
-        images={HERO_CAROUSEL_IMAGES}
-        backgroundImage={HERO_BACKGROUND_IMAGE}
+        images={DEFAULT_HERO_IMAGES}
       />
 
       {/* Facilities Showcase */}
@@ -1080,7 +1089,6 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 { id: "strength", label: "STRENGTH & IRON" },
                 { id: "cardio", label: "CARDIO & AGILITY" },
                 { id: "studio", label: "YOGA & STUDIO" },
-                { id: "spa", label: "MOROCCAN SPA" },
                 { id: "restroom", label: "RESTROOMS & LOUNGE" },
               ].map((tab) => (
                 <button

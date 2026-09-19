@@ -3,6 +3,30 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Restore default hero images, remove Moroccan steam spa photo, and revert photo inpainting (Antigravity session)
+
+**Goal:** Restore the hero section marquee images to the original default image set (`DEFAULT_HERO_IMAGES`), remove the Moroccan steam spa image completely from assets and gallery, and revert custom inpainting/edits on gym photos so all photographs remain 100% natural and authentic.
+
+**What changed:**
+- **Hero Section (`src/components/PublicWebsite.tsx`):**
+  - Set `DEFAULT_HERO_IMAGES` (the default Unsplash training imagery set) for `<AnimatedMarqueeHero />` as requested.
+  - Removed `backgroundImage` backdrop from hero section so the forge ambiance remains clean and unobstructed.
+  - Hero cards remain strictly upright and aligned with no circular cylinder badges or text overlays.
+- **Moroccan Steam Spa Photo Removal:**
+  - Removed `assets/GymPhotos/enhanced/gym-moroccan-steam-spa.webp`.
+  - Removed `moroccanSteamSpa` import and references from `src/assets/gymImages.ts`.
+  - Removed "MOROCCAN SPA" category filter tab from `src/components/PublicWebsite.tsx`.
+- **Photo Inpainting Reversion:**
+  - Reverted `gym-free-weights-benches-arena.webp` and `gym-power-squat-rack-station.webp` to their authentic enhanced state without artificial plate/mat inpainting.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.28s); prerender outputs 134,375-byte HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Align hero images, remove badges/text, clean floor clutter, and add Moroccan spa & restrooms to gallery (Antigravity session)
 
 **Goal:** Address user feedback to remove circular cylinders (pill badges) and text overlays from hero marquee images, align all hero cards upright (remove alternating tilt), clean up equipment and floor clutter (inpaint loose floor plates/pads, ensure dumbbells are racked and leveled), and add Moroccan steam spa and executive restroom & changing lounge to the gallery with interactive filter pills.
