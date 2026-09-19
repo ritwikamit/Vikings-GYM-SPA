@@ -665,65 +665,78 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       />
 
       {/* Facilities Showcase */}
-      <section id="facilities" className="relative py-16 md:py-24 px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
+      <section id="facilities" className="relative py-14 sm:py-16 md:py-24 px-4 sm:px-6 max-w-7xl mx-auto border-b border-red-950/20 scroll-mt-24">
         <DotGrid />
         <div className="relative z-10">
         <SectionHeader kicker="ROYAL EXPERIENCE" title="WORLD-CLASS WELLNESS FACILITIES" />
 
         <Reveal delay={0.1}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
             {
               title: "Olympic Powerlifting Center",
+              badge: "ZONE 01",
               description: "Viva Fitness competition deadlift platform, calibrated bumper plates, Olympic bars, and power squat cages.",
               icon: Award,
               img: deadliftPlatform
             },
             {
               title: "Imported Strength Station",
+              badge: "ZONE 02",
               description: "Plate-loaded chest rows, custom lat stations, cable crossovers, and complete Viva Fitness selectorized stacks.",
               icon: Dumbbell,
               img: strengthPanoramic
             },
             {
               title: "Cardio & Functional Floor",
+              badge: "ZONE 03",
               description: "Commercial treadmills, Concept air rowers, Cult spin bikes, numbered sprint sled lanes, and boxing heavy bags.",
               icon: Flame,
               img: cardioRowingWide
             },
             {
               title: "Yoga, Aerobics & Dance Studio",
+              badge: "ZONE 04",
               description: "Dedicated group fitness hall with full mirror walls, Om mandala art, climate control, kettlebells, and studio sound.",
               icon: Sparkles,
               img: yogaStudioClean
             }
-          ].map((f, i) => (
-            <div
-              key={i}
-              className="relative p-[1.5px] rounded-2xl bg-gradient-to-br from-red-600 via-rose-600/70 to-red-950 hover:from-red-500 hover:via-rose-500 hover:to-red-700 shadow-[0_4px_25px_rgba(220,38,38,0.2)] hover:shadow-[0_8px_35px_rgba(239,68,68,0.4)] transition-all duration-300 flex flex-col h-full group"
-            >
-              <div className="bg-[#0c0c0c] rounded-[15px] overflow-hidden flex flex-col h-full">
-                <div className="relative h-52 overflow-hidden bg-neutral-900 border-b border-red-600/25">
-                  <img
-                    src={f.img}
-                    alt={`Vikings Gym Aurangabad ${f.title}`}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-lg font-mono font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
-                    {f.title}
-                  </h3>
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    {f.description}
-                  </p>
+          ].map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <div
+                key={i}
+                className="relative p-[1.5px] rounded-2xl bg-gradient-to-br from-red-600 via-rose-600/70 to-red-950 hover:from-red-500 hover:via-rose-500 hover:to-red-700 shadow-[0_4px_25px_rgba(220,38,38,0.2)] hover:shadow-[0_8px_35px_rgba(239,68,68,0.4)] transition-all duration-300 flex flex-col h-full group active:scale-[0.99] touch-manipulation"
+              >
+                <div className="bg-[#0c0c0c] rounded-[15px] overflow-hidden flex flex-col h-full">
+                  <div className="relative aspect-[16/10] sm:aspect-auto sm:h-52 overflow-hidden bg-neutral-900 border-b border-red-600/25">
+                    <img
+                      src={f.img}
+                      alt={`Vikings Gym Aurangabad ${f.title}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Zone tag pill with icon */}
+                    <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono font-bold text-gray-200 shadow-md">
+                      <Icon className="w-3 h-3 text-red-500" />
+                      <span className="tracking-wider">{f.badge}</span>
+                    </div>
+                  </div>
+                  <div className="p-4 sm:p-5 flex flex-col flex-1">
+                    <h3 className="text-base sm:text-lg font-mono font-bold text-white mb-1.5 sm:mb-2 group-hover:text-red-400 transition-colors leading-snug">
+                      {f.title}
+                    </h3>
+                    <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                      {f.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         </Reveal>
         </div>
@@ -1079,28 +1092,29 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           {/* Gallery Preview Section — Exactly 6 Highlights with Reception First */}
           <Reveal delay={0.05}>
           <div>
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2.5">
-                <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest">FACILITY GALLERY</h3>
-                <span className="px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-600/30 text-[9px] font-mono font-bold uppercase">
-                  6 ARENA HIGHLIGHTS
+            {/* Gallery Preview Section — Exactly 6 Highlights with Reception First */}
+            <div className="flex items-center justify-between mb-4 sm:mb-5">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <h3 className="font-mono text-xs sm:text-sm font-black text-white uppercase tracking-wider sm:tracking-widest">FACILITY GALLERY</h3>
+                <span className="px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-600/30 text-[8px] sm:text-[9px] font-mono font-bold uppercase whitespace-nowrap">
+                  6 HIGHLIGHTS
                 </span>
               </div>
               <Link
                 to="/gallery"
-                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-red-500 hover:text-white uppercase transition-colors group cursor-pointer"
+                className="inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-mono font-bold text-red-500 hover:text-white uppercase transition-colors group cursor-pointer shrink-0"
               >
-                <span>VIEW ALL 36 PHOTOS</span>
+                <span>ALL 36 PHOTOS</span>
                 <span className="group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">
               {HOMEPAGE_GALLERY_PREVIEW.map((img, i) => (
                 <Link
                   key={img.id || i}
                   to="/gallery"
-                  className="relative aspect-[4/3] overflow-hidden rounded-xl group border border-neutral-900 hover:border-red-600/60 shadow-md hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300 cursor-pointer block"
+                  className="relative aspect-[4/3] overflow-hidden rounded-xl group border border-neutral-900 hover:border-red-600/60 shadow-md hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300 cursor-pointer block active:scale-[0.98] touch-manipulation"
                 >
                   <img
                     src={img.url}
@@ -1109,33 +1123,40 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div>
-                      <span className="text-[9px] font-mono text-red-400 uppercase tracking-widest block font-bold">{img.zone}</span>
-                      <span className="text-[11px] font-bold text-white uppercase tracking-wider line-clamp-1">{img.label}</span>
+                  {/* Gradient: always legible on touchscreens, deepens on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 flex items-center justify-between sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <div className="min-w-0 pr-1">
+                      <span className="text-[8px] sm:text-[9px] font-mono text-red-400 uppercase tracking-wider block font-bold truncate">{img.zone}</span>
+                      <span className="text-[10px] sm:text-[11px] font-bold text-white uppercase tracking-tight truncate block">{img.label}</span>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-red-500 shrink-0 ml-2" />
+                    <ArrowRight className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                  </div>
+                  {/* Small zone badge on smartphone top-left */}
+                  <div className="sm:hidden absolute top-1.5 left-1.5 pointer-events-none">
+                    <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-sm text-[8px] font-mono font-bold text-gray-300 border border-white/10 uppercase">
+                      {img.zone}
+                    </span>
                   </div>
                 </Link>
               ))}
             </div>
 
             {/* View All Photos Full-Width CTA Banner */}
-            <div className="mt-8 text-center">
+            <div className="mt-6 sm:mt-8 text-center">
               <Link
                 to="/gallery"
-                className="inline-flex items-center gap-3.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-neutral-950/90 hover:bg-neutral-900 text-white border border-neutral-800 hover:border-red-600/70 shadow-lg shadow-black/50 transition-all group cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-4 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-neutral-950/90 hover:bg-neutral-900 text-white border border-neutral-800 hover:border-red-600/70 shadow-lg shadow-black/50 transition-all group cursor-pointer active:scale-[0.98]"
               >
-                <div className="w-8 h-8 rounded-full bg-red-600/20 text-red-500 border border-red-600/40 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-600 group-hover:text-black transition-all">
+                <div className="w-8 h-8 rounded-full bg-red-600/20 text-red-500 border border-red-600/40 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-600 group-hover:text-black transition-all shrink-0">
                   <Camera className="w-4 h-4" />
                 </div>
                 <div className="text-left">
-                  <div className="text-xs font-mono font-black tracking-[0.16em] uppercase text-white group-hover:text-red-400 transition-colors">
+                  <div className="text-[11px] sm:text-xs font-mono font-black tracking-[0.12em] sm:tracking-[0.16em] uppercase text-white group-hover:text-red-400 transition-colors">
                     EXPLORE COMPLETE ARENA GALLERY
                   </div>
-                  <div className="text-[10px] font-mono text-gray-400">
-                    Browse all 36 real photos across reception, strength, cardio & studios →
+                  <div className="text-[9px] sm:text-[10px] font-mono text-gray-400">
+                    Browse all 36 real photos across reception, strength & cardio →
                   </div>
                 </div>
               </Link>

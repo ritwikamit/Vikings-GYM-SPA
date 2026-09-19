@@ -125,8 +125,8 @@ export default function GalleryPage() {
           Inspect every section from our executive reception lounge, Olympic powerlifting platform, and imported strength machines to our high-RPM spin fleet, group dance studios, and luxury changing suites.
         </p>
 
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap gap-2 pt-8">
+        {/* Category Filter Tabs: Swipeable on mobile, wrapped on desktop */}
+        <div className="flex overflow-x-auto sm:flex-wrap items-center gap-2 pt-6 sm:pt-8 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -134,7 +134,7 @@ export default function GalleryPage() {
                 setActiveCategory(cat.id);
                 setLightboxIndex(null);
               }}
-              className={`px-3.5 py-2 rounded-full font-mono text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer flex items-center gap-2 ${
+              className={`shrink-0 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 active:scale-95 touch-manipulation ${
                 activeCategory === cat.id
                   ? "bg-red-600 text-black shadow-lg shadow-red-600/30"
                   : "bg-neutral-900/90 border border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700"
@@ -149,14 +149,14 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Main Image Grid */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+      {/* Main Image Grid — 2 columns on mobile, 3-4 on tablet/desktop */}
+      <main className="max-w-7xl mx-auto px-3 sm:px-8 py-6 sm:py-10">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-5">
           {filteredImages.map((item, index) => (
             <div
               key={item.id}
               onClick={() => setLightboxIndex(index)}
-              className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950 border border-neutral-900 hover:border-red-600/60 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-red-950/20 cursor-pointer"
+              className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-neutral-950 border border-neutral-900 hover:border-red-600/60 transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-red-950/20 cursor-pointer active:scale-[0.98] touch-manipulation"
             >
               <img
                 src={item.url}
@@ -166,27 +166,34 @@ export default function GalleryPage() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
               />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* Gradient Overlay: visible on mobile for legibility, hover on desktop */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
 
-              {/* Badges on Hover */}
-              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* Badges on Hover for desktop */}
+              <div className="hidden sm:block absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span className="w-8 h-8 rounded-full bg-black/80 backdrop-blur-md border border-white/20 flex items-center justify-center text-white">
                   <Maximize2 className="w-3.5 h-3.5" />
                 </span>
               </div>
 
-              <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="text-[10px] font-mono font-bold text-red-400 uppercase tracking-widest mb-0.5">
+              <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+                <div className="text-[8px] sm:text-[10px] font-mono font-bold text-red-400 uppercase tracking-wider mb-0.5 truncate">
                   {item.zone}
                 </div>
-                <h3 className="text-xs font-bold text-white leading-snug line-clamp-1">
+                <h3 className="text-[10px] sm:text-xs font-bold text-white leading-snug line-clamp-1">
                   {item.label}
                 </h3>
               </div>
 
-              {/* Permanent small zone label pill */}
-              <div className="absolute top-2.5 left-2.5 group-hover:opacity-0 transition-opacity">
+              {/* Permanent small zone label pill on mobile */}
+              <div className="sm:hidden absolute top-1.5 left-1.5 pointer-events-none">
+                <span className="px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-sm text-[8px] font-mono font-bold text-gray-300 border border-white/10 uppercase">
+                  {item.zone}
+                </span>
+              </div>
+
+              {/* Desktop permanent pill */}
+              <div className="hidden sm:block absolute top-2.5 left-2.5 group-hover:opacity-0 transition-opacity">
                 <span className="px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[9px] font-mono font-bold text-gray-300 border border-white/10 uppercase">
                   {item.zone}
                 </span>
@@ -209,36 +216,36 @@ export default function GalleryPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-4 sm:p-6"
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-3 sm:p-6"
           >
             {/* Lightbox Top Header */}
             <div className="flex items-center justify-between z-10">
-              <div className="flex items-center gap-3">
-                <span className="px-2.5 py-1 rounded bg-red-600 text-black font-mono font-black text-[10px] uppercase tracking-wider">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded bg-red-600 text-black font-mono font-black text-[9px] sm:text-[10px] uppercase tracking-wider">
                   {currentLightboxItem.zone}
                 </span>
-                <span className="text-xs font-mono font-bold text-gray-400">
+                <span className="text-[11px] sm:text-xs font-mono font-bold text-gray-400">
                   {lightboxIndex + 1} / {filteredImages.length}
                 </span>
               </div>
 
               <button
                 onClick={() => setLightboxIndex(null)}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Close lightbox"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
 
             {/* Main Stage */}
-            <div className="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
+            <div className="relative flex-1 flex items-center justify-center my-2 sm:my-4 overflow-hidden">
               <button
                 onClick={() => setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : filteredImages.length - 1))}
-                className="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full bg-black/70 hover:bg-red-600 hover:text-black border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer"
+                className="absolute left-1 sm:left-4 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/80 sm:bg-black/70 hover:bg-red-600 hover:text-black border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer"
                 aria-label="Previous image"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
               <motion.img
@@ -249,24 +256,24 @@ export default function GalleryPage() {
                 transition={{ duration: 0.2 }}
                 src={currentLightboxItem.url}
                 alt={currentLightboxItem.alt}
-                className="max-h-[75vh] max-w-full object-contain rounded-lg shadow-2xl border border-white/10"
+                className="max-h-[60vh] sm:max-h-[75vh] max-w-full object-contain rounded-lg shadow-2xl border border-white/10"
               />
 
               <button
                 onClick={() => setLightboxIndex((prev) => (prev !== null && prev < filteredImages.length - 1 ? prev + 1 : 0))}
-                className="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full bg-black/70 hover:bg-red-600 hover:text-black border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer"
+                className="absolute right-1 sm:right-4 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-black/80 sm:bg-black/70 hover:bg-red-600 hover:text-black border border-white/20 flex items-center justify-center text-white transition-all cursor-pointer"
                 aria-label="Next image"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
             </div>
 
             {/* Lightbox Bottom Details */}
-            <div className="max-w-4xl mx-auto w-full text-center z-10">
-              <h2 className="text-base sm:text-lg font-bold text-white mb-1">
+            <div className="max-w-4xl mx-auto w-full text-center z-10 pb-1 sm:pb-0">
+              <h2 className="text-sm sm:text-lg font-bold text-white mb-0.5 sm:mb-1 line-clamp-1">
                 {currentLightboxItem.label}
               </h2>
-              <p className="text-gray-400 text-xs max-w-2xl mx-auto leading-relaxed mb-3">
+              <p className="text-gray-400 text-[10px] sm:text-xs max-w-2xl mx-auto leading-relaxed mb-2 sm:mb-3 line-clamp-2">
                 {currentLightboxItem.alt}
               </p>
               <div className="flex items-center justify-center gap-3">
@@ -274,7 +281,7 @@ export default function GalleryPage() {
                   href={`https://wa.me/${GYM_CONFIG.phone}?text=${encodeURIComponent(`Hi Vikings Gym, I am inquiring about this facility: ${currentLightboxItem.label}`)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-black font-mono font-bold text-[11px] tracking-wider uppercase transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-black font-mono font-bold text-[10px] sm:text-[11px] tracking-wider uppercase transition-colors"
                 >
                   <span>INQUIRE ABOUT THIS ZONE</span>
                 </a>

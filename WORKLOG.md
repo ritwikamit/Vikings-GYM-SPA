@@ -3,6 +3,33 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Smartphone optimizations for Wellness Facilities & Gallery sections (Antigravity session)
+
+**Goal:** Optimize the updated sections (World-Class Wellness Facilities, Homepage Gallery Preview, and Dedicated Gallery Page) for smartphones (320px–430px viewports, touchscreens, mobile Safari/Chrome).
+
+**What changed:**
+- **Wellness Facilities (`src/components/PublicWebsite.tsx`):**
+  - Tightened section container padding on phones (`px-4 sm:px-6`, `py-14 sm:py-16 md:py-24`) and grid spacing (`gap-4 sm:gap-6`).
+  - Switched card photo frames to widescreen cinematic ratio on mobile (`aspect-[16/10] sm:aspect-auto sm:h-52`) with zero awkward cropping or distortion.
+  - Added glassmorphic zone badges with dedicated icons (`ZONE 01` to `ZONE 04` with Award, Dumbbell, Flame, Sparkles) in brand red.
+  - Added tactile tap feedback (`active:scale-[0.99] touch-manipulation`) and mobile-friendly typography (`text-base sm:text-lg`).
+- **Homepage Gallery Preview (`src/components/PublicWebsite.tsx`):**
+  - Optimized grid gaps on mobile (`gap-2.5 sm:gap-4`) and added permanent legibility gradients with clear captions for touchscreens where hover states do not trigger.
+  - Added persistent mini zone badges on phone cards and tactile press states (`active:scale-[0.98]`).
+  - Styled full-width CTA banner (`w-full sm:w-auto px-4 sm:px-8`) with responsive font sizing so it never wraps or overflows small screens.
+- **Dedicated Gallery Page (`src/pages/GalleryPage.tsx`):**
+  - Converted category filter pill strip to horizontal touch-swipe carousel on phones (`overflow-x-auto [scrollbar-width:none]`).
+  - Upgraded mobile layout to a clean 2-column photo grid (`grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-5`) with touch-visible zone tags.
+  - Scaled Fullscreen Lightbox for short vertical phone screens (`max-h-[60vh] sm:max-h-[75vh]`, touch-sized `w-9 h-9` navigation buttons, centered WhatsApp inquiry button).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.97s); static prerender script writes 135,231-byte HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Remove red cube and apply brand red gradient borders to wellness facilities photos (Antigravity session)
 
 **Goal:** Remove the red cube indicator badge from the photos in the "World-Class Wellness Facilities" section and style the cards/photos with the brand's signature red gradient border and subtle dark forge glow.
