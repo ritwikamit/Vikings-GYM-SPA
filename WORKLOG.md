@@ -5,6 +5,31 @@ Append a new entry at the top after each work session, then commit/push so both 
 
 ---
 
+## 2026-09-19 — Restrict hero marquee strictly to gym workout & powerlifting imagery (Antigravity session)
+
+**Goal:** Remove non-training zones (reception lounge, entrance locker doors that resemble restrooms, and yoga/spa studio) from the Hero section marquee so the hero purely showcases high-octane iron, powerlifting, machines, and cardio training equipment.
+
+**What changed (one commit):**
+- **Hero Image Curation (`src/assets/gymImages.ts`):** Purged `entranceSign`, `receptionDesk`, and `yogaStudioClean` from `HERO_CAROUSEL_IMAGES`.
+- **Pure Workout Marquee:** Replaced them with 10 pure training floor images:
+  1. `deadliftPlatform` ("OLYMPIC DEADLIFT")
+  2. `freeWeightsBenches` ("FREE WEIGHTS ARENA")
+  3. `powerSquatRack` ("POWER SQUAT CAGE")
+  4. `plateLoadedRow` ("PLATE-LOADED ROWS")
+  5. `sprintTrackFloor` ("AGILITY TRACK")
+  6. `cardioTreadmillLine` ("CARDIO SUITE")
+  7. `inclineBenchStation` ("OLYMPIC BENCH PRESS")
+  8. `dumbbellRackClose` ("DUMBBELL ARSENAL")
+  9. `boxingHeavyBag` ("COMBAT ZONE")
+  10. `cardioSpinBikes` ("SPIN BIKE FLEET")
+- **Facilities & Gallery Intact:** Reception, lockers, and yoga studio remain properly allocated in their respective dedicated Facilities showcase and Gallery filter tabs ("Studio & Spa", "Reception"), keeping the Hero marquee 100% focused on elite workout power.
+
+**Verification:** `npm run lint` clean; `npm run build` succeeds; static prerender HTML verified without reception/spa in hero marquee.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Hero section images & presentation upgrade (Antigravity session)
 
 **Goal:** Improve the hero section images with a real gym ambient backdrop, vertically composed 4:5 cards, zone-labeled glassmorphic badges, and premium glowing hover interactions.

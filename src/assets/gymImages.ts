@@ -73,18 +73,19 @@ export {
 // Hero Ambient Background Image
 export const HERO_BACKGROUND_IMAGE = mainArenaPanoramic;
 
-// Hero Carousel Images (10 high-impact, vertically framed authentic gym photos with zone labels)
+// Hero Carousel Images (strictly pure gym workout floor, powerlifting, strength, and cardio machines)
+// Zero reception, zero lockers/restroom doors, zero yoga/spa
 export const HERO_CAROUSEL_IMAGES = [
-  { src: entranceSign, label: "MAIN ENTRANCE" },
   { src: deadliftPlatform, label: "OLYMPIC DEADLIFT" },
-  { src: sprintTrackFloor, label: "AGILITY TRACK" },
-  { src: receptionDesk, label: "RECEPTION LOUNGE" },
-  { src: powerSquatRack, label: "POWER SQUAT CAGE" },
   { src: freeWeightsBenches, label: "FREE WEIGHTS ARENA" },
-  { src: cardioTreadmillLine, label: "CARDIO SUITE" },
-  { src: yogaStudioClean, label: "YOGA & DANCE STUDIO" },
+  { src: powerSquatRack, label: "POWER SQUAT CAGE" },
   { src: plateLoadedRow, label: "PLATE-LOADED ROWS" },
+  { src: sprintTrackFloor, label: "AGILITY TRACK" },
+  { src: cardioTreadmillLine, label: "CARDIO SUITE" },
+  { src: inclineBenchStation, label: "OLYMPIC BENCH PRESS" },
+  { src: dumbbellRackClose, label: "DUMBBELL ARSENAL" },
   { src: boxingHeavyBag, label: "COMBAT ZONE" },
+  { src: cardioSpinBikes, label: "SPIN BIKE FLEET" },
 ];
 
 // Curated 8-image Gallery
