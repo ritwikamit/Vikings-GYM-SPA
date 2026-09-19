@@ -3,6 +3,16 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Trigger Vercel redeployment after repo public visibility restored (Antigravity session)
+
+**Goal:** Re-initiate Vercel deployment following GitHub repository visibility update from private back to public.
+
+**What changed:**
+- Pushed fresh trigger commit (`9a66425`) to `main` to fire GitHub webhook to Vercel.
+- Confirmed full build passed locally with static prerendering before trigger.
+
+---
+
 ## 2026-09-19 — Smartphone optimizations for Wellness Facilities & Gallery sections (Antigravity session)
 
 **Goal:** Optimize the updated sections (World-Class Wellness Facilities, Homepage Gallery Preview, and Dedicated Gallery Page) for smartphones (320px–430px viewports, touchscreens, mobile Safari/Chrome).
