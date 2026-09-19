@@ -39,6 +39,10 @@ import yogaStudioMats from "../../assets/GymPhotos/enhanced/gym-yoga-dance-studi
 import yogaStudioSpacious from "../../assets/GymPhotos/enhanced/gym-yoga-studio-spacious.webp";
 import groupClassEquipment from "../../assets/GymPhotos/enhanced/gym-group-class-equipment-studio.webp";
 
+// Restroom & Moroccan Steam Spa
+import restroomsChangingSuite from "../../assets/GymPhotos/enhanced/gym-restrooms-changing-suite.webp";
+import moroccanSteamSpa from "../../assets/GymPhotos/enhanced/gym-moroccan-steam-spa.webp";
+
 export {
   entranceSign,
   entranceFront,
@@ -68,13 +72,14 @@ export {
   yogaStudioMats,
   yogaStudioSpacious,
   groupClassEquipment,
+  restroomsChangingSuite,
+  moroccanSteamSpa,
 };
 
 // Hero Ambient Background Image
 export const HERO_BACKGROUND_IMAGE = mainArenaPanoramic;
 
-// Hero Carousel Images (strictly pure gym workout floor, powerlifting, strength, and cardio machines)
-// Zero reception, zero lockers/restroom doors, zero yoga/spa
+// Hero Carousel Images (strength, cardio, functional, yoga studio, Moroccan spa & executive restrooms)
 export const HERO_CAROUSEL_IMAGES = [
   { src: deadliftPlatform, label: "OLYMPIC DEADLIFT" },
   { src: freeWeightsBenches, label: "FREE WEIGHTS ARENA" },
@@ -85,50 +90,92 @@ export const HERO_CAROUSEL_IMAGES = [
   { src: inclineBenchStation, label: "OLYMPIC BENCH PRESS" },
   { src: dumbbellRackClose, label: "DUMBBELL ARSENAL" },
   { src: boxingHeavyBag, label: "COMBAT ZONE" },
+  { src: yogaStudioClean, label: "YOGA STUDIO" },
+  { src: moroccanSteamSpa, label: "MOROCCAN STEAM SPA" },
+  { src: restroomsChangingSuite, label: "RESTROOMS & LOUNGE" },
   { src: cardioSpinBikes, label: "SPIN BIKE FLEET" },
 ];
 
-// Curated 8-image Gallery
-export const REAL_GALLERY_IMAGES = [
+export interface GalleryItem {
+  url: string;
+  alt: string;
+  label: string;
+  category: "all" | "strength" | "cardio" | "studio" | "spa" | "restroom";
+}
+
+// Curated 12-image Gallery including Spa and Restroom
+export const REAL_GALLERY_IMAGES: GalleryItem[] = [
+  {
+    url: deadliftPlatform,
+    alt: "Olympic deadlift competition platform with calibrated bumper plates",
+    label: "Powerlifting Arena",
+    category: "strength",
+  },
+  {
+    url: freeWeightsBenches,
+    alt: "Heavy dumbbell racks and adjustable incline benches on pristine rubber flooring",
+    label: "Free Weights & Dumbbells",
+    category: "strength",
+  },
+  {
+    url: powerSquatRack,
+    alt: "Viva Fitness commercial multi-grip power squat cage station",
+    label: "Power Squat Cage",
+    category: "strength",
+  },
+  {
+    url: plateLoadedRow,
+    alt: "Heavy duty plate-loaded back rowing machine station",
+    label: "Plate-Loaded Rows",
+    category: "strength",
+  },
+  {
+    url: sprintTrackFloor,
+    alt: "Numbered functional sprint and sled agility turf track",
+    label: "Agility Track",
+    category: "cardio",
+  },
+  {
+    url: cardioTreadmillLine,
+    alt: "Viva Fitness commercial treadmill suite and cardio floor",
+    label: "Cardio Treadmills",
+    category: "cardio",
+  },
+  {
+    url: boxingHeavyBag,
+    alt: "Heavy boxing bag and functional combat conditioning zone",
+    label: "Combat Zone",
+    category: "cardio",
+  },
+  {
+    url: yogaStudioClean,
+    alt: "Mirror-lined yoga, aerobics and dance studio with clean hardwood flooring and halo lighting",
+    label: "Yoga & Dance Studio",
+    category: "studio",
+  },
+  {
+    url: moroccanSteamSpa,
+    alt: "Moroccan steam spa bath with relaxing ambient hydrotherapy",
+    label: "Moroccan Steam Spa",
+    category: "spa",
+  },
+  {
+    url: restroomsChangingSuite,
+    alt: "Modern executive changing lounge and luxury restrooms suite",
+    label: "Executive Restrooms",
+    category: "restroom",
+  },
   {
     url: receptionDesk,
     alt: "Vikings Gym luxury reception lounge with illuminated 3D logo",
     label: "Reception Lounge",
-  },
-  {
-    url: sprintTrackFloor,
-    alt: "Numbered functional sprint and sled track",
-    label: "Agility Track",
-  },
-  {
-    url: freeWeightsBenches,
-    alt: "Heavy dumbbell racks and adjustable incline benches",
-    label: "Free Weights",
-  },
-  {
-    url: deadliftPlatform,
-    alt: "Olympic deadlift platform with calibrated bumper plates",
-    label: "Powerlifting",
-  },
-  {
-    url: inclineBenchStation,
-    alt: "Olympic barbell incline bench press station",
-    label: "Chest & Press",
+    category: "restroom",
   },
   {
     url: cardioSpinBikes,
-    alt: "Cult spin bikes and commercial cardio zone",
-    label: "Spin & Cardio",
-  },
-  {
-    url: boxingHeavyBag,
-    alt: "Heavy boxing bag and functional conditioning area",
-    label: "Combat Zone",
-  },
-  {
-    url: yogaStudioMats,
-    alt: "Mirror-lined yoga, aerobics and dance studio",
-    label: "Yoga Studio",
+    alt: "Commercial spin bikes and studio cycle fleet",
+    label: "Spin Fleet",
+    category: "cardio",
   },
 ];
 

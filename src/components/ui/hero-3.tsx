@@ -427,37 +427,22 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             const label = typeof item === "string" ? undefined : item.label;
             const isRemote = typeof src === "string" && src.startsWith("http");
             const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
-            const tilt = index % 3 === 0 ? -1.5 : index % 3 === 1 ? 1.5 : 0;
 
             return (
               <div
                 key={index}
                 className="group relative aspect-[4/5] h-36 sm:h-48 md:h-56 flex-shrink-0 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:z-20 border border-white/10 hover:border-red-500/70 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(220,38,38,0.5)]"
-                style={{
-                  transform: `rotate(${tilt}deg)`,
-                }}
               >
                 {src ? (
-                  <>
-                    <img
-                      src={smallSrc}
-                      {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                      sizes="(max-width: 768px) 180px, 240px"
-                      alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-                    {label && (
-                      <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.16em] text-white shadow-sm">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                          {label}
-                        </span>
-                      </div>
-                    )}
-                  </>
+                  <img
+                    src={smallSrc}
+                    {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
+                    sizes="(max-width: 768px) 180px, 240px"
+                    alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
                 ) : (
                   <div className="w-full h-full bg-neutral-900" />
                 )}

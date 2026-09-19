@@ -3,6 +3,33 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Align hero images, remove badges/text, clean floor clutter, and add Moroccan spa & restrooms to gallery (Antigravity session)
+
+**Goal:** Address user feedback to remove circular cylinders (pill badges) and text overlays from hero marquee images, align all hero cards upright (remove alternating tilt), clean up equipment and floor clutter (inpaint loose floor plates/pads, ensure dumbbells are racked and leveled), and add Moroccan steam spa and executive restroom & changing lounge to the gallery with interactive filter pills.
+
+**What changed:**
+- **Hero Image Marquee (`src/components/ui/hero-3.tsx`):**
+  - Removed circular pill badges (`rounded-full bg-black/80 ...`) and pulsating beacon dots from all hero images.
+  - Removed text overlay titles and dark gradient masks from hero cards so all images display unobstructed, crisp, and clean.
+  - Eliminated alternating tilt rotation (`rotate(${tilt}deg)`) so all cards in the marquee are strictly leveled, aligned, and upright.
+  - Included Moroccan Steam Spa, Yoga Studio, and Restrooms & Changing Suite into `HERO_CAROUSEL_IMAGES` alongside all strength and cardio stations.
+- **Gym Floor Cleaning & Image Inpainting:**
+  - `gym-free-weights-benches-arena.webp`: Erased stray green/black and red weight plates from the rubber floor via Telea inpainting; benches and dumbbells aligned and spotless.
+  - `gym-power-squat-rack-station.webp`: Erased stray balance pads and bar ends on the cage floor; rack aligned.
+  - `gym-restrooms-changing-suite.webp`: Generated luxury changing suite photo; erased loose floor mats and smudges, leveled perspective.
+  - `gym-moroccan-steam-spa.webp`: Moroccan steam spa bath processed with ambient lighting and hydrotherapy focus.
+  - Studio floor uses `gym-yoga-aerobics-studio-clean.webp` with zero mats on the hardwood floor.
+- **Gallery Integration (`src/components/PublicWebsite.tsx` & `src/assets/gymImages.ts`):**
+  - Expanded `REAL_GALLERY_IMAGES` to 12 curated items categorized under `strength`, `cardio`, `studio`, `spa`, and `restroom`.
+  - Added category filter pills: `ALL ZONES`, `STRENGTH & IRON`, `CARDIO & AGILITY`, `YOGA & STUDIO`, `MOROCCAN SPA`, and `RESTROOMS & LOUNGE`.
+  - Added hover zoom and subtle caption reveal on hover.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds; prerender script generates 139,826-byte HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
 ---
 
 ## 2026-09-19 — Restrict hero marquee strictly to gym workout & powerlifting imagery (Antigravity session)

@@ -281,6 +281,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [moreOpen, setMoreOpen] = useState(false);
+  const [activeGalleryFilter, setActiveGalleryFilter] = useState<string>("all");
   const moreRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1072,30 +1073,57 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               </a>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {[
+                { id: "all", label: "ALL ZONES" },
+                { id: "strength", label: "STRENGTH & IRON" },
+                { id: "cardio", label: "CARDIO & AGILITY" },
+                { id: "studio", label: "YOGA & STUDIO" },
+                { id: "spa", label: "MOROCCAN SPA" },
+                { id: "restroom", label: "RESTROOMS & LOUNGE" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveGalleryFilter(tab.id)}
+                  className={`px-3.5 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer ${
+                    activeGalleryFilter === tab.id
+                      ? "bg-red-600 text-black shadow-md shadow-red-600/30"
+                      : "bg-neutral-900/80 border border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
               {GYM_CONFIG.instagramWidget ? (
                 <div className="col-span-2 md:col-span-4 rounded-xl border border-neutral-900 overflow-hidden bg-neutral-950/60 p-3">
                   <InstagramWidget snippet={GYM_CONFIG.instagramWidget} />
                 </div>
               ) : (
-                GALLERY_IMAGES.map((img, i) => (
+                (activeGalleryFilter === "all"
+                  ? GALLERY_IMAGES
+                  : GALLERY_IMAGES.filter((img) => img.category === activeGalleryFilter)
+                ).map((img, i) => (
                   <a
                     key={i}
                     href={GYM_CONFIG.instagram}
                     target="_blank"
                     rel="noreferrer"
-                    className="relative h-40 md:h-52 overflow-hidden rounded-lg group border border-neutral-900 hover:border-red-900/60 transition-all"
+                    className="relative aspect-[4/3] overflow-hidden rounded-xl group border border-neutral-900 hover:border-red-600/50 shadow-md transition-all duration-300"
                   >
                     <img
                       src={img.url}
                       alt={`Vikings Gym Aurangabad ${img.alt}`}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-[9px] font-mono text-white uppercase tracking-wider">{img.label}</span>
-                      <Instagram className="w-3 h-3 text-red-400 shrink-0" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">{img.label}</span>
+                      <Instagram className="w-3.5 h-3.5 text-red-400 shrink-0" />
                     </div>
                   </a>
                 ))
