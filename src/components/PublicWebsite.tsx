@@ -24,8 +24,10 @@ import {
   Menu,
   X,
   Play,
-  Flame
+  Flame,
+  Camera,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import logoPremium from "../../assets/l.webp";
 import devLogo from "../../assets/ac-custom-labs.webp";
@@ -41,6 +43,8 @@ import { GYM_CONFIG } from "../config/gym";
 import {
   HERO_BACKGROUND_IMAGE,
   HERO_CAROUSEL_IMAGES,
+  HOMEPAGE_GALLERY_PREVIEW,
+  ALL_GYM_GALLERY_IMAGES,
   REAL_GALLERY_IMAGES,
   REAL_STORY_TILES,
   deadliftPlatform,
@@ -291,7 +295,6 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [moreOpen, setMoreOpen] = useState(false);
-  const [activeGalleryFilter, setActiveGalleryFilter] = useState<string>("all");
   const moreRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -1067,75 +1070,69 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           </div>
           </Reveal>
 
-          {/* Gallery grid */}
+          {/* Gallery Preview Section — Exactly 6 Highlights with Reception First */}
           <Reveal delay={0.05}>
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest">GALLERY</h3>
-              <a
-                href={GYM_CONFIG.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[10px] font-mono text-red-500 hover:text-white uppercase font-bold transition-colors"
+              <div className="flex items-center gap-2.5">
+                <h3 className="font-mono text-sm font-black text-white uppercase tracking-widest">FACILITY GALLERY</h3>
+                <span className="px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-600/30 text-[9px] font-mono font-bold uppercase">
+                  6 ARENA HIGHLIGHTS
+                </span>
+              </div>
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-red-500 hover:text-white uppercase transition-colors group cursor-pointer"
               >
-                Follow @{GYM_CONFIG.instagramHandle} →
-              </a>
+                <span>VIEW ALL 36 PHOTOS</span>
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </Link>
             </div>
 
-            {/* Category Filter Tabs */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {[
-                { id: "all", label: "ALL ZONES" },
-                { id: "strength", label: "STRENGTH & IRON" },
-                { id: "cardio", label: "CARDIO & AGILITY" },
-                { id: "studio", label: "YOGA & STUDIO" },
-                { id: "restroom", label: "RESTROOMS & LOUNGE" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveGalleryFilter(tab.id)}
-                  className={`px-3.5 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-wider uppercase transition-all cursor-pointer ${
-                    activeGalleryFilter === tab.id
-                      ? "bg-red-600 text-black shadow-md shadow-red-600/30"
-                      : "bg-neutral-900/80 border border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700"
-                  }`}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
+              {HOMEPAGE_GALLERY_PREVIEW.map((img, i) => (
+                <Link
+                  key={img.id || i}
+                  to="/gallery"
+                  className="relative aspect-[4/3] overflow-hidden rounded-xl group border border-neutral-900 hover:border-red-600/60 shadow-md hover:shadow-xl hover:shadow-red-950/20 transition-all duration-300 cursor-pointer block"
                 >
-                  {tab.label}
-                </button>
+                  <img
+                    src={img.url}
+                    alt={`Vikings Gym Aurangabad ${img.alt}`}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div>
+                      <span className="text-[9px] font-mono text-red-400 uppercase tracking-widest block font-bold">{img.zone}</span>
+                      <span className="text-[11px] font-bold text-white uppercase tracking-wider line-clamp-1">{img.label}</span>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-red-500 shrink-0 ml-2" />
+                  </div>
+                </Link>
               ))}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
-              {GYM_CONFIG.instagramWidget ? (
-                <div className="col-span-2 md:col-span-4 rounded-xl border border-neutral-900 overflow-hidden bg-neutral-950/60 p-3">
-                  <InstagramWidget snippet={GYM_CONFIG.instagramWidget} />
+            {/* View All Photos Full-Width CTA Banner */}
+            <div className="mt-8 text-center">
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-3.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl bg-neutral-950/90 hover:bg-neutral-900 text-white border border-neutral-800 hover:border-red-600/70 shadow-lg shadow-black/50 transition-all group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-full bg-red-600/20 text-red-500 border border-red-600/40 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-600 group-hover:text-black transition-all">
+                  <Camera className="w-4 h-4" />
                 </div>
-              ) : (
-                (activeGalleryFilter === "all"
-                  ? GALLERY_IMAGES
-                  : GALLERY_IMAGES.filter((img) => img.category === activeGalleryFilter)
-                ).map((img, i) => (
-                  <a
-                    key={i}
-                    href={GYM_CONFIG.instagram}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="relative aspect-[4/3] overflow-hidden rounded-xl group border border-neutral-900 hover:border-red-600/50 shadow-md transition-all duration-300"
-                  >
-                    <img
-                      src={img.url}
-                      alt={`Vikings Gym Aurangabad ${img.alt}`}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-[10px] font-mono font-bold text-white uppercase tracking-wider">{img.label}</span>
-                      <Instagram className="w-3.5 h-3.5 text-red-400 shrink-0" />
-                    </div>
-                  </a>
-                ))
-              )}
+                <div className="text-left">
+                  <div className="text-xs font-mono font-black tracking-[0.16em] uppercase text-white group-hover:text-red-400 transition-colors">
+                    EXPLORE COMPLETE ARENA GALLERY
+                  </div>
+                  <div className="text-[10px] font-mono text-gray-400">
+                    Browse all 36 real photos across reception, strength, cardio & studios →
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
           </Reveal>

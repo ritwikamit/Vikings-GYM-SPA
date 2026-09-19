@@ -7,6 +7,7 @@ const AuthGateway = lazy(() => import("./components/AuthGateway"));
 const ResetPassword = lazy(() => import("./components/ResetPassword"));
 const ERPModules = lazy(() => import("./components/ERPModules"));
 const MemberDashboard = lazy(() => import("./components/MemberDashboard"));
+const GalleryPage = lazy(() => import("./pages/GalleryPage"));
 import { UserRole } from "./types";
 
 import { 
@@ -274,6 +275,7 @@ export default function App() {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<PublicWebsite onJoinNow={() => navigate("/login?view=register")} onLoginClick={() => navigate("/login")} />} />
+      <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/login" element={
         <AuthRedirect>
           <AuthGateway onLoginSuccess={(role) => navigate(role === UserRole.MEMBER ? "/member" : "/erp")} onBackToWebsite={() => navigate("/")} />

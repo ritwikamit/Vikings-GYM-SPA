@@ -3,6 +3,32 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-19 — Add all 36 images to gallery with Vikings reception first, 6-image homepage preview, and dedicated /gallery page (Antigravity session)
+
+**Goal:** Implement user request to include all photos in the gallery with the Vikings reception placed first, display exactly 6 curated highlight images on the homepage gallery section, and add a link to a dedicated page to view all images.
+
+**What changed:**
+- **Complete Image Catalog (`src/assets/gymImages.ts`):**
+  - Imported and catalogued all 36 authentic facility photographs into `ALL_GYM_GALLERY_IMAGES`.
+  - Placed Vikings Reception Lounge (`receptionDesk`) prominently as image #1, followed by deadlift platform, free weights arena, squat rack, sprint turf track, and yoga studio.
+  - Exported `HOMEPAGE_GALLERY_PREVIEW` (first 6 highlights).
+- **Homepage Gallery Preview (`src/components/PublicWebsite.tsx`):**
+  - Replaced long gallery with a clean, high-impact 6-image grid (`HOMEPAGE_GALLERY_PREVIEW`).
+  - Added header link `VIEW ALL 36 PHOTOS →` and full-width CTA banner `EXPLORE COMPLETE ARENA GALLERY` navigating to `/gallery`.
+- **Dedicated Gallery Page (`src/pages/GalleryPage.tsx` & `src/App.tsx`):**
+  - Created `/gallery` route with code-splitting.
+  - Category filter tabs: `ALL PHOTOS (36)`, `RECEPTION & LOBBY (8)`, `STRENGTH & IRON (11)`, `CARDIO & AGILITY (9)`, `YOGA & STUDIOS (5)`, and `EXECUTIVE CHANGING (1)`.
+  - Responsive 4:3 cards with zone badges and hover zoom.
+  - Interactive Fullscreen Lightbox modal with next/prev arrows, keyboard navigation (Escape/Left/Right), photo counters, and direct WhatsApp inquiry CTA.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (16.71s); code-split `dist/assets/GalleryPage-*.js` (10.42 kB); static prerendering passed.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Restore default hero images, remove Moroccan steam spa photo, and revert photo inpainting (Antigravity session)
 
 **Goal:** Restore the hero section marquee images to the original default image set (`DEFAULT_HERO_IMAGES`), remove the Moroccan steam spa image completely from assets and gallery, and revert custom inpainting/edits on gym photos so all photographs remain 100% natural and authentic.
