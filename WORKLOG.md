@@ -3,19 +3,19 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
-## 2026-09-19 — Remove red cube and apply blue gradient borders to wellness facilities photos (Antigravity session)
+## 2026-09-19 — Remove red cube and apply brand red gradient borders to wellness facilities photos (Antigravity session)
 
-**Goal:** Remove the red cube indicator badge from the photos in the "World-Class Wellness Facilities" section and style the cards/photos with a modern blue gradient border and cyan accents.
+**Goal:** Remove the red cube indicator badge from the photos in the "World-Class Wellness Facilities" section and style the cards/photos with the brand's signature red gradient border and subtle dark forge glow.
 
 **What changed:**
 - **Facilities Showcase (`src/components/PublicWebsite.tsx`):**
   - Removed the red cube overlay (`div.bg-red-600` with pulsating dot) from all 4 facility showcase photos.
-  - Wrapped each facility card in a sleek blue-to-cyan gradient border (`bg-gradient-to-br from-blue-500 via-cyan-400/80 to-blue-700 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500`) with blue ambient glow effects (`shadow-[0_4px_25px_rgba(37,99,235,0.18)]`).
-  - Set crisp photo framing with an interior blue border line (`border-b border-blue-500/25`) and full image vibrancy.
+  - Wrapped each facility card in the signature Vikings red gradient border (`bg-gradient-to-br from-red-600 via-rose-600/70 to-red-950 hover:from-red-500 hover:via-rose-500 hover:to-red-700`) with red ambient glow (`shadow-[0_4px_25px_rgba(220,38,38,0.2)] hover:shadow-[0_8px_35px_rgba(239,68,68,0.4)]`).
+  - Set crisp photo framing with an interior dark-red border line (`border-b border-red-600/25`) and red hover accent on card titles.
 
 **Verification:**
 - `npm run lint` (`tsc --noEmit`) clean with 0 errors.
-- `npm run build` succeeds (8.52s); prerender outputs 128,968-byte HTML.
+- `npm run build` succeeds (8.72s); prerender outputs 128,925-byte HTML.
 
 **Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
 
