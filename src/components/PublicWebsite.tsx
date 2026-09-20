@@ -649,12 +649,12 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
       {/* Hero Section */}
       <AnimatedMarqueeHero
         title={
-          <>
+          <span className="block text-center w-full">
             CARVE YOUR BODY <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-800">
               FOR VALHALLA
             </span>
-          </>
+          </span>
         }
         description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths — located on MG Road, Aurangabad, Bihar."
         ctaText="INVEST IN YOURSELF"

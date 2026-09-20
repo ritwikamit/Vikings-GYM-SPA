@@ -3,6 +3,27 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Centered Alignment & Load Synchronization for Hero Heading & Details (Antigravity session)
+
+**Goal:** Ensure the hero heading ("CARVE YOUR BODY FOR VALHALLA") and facility details description are perfectly aligned with each other and centered on the smartphone viewport upon loading, eliminating text misalignment and delayed layout pop-in shifts.
+
+**What changed:**
+- **Explicit Text Centering & Block Alignment (`src/components/ui/hero-3.tsx`, `src/components/PublicWebsite.tsx`):**
+  - Wrapped hero title in `<span className="block text-center w-full">` in `PublicWebsite.tsx`.
+  - Added explicit `text-center w-full mx-auto` to both the title container and `motion.h1` in `hero-3.tsx`, ensuring multi-line heading text is strictly centered across all viewports.
+  - Added explicit `text-center w-full mx-auto` to both the details container and `motion.p`, ensuring balanced and centered prose matching the title's center axis.
+- **Load Synchronization (Zero Jitter/Shift):**
+  - Replaced delayed, staggered entrance variants (`delay: 0.7`, `y: 10`) with immediate, smooth entrance animations (`initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}`) across heading, buttons, trust pills, and details.
+  - Heading and details appear in their final, stable aligned positions immediately when the page loads.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Smartphone Headline Lowered & Details Lifted (Antigravity session)
 
 **Goal:** Fine-tune smartphone hero vertical spacing per user request: position "CARVE YOUR BODY FOR VALHALLA" a little down from the top navbar, and lift the facility details a little up from the bottom edge, preserving PC & tablet viewports untouched.

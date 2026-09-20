@@ -183,11 +183,6 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   backgroundImage,
   className,
 }) => {
-  // Animation variants for the text content
-  const FADE_IN_ANIMATION_VARIANTS = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20 } },
-  };
 
   // Duplicate images 4x for a seamless, gap-free infinite loop on all screen widths
   const duplicatedImages = useMemo(() => [...images, ...images, ...images, ...images], [images]);
@@ -309,30 +304,22 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      {/* Title Container — Positioned with comfortable top spacing on smartphone, centered on tablet/PC */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-5 xs:pt-6 sm:pt-0 shrink-0">
+      {/* Title Container — Centered with comfortable top spacing on smartphone, centered on tablet/PC */}
+      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-5 xs:pt-6 sm:pt-0 shrink-0">
         <motion.h1
-          initial="hidden"
-          animate="show"
-          variants={{
-            hidden: {},
-            show: {
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-          className="relative z-20 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-1 xs:mb-2 sm:mb-3"
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative z-20 w-full text-center mx-auto text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-1 xs:mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
-              <motion.span
+              <span
                 key={i}
-                variants={FADE_IN_ANIMATION_VARIANTS}
                 className="inline-block"
               >
                 {word}&nbsp;
-              </motion.span>
+              </span>
             ))
           ) : (
             title
@@ -381,10 +368,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           <div className="pointer-events-auto flex flex-col items-center gap-2 xs:gap-2.5 sm:gap-3.5 w-full max-w-xl">
             {/* Call to Action Buttons — Lucid Fluid Row */}
             <motion.div
-              initial="hidden"
-              animate="show"
-              variants={FADE_IN_ANIMATION_VARIANTS}
-              transition={{ delay: 0.45 }}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
               className="flex flex-row items-center justify-center gap-2 xs:gap-2.5 sm:gap-3.5 w-auto"
             >
               <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
@@ -400,10 +386,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
 
             {/* Trust signals: Google Reviews & Date/Hours in the same line, aligned & lucid */}
             <motion.div
-              initial="hidden"
-              animate="show"
-              variants={FADE_IN_ANIMATION_VARIANTS}
-              transition={{ delay: 0.6 }}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
               className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-1.5 sm:gap-2.5 max-w-full px-1"
             >
               <a
@@ -442,14 +427,13 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </div>
       </div>
 
-      {/* Description / Details Container — Positioned with comfortable bottom lift on smartphone */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-5 xs:pb-6 sm:pb-0 shrink-0">
+      {/* Description / Details Container — Centered with comfortable bottom lift on smartphone */}
+      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-5 xs:pb-6 sm:pb-0 shrink-0">
         <motion.p
-          initial="hidden"
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.7 }}
-          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-300 mx-auto font-sans leading-relaxed tracking-normal text-balance px-2"
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative z-20 w-full text-center max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-300 mx-auto font-sans leading-relaxed tracking-normal text-balance px-2"
         >
           {description}
         </motion.p>
