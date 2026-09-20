@@ -27,7 +27,7 @@ const ActionButton = ({ children, onClick }: { children: React.ReactNode, onClic
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.97 }}
     onClick={onClick}
-    className="w-full xs:w-auto min-h-[42px] sm:min-h-[46px] px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-md bg-red-600 text-black font-mono font-black text-[11px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] shadow-lg shadow-red-600/30 transition-all hover:bg-red-500 active:bg-red-700 flex items-center justify-center gap-1.5 sm:gap-2 uppercase cursor-pointer shrink-0 touch-manipulation"
+    className="w-auto min-h-[42px] sm:min-h-[46px] px-4 xs:px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-md bg-red-600 text-black font-mono font-black text-[10px] xs:text-[11px] sm:text-xs tracking-[0.14em] xs:tracking-[0.16em] sm:tracking-[0.2em] shadow-lg shadow-red-600/30 transition-all hover:bg-red-500 active:bg-red-700 flex items-center justify-center gap-1.5 sm:gap-2 uppercase cursor-pointer shrink-0 touch-manipulation"
   >
     {children}
   </motion.button>
@@ -322,7 +322,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="relative z-20 text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.05] xs:leading-[1.0] sm:leading-[0.95] mb-2.5 sm:mb-4"
+          className="relative z-20 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.98] sm:leading-[0.95] mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -340,23 +340,22 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </motion.h1>
       </div>
 
-      {/* Full-bleed Marquee Stage: Moving criss-cross images from the sides of the screen, with CTAs and Trust Signals floating OVER */}
-      <div className="relative z-20 w-full overflow-hidden my-2.5 sm:my-4 md:my-5 py-2.5 sm:py-3.5 md:py-4 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)]">
-        {/* Moving background track with criss-cross tilted cards */}
-        <div className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-2 sm:px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
+      {/* Animated Image Marquee — Criss-cross tilted cards gliding smoothly from edge to edge in the background */}
+      <div className="relative z-10 w-full overflow-hidden my-2 sm:my-3.5 md:my-5 py-2 sm:py-3 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)] pointer-events-auto">
+        <div className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-2 sm:px-4 opacity-75 sm:opacity-85 hover:opacity-100 transition-opacity">
           {duplicatedImages.map((item, index) => {
             const src = typeof item === "string" ? item : item.src;
             const label = typeof item === "string" ? undefined : item.label;
             const isRemote = typeof src === "string" && src.startsWith("http");
             const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
-            // Criss-cross alternating tilt
+            // Criss-cross alternating tilt like it was before
             const tilt = index % 2 === 0 ? -2.5 : 3.5;
 
             return (
               <div
                 key={index}
                 style={{ transform: `rotate(${tilt}deg)` }}
-                className="relative aspect-[4/5] h-36 xs:h-40 sm:h-44 md:h-48 lg:h-52 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)]"
+                className="group relative aspect-[4/5] h-28 xs:h-32 sm:h-38 md:h-44 lg:h-48 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:rotate-0 hover:z-30 border border-white/10 hover:border-red-500/70 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.95),0_0_25px_rgba(220,38,38,0.4)] cursor-pointer"
               >
                 {src ? (
                   <img
@@ -366,7 +365,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                     alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
                     loading="eager"
                     decoding="async"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
                 ) : (
                   <div className="w-full h-full bg-neutral-900" />
@@ -375,84 +374,80 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             );
           })}
         </div>
-
-        {/* Floating Foreground Layer OVER the moving images */}
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-3 sm:px-6">
-          <div className="pointer-events-auto flex flex-col items-center gap-2 xs:gap-2.5 sm:gap-3.5 w-full max-w-xl">
-            {/* Call to Action Buttons — Lucid Fluid Row */}
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={FADE_IN_ANIMATION_VARIANTS}
-              transition={{ delay: 0.45 }}
-              className="flex flex-col xs:flex-row items-center justify-center gap-2 sm:gap-3.5 w-full xs:w-auto"
-            >
-              <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
-              {secondaryCtaText && (
-                <button
-                  onClick={onSecondaryCtaClick}
-                  className="btn-ice w-full xs:w-auto min-h-[42px] sm:min-h-[46px] px-5 sm:px-8 py-2.5 sm:py-3.5 rounded-md border border-white/15 bg-black/50 hover:bg-white/10 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-[11px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] uppercase transition-all cursor-pointer shadow-xl shrink-0 touch-manipulation flex items-center justify-center"
-                >
-                  {secondaryCtaText}
-                </button>
-              )}
-            </motion.div>
-
-            {/* Trust signals: Google Reviews & Date/Hours in the same line, aligned & lucid */}
-            <motion.div
-              initial="hidden"
-              animate="show"
-              variants={FADE_IN_ANIMATION_VARIANTS}
-              transition={{ delay: 0.6 }}
-              className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-1.5 sm:gap-2.5 max-w-full px-1"
-            >
-              <a
-                href={GYM_CONFIG.mapLink}
-                target="_blank"
-                rel="noreferrer"
-                className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/70 shadow-lg cursor-pointer shrink-0 touch-manipulation"
-              >
-                <span className="flex items-center gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
-                    />
-                  ))}
-                </span>
-                <span className="text-[11px] sm:text-xs md:text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
-                <span className="text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 group-hover:text-white transition-colors">
-                  · {GYM_CONFIG.reviews} REVIEWS
-                </span>
-              </a>
-
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 shadow-lg shrink-0">
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
-                  MON–SAT · 5 AM – 10 PM
-                </span>
-                <span className="text-neutral-600 select-none">·</span>
-                <span className="inline-flex items-center gap-1">
-                  <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
-                  MG ROAD
-                </span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
       </div>
 
-      {/* Description / Details Container */}
+      {/* Description & Action Controls Container */}
       <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6">
+        {/* Description / Details */}
         <motion.p
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.7 }}
-          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-400 mx-auto font-sans leading-relaxed tracking-normal text-balance mt-2 sm:mt-3"
+          transition={{ delay: 0.5 }}
+          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-300 mx-auto font-sans leading-relaxed tracking-normal text-balance px-2"
         >
           {description}
         </motion.p>
+
+        {/* Call to Action Buttons */}
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={FADE_IN_ANIMATION_VARIANTS}
+          transition={{ delay: 0.6 }}
+          className="relative z-20 mt-3.5 sm:mt-5 flex flex-row items-center justify-center gap-2 xs:gap-3 sm:gap-4 w-full sm:w-auto px-2"
+        >
+          <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
+          {secondaryCtaText && (
+            <button
+              onClick={onSecondaryCtaClick}
+              className="btn-ice w-auto min-h-[42px] sm:min-h-[46px] px-4 xs:px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-[10px] xs:text-[11px] sm:text-xs tracking-[0.14em] xs:tracking-[0.16em] sm:tracking-[0.2em] uppercase transition-all cursor-pointer shadow-xl shrink-0 touch-manipulation flex items-center justify-center"
+            >
+              {secondaryCtaText}
+            </button>
+          )}
+        </motion.div>
+
+        {/* Trust signals */}
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={FADE_IN_ANIMATION_VARIANTS}
+          transition={{ delay: 0.75 }}
+          className="relative z-20 mt-3 sm:mt-4 flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-1.5 sm:gap-2.5 max-w-full px-1"
+        >
+          <a
+            href={GYM_CONFIG.mapLink}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/70 shadow-lg cursor-pointer shrink-0 touch-manipulation"
+          >
+            <span className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
+                />
+              ))}
+            </span>
+            <span className="text-[11px] sm:text-xs md:text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
+            <span className="text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 group-hover:text-white transition-colors">
+              · {GYM_CONFIG.reviews} REVIEWS
+            </span>
+          </a>
+
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 shadow-lg shrink-0">
+            <span className="inline-flex items-center gap-1">
+              <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
+              MON–SAT · 5 AM – 10 PM
+            </span>
+            <span className="text-neutral-600 select-none">·</span>
+            <span className="inline-flex items-center gap-1">
+              <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
+              MG ROAD
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -3,6 +3,32 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Aesthetic Hero Section Redesign for Smartphone & Tablet (Antigravity session)
+
+**Goal:** Redesign the hero section on smartphone and tablet back to the clean, aesthetic layout from earlier: remove the crowded buttons-over-images overlay, let the moving images ribbon glide freely in criss-cross tilt across the full width between title and description, and place the CTA buttons and trust badges in an ergonomic, uncluttered, premium hierarchy.
+
+**What changed:**
+- **Uncluttered, Aesthetic Composition (`src/components/ui/hero-3.tsx`):**
+  - Removed the cramped floating overlay from on top of the moving image marquee.
+  - Reestablished the harmonious hierarchy:
+    1. **Title**: Bold Norse typography (`CARVE YOUR BODY FOR VALHALLA`).
+    2. **Moving Image Ribbon**: Full-bleed edge-to-edge ribbon with alternating criss-cross tilt (`-2.5deg` and `+3.5deg`), hover scale effects, dark red glow borders, and unblocked visibility of real gym equipment.
+    3. **Facility Description**: Crisp, minimal prose centered below the marquee.
+    4. **Action Buttons**: Dual lucid buttons (`INVEST IN YOURSELF` & `EXPLORE THE ARENA`) side-by-side with fluid padding (`px-4 xs:px-6 sm:px-8 py-2.5 sm:py-3.5`) and gold/blue hover accents.
+    5. **Trust Badges**: Frosted glass Google Review pill (`4.9 · 184 REVIEWS`) and Gym Hours & Location pill (`MON–SAT · 5 AM – 10 PM · MG ROAD`) aligned symmetrically underneath.
+- **Smartphone & Tablet UX:**
+  - Zero overlapping text on moving photos; cards are 100% visible and interactive.
+  - Buttons sit comfortably within the mobile thumb zone without covering any content.
+  - All hero content fits within the viewport on mobile and tablet without horizontal or vertical clipping.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Edge-to-Edge Hero Marquee Moving From Screen Sides (Antigravity session)
 
 **Goal:** Restore the laterally moving background images to move continuously from the very sides (edges) of the screen across the entire viewport width, rather than being confined inside the center `max-w-4xl` box.
