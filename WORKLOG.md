@@ -3,6 +3,31 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Hero design alignment: CTAs & Trust Badges overlaid on moving images + elevated description (Antigravity session)
+
+**Goal:** Align hero section with graphic design principles by layering the primary buttons ("INVEST IN YOURSELF", "EXPLORE THE ARENA") and trust signals (Google Reviews rating pill & Mon–Sat Timetable/Location badge) directly OVER the moving criss-cross background images using translucent glassmorphism, and placing the facility description below the moving stage with high-contrast, scannable typography.
+
+**What changed:**
+- **Overlay CTAs & Trust Signals Over Moving Images (`src/components/ui/hero-3.tsx`):**
+  - Created a dedicated 3D foreground layer (`absolute inset-0 z-30 pointer-events-none`) centered over the moving background images track (`pointer-events-auto flex flex-col items-center gap-3 sm:gap-4.5`).
+  - Styled action buttons and trust pills with high-contrast glassmorphism (`backdrop-blur-xl bg-black/80 sm:bg-black/85 border border-white/20 shadow-2xl`), ensuring crisp WCAG contrast and readability while gym photos dynamically glide behind them.
+  - Sized marquee cards generously (`h-48 sm:h-56 md:h-64 lg:h-72`) so the overlaid buttons and pills have ample framing space on both mobile and desktop.
+- **Facility Description Aligned with Design Principles (`src/components/ui/hero-3.tsx` & `src/components/PublicWebsite.tsx`):**
+  - Positioned the facility description below the moving marquee stage for clear, logical visual flow (Title -> Moving Image Stage with Overlaid Actions -> Facility Details).
+  - Framed description within an editorial glass card with an ambient red-glow gradient line (`bg-gradient-to-b from-neutral-900/60 via-neutral-950/70 to-black/90 border border-white/10 rounded-2xl`).
+  - Formatted description text with typographic contrast: subdued neutral prose with bold white highlights for the 4 core pillars (*imported heavy duty plate-loaded machines*, *Olympic powerlifting stations*, *structured cardio rooms*, *rejuvenating Moroccan steam spa baths*) and Norse red mono highlight for *MG Road, Aurangabad, Bihar*.
+- **Background Motion & Criss-Cross Styling Preserved:**
+  - Kept default hero images (`DEFAULT_HERO_IMAGES`) moving continuously via hardware-accelerated CSS GPU animation (`translate3d(0, 0, 0) -> translate3d(-50%, 0, 0)`) with zero stutter/replay across all devices.
+  - Maintained alternating criss-cross card tilts (`-2.5deg` / `+3.5deg`).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (9.01s); prerender outputs 144,588-byte static HTML with all hero elements.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Criss-cross hero marquee between heading and details with GPU-accelerated motion (Antigravity session)
 
 **Goal:** Position the laterally moving images in the background between the heading ("CARVE YOUR BODY FOR VALHALLA") and the details written, restore the alternating criss-cross card tilt, optimize for smartphones with identical velocity, and switch to continuous hardware-accelerated CSS GPU translation to completely eliminate video-like play/pause/replay stuttering.

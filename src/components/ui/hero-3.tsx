@@ -11,7 +11,7 @@ export type HeroMarqueeImage = string | { src: string; label?: string };
 // Props interface for the component
 export interface AnimatedMarqueeHeroProps {
   title: React.ReactNode;
-  description: string;
+  description: React.ReactNode;
   ctaText: string;
   onCtaClick?: () => void;
   secondaryCtaText?: string;
@@ -309,7 +309,18 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto my-auto py-2">
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto my-auto pt-4 pb-2">
+        {/* Eyebrow Kicker */}
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={FADE_IN_ANIMATION_VARIANTS}
+          className="mb-3.5 inline-flex items-center gap-2 rounded-full border border-red-600/30 bg-red-600/10 px-3.5 py-1 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.2em] text-red-400 backdrop-blur-md shadow-sm"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          AURANGABAD'S HOME OF IRON & STEAM
+        </motion.div>
+
         {/* Main Title */}
         <motion.h1
           initial="hidden"
@@ -322,7 +333,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="relative z-20 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-2 sm:mb-3"
+          className="relative z-20 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-3 sm:mb-4"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -339,9 +350,10 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           )}
         </motion.h1>
 
-        {/* Animated Image Marquee — Criss-cross tilted, continuous linear motion in background between heading and details */}
-        <div className="relative z-10 w-screen max-w-none my-3 sm:my-5 py-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] pointer-events-auto select-none">
-          <div className="hero-marquee-track flex gap-3.5 sm:gap-5 items-center px-4">
+        {/* Interactive Marquee Stage: Moving criss-cross images in background, with CTAs and Trust Signals floating OVER */}
+        <div className="relative z-20 w-screen max-w-none my-4 sm:my-6 py-4 sm:py-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)] select-none">
+          {/* Moving background track with criss-cross tilted cards */}
+          <div className="hero-marquee-track flex gap-4 sm:gap-6 items-center px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
             {duplicatedImages.map((item, index) => {
               const src = typeof item === "string" ? item : item.src;
               const label = typeof item === "string" ? undefined : item.label;
@@ -354,17 +366,17 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                 <div
                   key={index}
                   style={{ transform: `rotate(${tilt}deg)` }}
-                  className="group relative aspect-[4/5] h-28 sm:h-36 md:h-44 lg:h-48 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:rotate-0 hover:z-30 border border-white/10 hover:border-red-500/70 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.95),0_0_25px_rgba(220,38,38,0.4)] cursor-pointer"
+                  className="relative aspect-[4/5] h-48 sm:h-56 md:h-64 lg:h-72 flex-shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.18)]"
                 >
                   {src ? (
                     <img
                       src={smallSrc}
                       {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                      sizes="(max-width: 768px) 140px, 200px"
+                      sizes="(max-width: 768px) 160px, 220px"
                       alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
                       loading="eager"
                       decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full bg-neutral-900" />
@@ -373,74 +385,85 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               );
             })}
           </div>
+
+          {/* Floating Foreground Layer OVER the moving images */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-4">
+            <div className="pointer-events-auto flex flex-col items-center gap-3 sm:gap-4.5 w-full max-w-2xl">
+              {/* Call to Action Buttons */}
+              <motion.div
+                initial="hidden"
+                animate="show"
+                variants={FADE_IN_ANIMATION_VARIANTS}
+                transition={{ delay: 0.45 }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
+              >
+                <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
+                {secondaryCtaText && (
+                  <button
+                    onClick={onSecondaryCtaClick}
+                    className="btn-ice w-full sm:w-auto px-8 py-4 rounded-md border border-white/20 bg-black/80 backdrop-blur-xl text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs sm:text-sm tracking-[0.2em] uppercase transition-all cursor-pointer shadow-2xl"
+                  >
+                    {secondaryCtaText}
+                  </button>
+                )}
+              </motion.div>
+
+              {/* Trust signals: Google Reviews and Timetable / Location floating OVER moving images */}
+              <motion.div
+                initial="hidden"
+                animate="show"
+                variants={FADE_IN_ANIMATION_VARIANTS}
+                transition={{ delay: 0.6 }}
+                className="flex flex-wrap items-center justify-center gap-2 sm:gap-3.5 max-w-full"
+              >
+                <a
+                  href={GYM_CONFIG.mapLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-black/85 px-4 sm:px-5 py-2 backdrop-blur-xl transition-all hover:border-amber-400/50 shadow-2xl hover:bg-black/95 cursor-pointer"
+                >
+                  <span className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
+                      />
+                    ))}
+                  </span>
+                  <span className="text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
+                  <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.16em] sm:tracking-[0.18em] text-gray-300 group-hover:text-white transition-colors">
+                    · {GYM_CONFIG.reviews} GOOGLE REVIEWS
+                  </span>
+                </a>
+
+                <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/20 bg-black/85 px-4 sm:px-5 py-2 backdrop-blur-xl text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-200 max-w-full shadow-2xl">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                    MON–SAT · 5 AM – 10 PM
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                    MG ROAD, AURANGABAD
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
 
-        {/* Description / Details */}
-        <motion.p
-          initial="hidden"
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.5 }}
-          className="relative z-20 mt-1 sm:mt-2 max-w-2xl text-xs sm:text-base md:text-lg text-gray-300 mx-auto font-sans leading-relaxed px-4"
-        >
-          {description}
-        </motion.p>
-
-        {/* Call to Action Buttons */}
+        {/* Description / Details — Aligned with Design Principles (Below Marquee Stage) */}
         <motion.div
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.6 }}
-          className="relative z-20 mt-5 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
+          transition={{ delay: 0.7 }}
+          className="relative z-20 max-w-3xl w-full mx-auto px-4 mt-2 sm:mt-4"
         >
-          <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
-          {secondaryCtaText && (
-            <button
-              onClick={onSecondaryCtaClick}
-              className="btn-ice w-full sm:w-auto px-8 py-4 rounded-md border border-white/10 bg-white/5 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer"
-            >
-              {secondaryCtaText}
-            </button>
-          )}
-        </motion.div>
-
-        {/* Trust signals */}
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.75 }}
-          className="relative z-20 mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-full"
-        >
-          <a
-            href={GYM_CONFIG.mapLink}
-            target="_blank"
-            rel="noreferrer"
-            className="group inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 sm:px-5 py-2 backdrop-blur-md transition-colors hover:border-amber-400/40"
-          >
-            <span className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-3.5 h-3.5 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
-                />
-              ))}
-            </span>
-            <span className="text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
-            <span className="text-[11px] font-mono font-bold tracking-[0.18em] text-gray-300 group-hover:text-white transition-colors">
-              · {GYM_CONFIG.reviews} GOOGLE REVIEWS
-            </span>
-          </a>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/10 bg-black/45 px-4 sm:px-5 py-2 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-300 max-w-full">
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-red-500" />
-              MON–SAT · 5 AM – 10 PM
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-red-500" />
-              MG ROAD, AURANGABAD
-            </span>
+          <div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-neutral-900/60 via-neutral-950/70 to-black/90 p-4 sm:p-5 md:p-6 backdrop-blur-md shadow-2xl text-center">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 sm:w-36 h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
+            <p className="text-xs sm:text-sm md:text-base text-gray-300 font-sans leading-relaxed tracking-normal text-balance">
+              {description}
+            </p>
           </div>
         </motion.div>
       </div>
