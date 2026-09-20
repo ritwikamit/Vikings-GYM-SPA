@@ -3,6 +3,26 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Elevate and properly align laterally moving hero images above the fold (Antigravity session)
+
+**Goal:** Lift the laterally moving marquee images up into the main hero composition and properly align them so they appear immediately in view on initial page load rather than being pushed off to the bottom edge or cut off by vertical masks.
+
+**What changed:**
+- **Hero Layout & Marquee Alignment (`src/components/ui/hero-3.tsx`):**
+  - Converted hero section to a balanced vertical layout (`flex flex-col justify-between items-center pt-16 pb-8 sm:pt-20 sm:pb-10 md:pt-24 md:pb-12`).
+  - Removed detached `absolute bottom-0` positioning that previously glued the marquee to the screen's bottom border and forced users to scroll down to view it.
+  - Placed the lateral marquee in the structured flow with `relative z-20 w-full mt-4 sm:mt-6 md:mt-8 mb-2 sm:mb-4`, ensuring Title + Subtitle + CTAs + Trust Bar + Moving Gym Photos all fit harmoniously within the initial viewport on page load.
+  - Replaced the vertical cutting mask (`mask-image:linear-gradient(to_bottom,...)` which clipped top and bottom photo edges) with a sleek horizontal edge fade (`[mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)]`), leaving images 100% solid and crisp vertically.
+  - Set `loading="eager"` on marquee images so they render immediately upon initial page load without late pop-in.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (9.27s); prerender outputs 129,712-byte HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-19 — Trigger Vercel redeployment after repo public visibility restored (Antigravity session)
 
 **Goal:** Re-initiate Vercel deployment following GitHub repository visibility update from private back to public.

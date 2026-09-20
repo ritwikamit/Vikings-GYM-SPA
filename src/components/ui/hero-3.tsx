@@ -246,7 +246,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       onTouchStart={handleTouchMove}
       onTouchMove={handleTouchMove}
       className={cn(
-        "relative w-full min-h-svh overflow-hidden bg-black flex flex-col items-center justify-center text-center px-4 py-20 md:py-28 border-b border-red-950/20",
+        "relative w-full min-h-svh overflow-hidden bg-black flex flex-col justify-between items-center text-center px-4 pt-16 pb-8 sm:pt-20 sm:pb-10 md:pt-24 md:pb-12 border-b border-red-950/20",
         className
       )}
     >
@@ -309,7 +309,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      <div className="z-10 flex flex-col items-center max-w-4xl mt-[-6vh]">
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto my-auto py-2">
         {/* Main Title */}
         <motion.h1
           initial="hidden"
@@ -322,7 +322,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="text-4xl sm:text-6xl md:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-6"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-3 sm:mb-4"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -345,7 +345,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.5 }}
-          className="mt-6 max-w-2xl text-base md:text-lg text-gray-300 mx-auto font-sans leading-relaxed"
+          className="mt-2 sm:mt-3 max-w-2xl text-sm sm:text-base md:text-lg text-gray-300 mx-auto font-sans leading-relaxed"
         >
           {description}
         </motion.p>
@@ -356,7 +356,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.6 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
         >
           <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
           {secondaryCtaText && (
@@ -375,13 +375,13 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.75 }}
-          className="mt-10 flex flex-col items-center gap-4"
+          className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-full"
         >
           <a
             href={GYM_CONFIG.mapLink}
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 sm:px-5 py-2.5 backdrop-blur-md transition-colors hover:border-amber-400/40"
+            className="group inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 sm:px-5 py-2 backdrop-blur-md transition-colors hover:border-amber-400/40"
           >
             <span className="flex items-center gap-0.5">
               {[...Array(5)].map((_, i) => (
@@ -396,7 +396,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               · {GYM_CONFIG.reviews} GOOGLE REVIEWS
             </span>
           </a>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/10 bg-black/45 px-4 sm:px-5 py-2.5 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-300 max-w-full">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/10 bg-black/45 px-4 sm:px-5 py-2 backdrop-blur-md text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-300 max-w-full">
             <span className="inline-flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5 text-red-500" />
               MON–SAT · 5 AM – 10 PM
@@ -409,8 +409,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </motion.div>
       </div>
 
-      {/* Animated Image Marquee */}
-      <div className="absolute bottom-0 left-0 w-full h-44 sm:h-56 md:h-64 [mask-image:linear-gradient(to_bottom,transparent_0%,black_12%,black_88%,transparent_100%)] pointer-events-auto">
+      {/* Animated Image Marquee — Lifted up and aligned gracefully above the fold */}
+      <div className="relative z-20 w-full mt-4 sm:mt-6 md:mt-8 mb-2 sm:mb-4 py-2 [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] pointer-events-auto">
         <motion.div
           className="flex gap-4 sm:gap-5 items-center px-4"
           animate={{
@@ -431,15 +431,15 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
             return (
               <div
                 key={index}
-                className="group relative aspect-[4/5] h-36 sm:h-48 md:h-56 flex-shrink-0 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:z-20 border border-white/10 hover:border-red-500/70 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(220,38,38,0.5)]"
+                className="group relative aspect-[4/5] h-32 sm:h-40 md:h-48 lg:h-52 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:z-20 border border-white/10 hover:border-red-500/70 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(220,38,38,0.5)] cursor-pointer"
               >
                 {src ? (
                   <img
                     src={smallSrc}
                     {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                    sizes="(max-width: 768px) 180px, 240px"
+                    sizes="(max-width: 768px) 160px, 220px"
                     alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
