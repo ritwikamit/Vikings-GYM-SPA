@@ -309,8 +309,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      {/* Title Container — Elevated up like a heading on smartphone, centered on tablet/PC */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-2 xs:pt-3 sm:pt-0 shrink-0">
+      {/* Title Container — Positioned with comfortable top spacing on smartphone, centered on tablet/PC */}
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-5 xs:pt-6 sm:pt-0 shrink-0">
         <motion.h1
           initial="hidden"
           animate="show"
@@ -442,8 +442,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </div>
       </div>
 
-      {/* Description / Details Container — Positioned after the marquee stage */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-2 xs:pb-3 sm:pb-0 shrink-0">
+      {/* Description / Details Container — Positioned with comfortable bottom lift on smartphone */}
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-5 xs:pb-6 sm:pb-0 shrink-0">
         <motion.p
           initial="hidden"
           animate="show"

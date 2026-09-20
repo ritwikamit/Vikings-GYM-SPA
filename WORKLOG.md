@@ -3,6 +3,24 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Smartphone Headline Lowered & Details Lifted (Antigravity session)
+
+**Goal:** Fine-tune smartphone hero vertical spacing per user request: position "CARVE YOUR BODY FOR VALHALLA" a little down from the top navbar, and lift the facility details a little up from the bottom edge, preserving PC & tablet viewports untouched.
+
+**What changed:**
+- **Smartphone Spacing Fine-Tuning (`src/components/ui/hero-3.tsx`):**
+  - **Heading "Little Down":** Adjusted title container padding on mobile from `pt-2 xs:pt-3` to `pt-5 xs:pt-6 sm:pt-0`, granting comfortable breathing space below the top navigation bar.
+  - **Details "Little Up":** Adjusted description container padding on mobile from `pb-2 xs:pb-3` to `pb-5 xs:pb-6 sm:pb-0`, gently lifting the details prose away from the bottom edge.
+  - Tablet (`sm:`) and desktop remain strictly centered and unaffected.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Smartphone Filled Hero Layout with Balanced Vertical Padding (Antigravity session)
 
 **Goal:** Ensure the hero section looks completely filled across the entire smartphone viewport height (`min-h-[calc(100svh-3.5rem)]`) with generous, balanced vertical padding between the heading, moving marquee stage, and facility details, eliminating dead empty space at the bottom while keeping PC & tablet viewports untouched.
