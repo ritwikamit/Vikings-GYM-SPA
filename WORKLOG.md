@@ -3,6 +3,19 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 - Hero principle pass: a11y, targets, contrast (opencode session)
+
+**Context:** Antigravity already rebuilt the hero (marquee stage + floating CTAs, xs breakpoint, real photos). This pass adds the remaining design-principle gaps without touching that layout.
+
+**What changed (one commit, hero-3.tsx):**
+- Decorative marquee duplicates hidden from assistive tech (aria-hidden track + empty alts on all 28 backdrops; descriptive alts stay in gallery/facilities for SEO).
+- Trust pills raised to 36px minimum touch targets.
+- Description gets a soft text-shadow so gray copy stays readable over moving images.
+
+**Verification:** lint + build pass; aria-hidden, 28 empty alts, min-height pills, text-shadow confirmed in prerendered HTML.
+
+**Deploy status:** Pushed to main; Vercel auto-deploy triggered. Backend untouched.
+
 ## 2026-09-20 — Comprehensive Smartphone & Tablet Optimization for Hero Section (Antigravity session)
 
 **Goal:** Thoroughly optimize the hero section across smartphone (<640px) and tablet (640px-1024px, including portrait iPads 768px/810px/834px) viewports: prevent horizontal scroll overflow, fit cleanly above the fold with navbar offset, calibrate marquee card heights, ensure ergonomic touch targets, and configure responsive GPU animation speeds.

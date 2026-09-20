@@ -342,10 +342,9 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         {/* Interactive Marquee Stage: Moving criss-cross images in background, with CTAs and Trust Signals floating OVER */}
         <div className="relative z-20 w-full overflow-hidden my-2.5 sm:my-4 md:my-5 py-2.5 sm:py-3.5 md:py-4 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)]">
           {/* Moving background track with criss-cross tilted cards (scaled sleeker / little small) */}
-          <div className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
+          <div aria-hidden="true" className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
             {duplicatedImages.map((item, index) => {
               const src = typeof item === "string" ? item : item.src;
-              const label = typeof item === "string" ? undefined : item.label;
               const isRemote = typeof src === "string" && src.startsWith("http");
               const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
               // Criss-cross alternating tilt
@@ -362,7 +361,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                       src={smallSrc}
                       {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
                       sizes="(max-width: 640px) 140px, (max-width: 1024px) 175px, 200px"
-                      alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
+                      alt=""
                       loading="eager"
                       decoding="async"
                       className="w-full h-full object-cover"
@@ -409,7 +408,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                   href={GYM_CONFIG.mapLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/70 shadow-lg cursor-pointer shrink-0 touch-manipulation"
+                  className="group inline-flex min-h-[36px] items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/70 shadow-lg cursor-pointer shrink-0 touch-manipulation"
                 >
                   <span className="flex items-center gap-0.5">
                     {[...Array(5)].map((_, i) => (
@@ -425,7 +424,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                   </span>
                 </a>
 
-                <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 shadow-lg shrink-0">
+                <div className="inline-flex min-h-[36px] items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md text-[9px] sm:text-[10px] md:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.16em] text-gray-300 shadow-lg shrink-0">
                   <span className="inline-flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
                     MON–SAT · 5 AM – 10 PM
@@ -447,7 +446,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.7 }}
-          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-400 mx-auto font-sans leading-relaxed tracking-normal text-balance px-4 mt-2 sm:mt-3"
+          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-400 mx-auto font-sans leading-relaxed tracking-normal text-balance px-4 mt-2 sm:mt-3 [text-shadow:0_1px_14px_rgba(0,0,0,0.9)]"
         >
           {description}
         </motion.p>
