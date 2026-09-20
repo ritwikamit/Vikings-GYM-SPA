@@ -5,8 +5,6 @@ import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Star, Clock, MapPin } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { GYM_CONFIG } from "../../config/gym";
-import vikingBaseImg from "../../../assets/viking-base.jpg";
-import vikingRevealImg from "../../../assets/viking-reveal.jpg";
 
 export type HeroMarqueeImage = string | { src: string; label?: string };
 
@@ -229,20 +227,6 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   const emberX = useTransform(glowX, [0, 1], [-14, 14]);
   const emberY = useTransform(glowY, [0, 1], [-10, 10]);
 
-  const revealRef = React.useRef<HTMLDivElement>(null);
-
-  const updateSpotlight = (clientX: number, clientY: number) => {
-    if (!revealRef.current) return;
-    const rect = revealRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-    const w = typeof window !== "undefined" ? window.innerWidth : 1200;
-    const r = w < 480 ? 140 : w < 768 ? 190 : 280;
-    const mask = `radial-gradient(circle ${r}px at ${x}px ${y}px, #fff 0%, #fff 40%, rgba(255,255,255,0.75) 60%, rgba(255,255,255,0.4) 75%, rgba(255,255,255,0.12) 88%, transparent 100%)`;
-    revealRef.current.style.webkitMaskImage = mask;
-    revealRef.current.style.maskImage = mask;
-  };
-
   const setTorchFromPoint = (clientX: number, clientY: number, el: HTMLElement) => {
     const r = el.getBoundingClientRect();
     mouseX.set((clientX - r.left) / r.width);
@@ -250,14 +234,10 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
   };
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     setTorchFromPoint(e.clientX, e.clientY, e.currentTarget);
-    updateSpotlight(e.clientX, e.clientY);
   };
   const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
     const t = e.touches[0];
-    if (t) {
-      setTorchFromPoint(t.clientX, t.clientY, e.currentTarget);
-      updateSpotlight(t.clientX, t.clientY);
-    }
+    if (t) setTorchFromPoint(t.clientX, t.clientY, e.currentTarget);
   };
 
   return (
@@ -270,40 +250,20 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         className
       )}
     >
-      {/* 1. Base Viking Gym Arena Backdrop (Day/Iron Arena Scene) */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <motion.img
-          src={vikingBaseImg}
-          alt=""
-          className="w-full h-full object-cover object-center opacity-35 sm:opacity-40 filter contrast-125 saturate-90 brightness-85 scale-105"
-          animate={{ scale: [1.05, 1.08, 1.05] }}
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_50%_38%,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.85)_70%,#000000_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
-      </div>
-
-      {/* 2. Interactive Spotlight Reveal: Cyber-Berserker Valhalla Energy Layer */}
-      <div
-        ref={revealRef}
-        id="reveal-img"
-        aria-hidden="true"
-        style={{
-          WebkitMaskImage: "radial-gradient(circle 0px at -999px -999px, #fff, transparent)",
-          maskImage: "radial-gradient(circle 0px at -999px -999px, #fff, transparent)",
-        }}
-        className="pointer-events-none absolute inset-0 z-[1] overflow-hidden"
-      >
-        <motion.img
-          src={vikingRevealImg}
-          alt=""
-          className="w-full h-full object-cover object-center opacity-85 filter contrast-130 saturate-125 brightness-110 scale-105"
-          animate={{ scale: [1.05, 1.08, 1.05] }}
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_50%_38%,rgba(220,38,38,0.15)_0%,rgba(0,0,0,0.6)_70%,#000000_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black" />
-      </div>
+      {/* Real gym ambient backdrop with cinematic dark vignette */}
+      {backgroundImage && (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <motion.img
+            src={backgroundImage}
+            alt=""
+            className="w-full h-full object-cover object-center opacity-20 filter contrast-125 saturate-75 brightness-75 scale-105"
+            animate={{ scale: [1.05, 1.09, 1.05] }}
+            transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_65%_at_50%_38%,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.88)_70%,#000000_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        </div>
+      )}
 
       {/* Forge ambiance: drifting red glows + rising embers + dot texture + vignette */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden">
