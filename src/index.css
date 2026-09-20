@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --breakpoint-xs: 440px;
   /* Custom mid-shades used across the Vikings theme (between default steps) */
   --color-red-650: oklch(0.541 0.229 27.42);
   --color-neutral-850: oklch(0.237 0 0);
@@ -85,7 +86,19 @@ button {
   display: flex;
   width: max-content;
   will-change: transform;
-  animation: hero-marquee-scroll 45s linear infinite;
+  animation: hero-marquee-scroll 35s linear infinite;
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .hero-marquee-track {
+    animation-duration: 40s;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero-marquee-track {
+    animation-duration: 45s;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

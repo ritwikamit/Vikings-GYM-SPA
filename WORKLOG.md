@@ -3,6 +3,34 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Comprehensive Smartphone & Tablet Optimization for Hero Section (Antigravity session)
+
+**Goal:** Thoroughly optimize the hero section across smartphone (<640px) and tablet (640px-1024px, including portrait iPads 768px/810px/834px) viewports: prevent horizontal scroll overflow, fit cleanly above the fold with navbar offset, calibrate marquee card heights, ensure ergonomic touch targets, and configure responsive GPU animation speeds.
+
+**What changed:**
+- **Zero Horizontal Overflow & Sticky Navbar Viewport Height (`src/components/ui/hero-3.tsx`):**
+  - Replaced `w-screen max-w-none` on the marquee container with `w-full overflow-hidden`, completely eliminating the 16px-32px horizontal scrollbar/jitter on mobile and tablet touch devices.
+  - Adjusted section height to `min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)]` with `px-0 py-4 sm:py-6 md:py-8 justify-center`, factoring in the 56px/72px sticky navbar so the hero content fits comfortably above the fold on initial load.
+- **Ergonomic Buttons & Responsive Layout:**
+  - Configured action buttons (`INVEST IN YOURSELF` & `EXPLORE THE ARENA`) with `flex-col xs:flex-row items-center justify-center w-full xs:w-auto` and identical `min-h-[42px] sm:min-h-[46px] px-5 sm:px-8 py-2.5 sm:py-3.5`.
+  - Buttons cleanly stack on narrow phones (<440px) for effortless single-thumb tapping, and sit side-by-side on larger phones, tablets, and desktop.
+- **Calibrated Marquee Image Ribbon:**
+  - Upgraded card heights to valid responsive Tailwind scales (`h-36 xs:h-40 sm:h-44 md:h-48 lg:h-52`), creating sufficient vertical framing so the floating buttons and trust badges sit handsomely inside the moving image ribbon without awkward vertical clipping.
+- **Trust Badges & Text Hierarchy:**
+  - Trust signals (Google Reviews and Gym Hours/Location) wrap gracefully on narrow screens and align in a single sleek line on tablets and desktops.
+  - Responsive title sizing (`text-2xl xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] xs:leading-[1.0] sm:leading-[0.95]`) and minimal description (`text-[11px] xs:text-xs sm:text-sm md:text-base`).
+- **Tailwind Breakpoint & Responsive GPU Animation (`src/index.css`):**
+  - Added `--breakpoint-xs: 440px;` to `@theme`.
+  - Added responsive animation durations for `.hero-marquee-track`: 35s on smartphones (<640px), 40s on tablets (641px-1024px), and 45s on desktops (>1024px) for buttery-smooth continuous GPU translation.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.91s); prerender outputs 145,538-byte static HTML with zero errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Smartphone & Tablet Hero Section Optimization (Antigravity session)
 
 **Goal:** Optimize the hero section for smartphones and tablets to ensure buttons and trust badges fit side-by-side with fluid proportions, zero clipping, and fast touch responsiveness.
