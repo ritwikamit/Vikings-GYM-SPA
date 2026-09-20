@@ -441,21 +441,16 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           </div>
         </div>
 
-        {/* Description / Details — Aligned with Design Principles (Below Marquee Stage) */}
-        <motion.div
+        {/* Description / Details — Minimal Presentation */}
+        <motion.p
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.7 }}
-          className="relative z-20 max-w-3xl w-full mx-auto px-4 mt-2 sm:mt-4"
+          className="relative z-20 max-w-2xl text-xs sm:text-sm md:text-base text-gray-400 mx-auto font-sans leading-relaxed tracking-normal text-balance px-4 mt-2 sm:mt-3"
         >
-          <div className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-neutral-900/60 via-neutral-950/70 to-black/90 p-4 sm:p-5 md:p-6 backdrop-blur-md shadow-2xl text-center">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 sm:w-36 h-[1px] bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
-            <p className="text-xs sm:text-sm md:text-base text-gray-300 font-sans leading-relaxed tracking-normal text-balance">
-              {description}
-            </p>
-          </div>
-        </motion.div>
+          {description}
+        </motion.p>
       </div>
     </section>
   );

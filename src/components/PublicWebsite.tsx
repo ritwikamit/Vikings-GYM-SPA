@@ -656,17 +656,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             </span>
           </>
         }
-        description={
-          <>
-            A high-end, premium, dark-themed training facility featuring{" "}
-            <span className="text-white font-semibold">imported heavy duty plate-loaded machines</span>,{" "}
-            <span className="text-white font-semibold">Olympic powerlifting stations</span>,{" "}
-            <span className="text-white font-semibold">structured cardio rooms</span>, and{" "}
-            <span className="text-white font-semibold">complete rejuvenating Moroccan steam spa baths</span>
-            {" — "}located on{" "}
-            <span className="text-red-400 font-semibold font-mono tracking-wide">MG Road, Aurangabad, Bihar</span>.
-          </>
-        }
+        description="A high-end, premium, dark-themed training facility featuring imported heavy duty plate-loaded machines, Olympic powerlifting stations, structured cardio rooms, and complete rejuvenating Moroccan steam spa baths — located on MG Road, Aurangabad, Bihar."
         ctaText="INVEST IN YOURSELF"
         onCtaClick={() => openWhatsApp(JOIN_MESSAGE)}
         secondaryCtaText="EXPLORE THE ARENA"

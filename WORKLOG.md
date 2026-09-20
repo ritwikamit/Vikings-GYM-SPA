@@ -3,6 +3,24 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Minimal hero description presentation (Antigravity session)
+
+**Goal:** Simplify the facility description typography below the hero marquee to a clean, minimal, unboxed presentation without heavy borders, boxes, or keylines.
+
+**What changed:**
+- **Minimal Description Typography (`src/components/ui/hero-3.tsx` & `src/components/PublicWebsite.tsx`):**
+  - Removed the boxed card container, background gradient panels, and glowing keyline below the marquee stage.
+  - Rendered description as a clean, airy `<motion.p>` with muted titanium typography (`text-xs sm:text-sm md:text-base text-gray-400 max-w-2xl leading-relaxed text-balance`).
+  - Passed clean minimal prose string without heavy inline badges.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.98s); prerender outputs 143,929-byte static HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Lucid hero controls, single-line aligned reviews & timetable, and compact marquee cards (Antigravity session)
 
 **Goal:** Restore lucid, translucent styling to the CTA buttons and trust badges, align Google Reviews and Mon–Sat timetable/location horizontally in the same line, and scale down the background moving hero cards to a sleek, compact size.
