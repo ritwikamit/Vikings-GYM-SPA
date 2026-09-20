@@ -3,6 +3,29 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Lucid hero controls, single-line aligned reviews & timetable, and compact marquee cards (Antigravity session)
+
+**Goal:** Restore lucid, translucent styling to the CTA buttons and trust badges, align Google Reviews and Mon–Sat timetable/location horizontally in the same line, and scale down the background moving hero cards to a sleek, compact size.
+
+**What changed:**
+- **Lucid Translucent Styling (`src/components/ui/hero-3.tsx`):**
+  - Replaced heavy dark solid overlay styles with lucid glassmorphism (`border border-white/15 bg-black/40 hover:bg-white/10 backdrop-blur-md`).
+  - Styled `EXPLORE THE ARENA` with refined ice-glow glass accents.
+- **Single-Line Aligned Google Reviews & Date/Hours:**
+  - Aligned Google Reviews pill and Mon–Sat Timetable/Location pill in the exact same horizontal flex row (`flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-2.5`).
+  - Matched pill dimensions (`px-3.5 sm:px-4 py-1.5 rounded-full border border-white/15 bg-black/45 backdrop-blur-md`) with symmetrical vertical centering.
+- **Compact Hero Background Cards:**
+  - Scaled cards down to `h-32 sm:h-38 md:h-44 lg:h-48` for a sleek, compact moving ribbon behind the floating controls.
+  - Reduced stage vertical padding to `my-3 sm:my-5 py-3 sm:py-4` for optimal viewport height balance.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (11.22s); prerender outputs 144,624-byte static HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Remove "AURANGABAD'S HOME OF IRON & STEAM" kicker badge (Antigravity session)
 
 **Goal:** Remove the "AURANGABAD'S HOME OF IRON & STEAM" kicker pill badge from above the main hero heading for a cleaner, bolder title presentation.

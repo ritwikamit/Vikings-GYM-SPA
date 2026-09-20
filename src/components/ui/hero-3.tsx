@@ -340,28 +340,28 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </motion.h1>
 
         {/* Interactive Marquee Stage: Moving criss-cross images in background, with CTAs and Trust Signals floating OVER */}
-        <div className="relative z-20 w-screen max-w-none my-4 sm:my-6 py-4 sm:py-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)] select-none">
-          {/* Moving background track with criss-cross tilted cards */}
-          <div className="hero-marquee-track flex gap-4 sm:gap-6 items-center px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
+        <div className="relative z-20 w-screen max-w-none my-3 sm:my-5 py-3 sm:py-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_8%,black_92%,transparent_100%)] select-none">
+          {/* Moving background track with criss-cross tilted cards (scaled sleeker / little small) */}
+          <div className="hero-marquee-track flex gap-3.5 sm:gap-5 items-center px-4 opacity-50 sm:opacity-65 transition-opacity pointer-events-none">
             {duplicatedImages.map((item, index) => {
               const src = typeof item === "string" ? item : item.src;
               const label = typeof item === "string" ? undefined : item.label;
               const isRemote = typeof src === "string" && src.startsWith("http");
               const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
-              // Criss-cross alternating tilt like it was before
+              // Criss-cross alternating tilt
               const tilt = index % 2 === 0 ? -2.5 : 3.5;
 
               return (
                 <div
                   key={index}
                   style={{ transform: `rotate(${tilt}deg)` }}
-                  className="relative aspect-[4/5] h-48 sm:h-56 md:h-64 lg:h-72 flex-shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.18)]"
+                  className="relative aspect-[4/5] h-32 sm:h-38 md:h-44 lg:h-48 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)]"
                 >
                   {src ? (
                     <img
                       src={smallSrc}
                       {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                      sizes="(max-width: 768px) 160px, 220px"
+                      sizes="(max-width: 768px) 140px, 190px"
                       alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
                       loading="eager"
                       decoding="async"
@@ -377,62 +377,63 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
 
           {/* Floating Foreground Layer OVER the moving images */}
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-4">
-            <div className="pointer-events-auto flex flex-col items-center gap-3 sm:gap-4.5 w-full max-w-2xl">
-              {/* Call to Action Buttons */}
+            <div className="pointer-events-auto flex flex-col items-center gap-3 sm:gap-3.5 w-full max-w-2xl">
+              {/* Call to Action Buttons — Lucid Styling */}
               <motion.div
                 initial="hidden"
                 animate="show"
                 variants={FADE_IN_ANIMATION_VARIANTS}
                 transition={{ delay: 0.45 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
+                className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-3.5 w-full sm:w-auto"
               >
                 <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
                 {secondaryCtaText && (
                   <button
                     onClick={onSecondaryCtaClick}
-                    className="btn-ice w-full sm:w-auto px-8 py-4 rounded-md border border-white/20 bg-black/80 backdrop-blur-xl text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs sm:text-sm tracking-[0.2em] uppercase transition-all cursor-pointer shadow-2xl"
+                    className="btn-ice w-full sm:w-auto px-7 py-3.5 sm:px-8 sm:py-3.5 rounded-md border border-white/15 bg-black/40 hover:bg-white/10 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer shadow-xl"
                   >
                     {secondaryCtaText}
                   </button>
                 )}
               </motion.div>
 
-              {/* Trust signals: Google Reviews and Timetable / Location floating OVER moving images */}
+              {/* Trust signals: Google Reviews & Date/Hours in the same line, aligned & lucid */}
               <motion.div
                 initial="hidden"
                 animate="show"
                 variants={FADE_IN_ANIMATION_VARIANTS}
                 transition={{ delay: 0.6 }}
-                className="flex flex-wrap items-center justify-center gap-2 sm:gap-3.5 max-w-full"
+                className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-2.5 max-w-full"
               >
                 <a
                   href={GYM_CONFIG.mapLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-black/85 px-4 sm:px-5 py-2 backdrop-blur-xl transition-all hover:border-amber-400/50 shadow-2xl hover:bg-black/95 cursor-pointer"
+                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3.5 sm:px-4 py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/60 shadow-lg cursor-pointer shrink-0"
                 >
                   <span className="flex items-center gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3.5 h-3.5 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
+                        className={`w-3 h-3 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
                       />
                     ))}
                   </span>
-                  <span className="text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
+                  <span className="text-xs sm:text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
                   <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.16em] sm:tracking-[0.18em] text-gray-300 group-hover:text-white transition-colors">
-                    · {GYM_CONFIG.reviews} GOOGLE REVIEWS
+                    · {GYM_CONFIG.reviews} REVIEWS
                   </span>
                 </a>
 
-                <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-1.5 rounded-2xl sm:rounded-full border border-white/20 bg-black/85 px-4 sm:px-5 py-2 backdrop-blur-xl text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.2em] text-gray-200 max-w-full shadow-2xl">
+                <div className="inline-flex items-center gap-2 sm:gap-2.5 rounded-full border border-white/15 bg-black/45 px-3.5 sm:px-4 py-1.5 backdrop-blur-md text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.18em] text-gray-300 shadow-lg shrink-0">
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-red-500 shrink-0" />
+                    <Clock className="w-3 h-3 text-red-500 shrink-0" />
                     MON–SAT · 5 AM – 10 PM
                   </span>
+                  <span className="text-neutral-600 select-none">·</span>
                   <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                    MG ROAD, AURANGABAD
+                    <MapPin className="w-3 h-3 text-red-500 shrink-0" />
+                    MG ROAD
                   </span>
                 </div>
               </motion.div>
