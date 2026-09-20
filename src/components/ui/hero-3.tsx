@@ -310,17 +310,6 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto my-auto pt-4 pb-2">
-        {/* Eyebrow Kicker */}
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          className="mb-3.5 inline-flex items-center gap-2 rounded-full border border-red-600/30 bg-red-600/10 px-3.5 py-1 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.2em] text-red-400 backdrop-blur-md shadow-sm"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          AURANGABAD'S HOME OF IRON & STEAM
-        </motion.div>
-
         {/* Main Title */}
         <motion.h1
           initial="hidden"

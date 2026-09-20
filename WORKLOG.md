@@ -3,6 +3,23 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Remove "AURANGABAD'S HOME OF IRON & STEAM" kicker badge (Antigravity session)
+
+**Goal:** Remove the "AURANGABAD'S HOME OF IRON & STEAM" kicker pill badge from above the main hero heading for a cleaner, bolder title presentation.
+
+**What changed:**
+- **Kicker Badge Removal (`src/components/ui/hero-3.tsx`):**
+  - Removed the `motion.div` eyebrow kicker pill badge above the `<h1>` title.
+  - Heading `CARVE YOUR BODY FOR VALHALLA` now takes top prominence cleanly.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (12.94s); prerender outputs 144,181-byte static HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Hero design alignment: CTAs & Trust Badges overlaid on moving images + elevated description (Antigravity session)
 
 **Goal:** Align hero section with graphic design principles by layering the primary buttons ("INVEST IN YOURSELF", "EXPLORE THE ARENA") and trust signals (Google Reviews rating pill & Mon–Sat Timetable/Location badge) directly OVER the moving criss-cross background images using translucent glassmorphism, and placing the facility description below the moving stage with high-contrast, scannable typography.
