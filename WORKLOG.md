@@ -3,6 +3,28 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Elevated Headline with Overlapping Lucid Buttons & Trust Badges (Antigravity session)
+
+**Goal:** Elevate the "CARVE YOUR BODY FOR VALHALLA" headline slightly higher on mobile/tablet, restore the lucid CTA buttons (`INVEST IN YOURSELF`, `EXPLORE THE ARENA`), Google reviews, and date/hours pill overlapping the moving criss-cross images ribbon, and keep the facility details after the marquee stage.
+
+**What changed:**
+- **Elevated Headline (`src/components/ui/hero-3.tsx`):**
+  - Raised the top section alignment (`pt-2 sm:pt-4 md:pt-6`) and applied `-mt-1 sm:-mt-2 md:mt-0` with `leading-[0.98] sm:leading-[0.95]` to position "CARVE YOUR BODY FOR VALHALLA" slightly higher up, freeing ample vertical room below on smartphones and tablets.
+- **Overlapping Lucid Buttons & Trust Badges:**
+  - Restored the floating foreground layer directly over the moving background images track across all viewports (smartphone, tablet, and PC).
+  - Styled buttons and badges with lucid frosted glassmorphism (`bg-black/60 border border-white/20 backdrop-blur-md shadow-xl`).
+  - Fluid sizing on buttons (`min-h-[38px] xs:min-h-[42px] sm:min-h-[46px] px-3.5 xs:px-5 sm:px-8 py-2 xs:py-2.5 sm:py-3.5`) and trust pills (`text-[8.5px] xs:text-[9.5px] sm:text-[10px] md:text-[11px]`) for a clean, side-by-side single-line fit on mobile and tablet without clipping.
+- **Details Positioned After:**
+  - Positioned the facility description prose directly after the marquee stage at the bottom of the hero section.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Aesthetic Hero Section Redesign for Smartphone & Tablet (Antigravity session)
 
 **Goal:** Redesign the hero section on smartphone and tablet back to the clean, aesthetic layout from earlier: remove the crowded buttons-over-images overlay, let the moving images ribbon glide freely in criss-cross tilt across the full width between title and description, and place the CTA buttons and trust badges in an ergonomic, uncluttered, premium hierarchy.
