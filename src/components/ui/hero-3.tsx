@@ -241,7 +241,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       onTouchStart={handleTouchMove}
       onTouchMove={handleTouchMove}
       className={cn(
-        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-between sm:justify-center items-center text-center px-0 py-3 xs:py-4 sm:py-6 md:py-8 border-b border-red-950/20",
+        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-center items-center text-center px-0 py-4 sm:py-6 md:py-8 border-b border-red-950/20",
         className
       )}
     >
@@ -304,13 +304,13 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      {/* Title Container — Centered with comfortable top spacing on smartphone, centered on tablet/PC */}
-      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-5 xs:pt-6 sm:pt-0 shrink-0">
+      {/* Title Container — Consistent centered composition matching PC */}
+      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6">
         <motion.h1
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative z-20 w-full text-center mx-auto text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-1 xs:mb-2 sm:mb-3"
+          className="relative z-20 w-full text-center mx-auto text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -327,8 +327,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </motion.h1>
       </div>
 
-      {/* Full-bleed Marquee Stage with Overlapping Lucid Buttons & Trust Badges */}
-      <div className="relative z-20 w-full overflow-hidden my-auto sm:my-3.5 md:my-5 py-3 sm:py-3.5 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)] flex flex-col justify-center">
+      {/* Full-bleed Marquee Stage with Overlapping Lucid Buttons & Trust Badges — Same as PC */}
+      <div className="relative z-20 w-full overflow-hidden my-2.5 sm:my-3.5 md:my-5 py-2 sm:py-3 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)] flex flex-col justify-center">
         {/* Moving background track with criss-cross tilted cards from the sides of the screen */}
         <div className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-2 sm:px-4 opacity-55 sm:opacity-70 transition-opacity pointer-events-none">
           {duplicatedImages.map((item, index) => {
@@ -427,8 +427,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         </div>
       </div>
 
-      {/* Description / Details Container — Centered with comfortable bottom lift on smartphone */}
-      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-5 xs:pb-6 sm:pb-0 shrink-0">
+      {/* Description / Details Container — Positioned directly below marquee stage matching PC */}
+      <div className="z-10 flex flex-col items-center text-center max-w-4xl w-full mx-auto px-4 sm:px-6 mt-1 sm:mt-2">
         <motion.p
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}

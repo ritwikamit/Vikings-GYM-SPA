@@ -3,6 +3,27 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Smartphone Hero UI Redesigned to Match PC Composition (Antigravity session)
+
+**Goal:** Redesign the smartphone hero UI so it visually mirrors the premium, cohesive, vertically centered composition of the PC version, rather than splitting elements to screen extremes.
+
+**What changed:**
+- **Unified Centered Hierarchy (`src/components/ui/hero-3.tsx`):**
+  - Updated hero section to `justify-center items-center text-center px-0 py-4 sm:py-6 md:py-8` across all viewports.
+  - Reestablished the cohesive PC grouping on smartphone:
+    1. **Title**: "CARVE YOUR BODY FOR VALHALLA" sits directly above the marquee stage with comfortable breathing margin (`mb-2 sm:mb-3`).
+    2. **Marquee Stage**: Glides full-bleed with tilted criss-cross gym imagery behind the centered lucid buttons (`INVEST IN YOURSELF`, `EXPLORE THE ARENA`) and frosted trust badges.
+    3. **Facility Details**: Sits directly underneath the marquee ribbon with clean spacing (`mt-1 sm:mt-2`) matching the PC presentation.
+  - The smartphone layout now looks identical in spirit, structure, and aesthetic polish to the desktop experience.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Centered Alignment & Load Synchronization for Hero Heading & Details (Antigravity session)
 
 **Goal:** Ensure the hero heading ("CARVE YOUR BODY FOR VALHALLA") and facility details description are perfectly aligned with each other and centered on the smartphone viewport upon loading, eliminating text misalignment and delayed layout pop-in shifts.
