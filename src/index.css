@@ -71,8 +71,28 @@ button {
   opacity: 1;
 }
 
+/* Hardware-accelerated continuous hero marquee (runs on compositor thread — zero stutter/replay) */
+@keyframes hero-marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.hero-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: hero-marquee-scroll 45s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .hero-marquee-track {
+    animation-play-state: paused;
   }
 }

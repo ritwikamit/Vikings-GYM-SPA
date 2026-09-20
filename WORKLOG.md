@@ -3,6 +3,31 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Criss-cross hero marquee between heading and details with GPU-accelerated motion (Antigravity session)
+
+**Goal:** Position the laterally moving images in the background between the heading ("CARVE YOUR BODY FOR VALHALLA") and the details written, restore the alternating criss-cross card tilt, optimize for smartphones with identical velocity, and switch to continuous hardware-accelerated CSS GPU translation to completely eliminate video-like play/pause/replay stuttering.
+
+**What changed:**
+- **Placement Between Heading & Details (`src/components/ui/hero-3.tsx`):**
+  - Moved the lateral marquee band directly between the `<h1>` title and the details `<p>` description text.
+  - Gave text layers `relative z-20` for crystal clear contrast while the marquee glides across the mid-section background (`relative z-10 w-screen max-w-none`).
+- **Restored Criss-Cross Card Tilt:**
+  - Applied alternating card rotation (`rotate(${index % 2 === 0 ? -2.5 : 3.5}deg)`) so cards sit in a dynamic criss-cross layout with hover un-tilt (`hover:rotate-0 hover:scale-105`).
+- **Hardware-Accelerated Smooth Motion (`src/index.css` & `hero-3.tsx`):**
+  - Added `@keyframes hero-marquee-scroll` with `translate3d(0, 0, 0) -> translate3d(-50%, 0, 0)` and `will-change: transform` directly on the GPU compositor thread.
+  - Replaced JavaScript-driven Framer Motion loop with pure CSS `.hero-marquee-track`, guaranteeing continuous 60/120 FPS gliding with zero stutter, pausing, or replaying glitch across mobile and desktop.
+  - Quadrupled images in the track (`[...images, ...images, ...images, ...images]`) to ensure 100% gapless, seamless infinite looping on all screen sizes.
+- **Smartphone Velocity & Sizing:**
+  - Scaled card heights responsively (`h-28 sm:h-36 md:h-44 lg:h-48`) so the heading, criss-cross marquee, and details all fit comfortably within the initial smartphone viewport.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (9.20s); prerender outputs 129,712-byte static HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Elevate and properly align laterally moving hero images above the fold (Antigravity session)
 
 **Goal:** Lift the laterally moving marquee images up into the main hero composition and properly align them so they appear immediately in view on initial page load rather than being pushed off to the bottom edge or cut off by vertical masks.

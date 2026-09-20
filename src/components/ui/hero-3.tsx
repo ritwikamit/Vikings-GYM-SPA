@@ -189,8 +189,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
     show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20 } },
   };
 
-  // Duplicate images for a seamless loop
-  const duplicatedImages = [...images, ...images];
+  // Duplicate images 4x for a seamless, gap-free infinite loop on all screen widths
+  const duplicatedImages = useMemo(() => [...images, ...images, ...images, ...images], [images]);
 
   // Fewer particles on phones to keep old devices smooth.
   const [emberCount] = useState(() =>
@@ -322,7 +322,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-3 sm:mb-4"
+          className="relative z-20 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.95] mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -339,13 +339,49 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           )}
         </motion.h1>
 
-        {/* Description */}
+        {/* Animated Image Marquee — Criss-cross tilted, continuous linear motion in background between heading and details */}
+        <div className="relative z-10 w-screen max-w-none my-3 sm:my-5 py-2 overflow-hidden [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] pointer-events-auto select-none">
+          <div className="hero-marquee-track flex gap-3.5 sm:gap-5 items-center px-4">
+            {duplicatedImages.map((item, index) => {
+              const src = typeof item === "string" ? item : item.src;
+              const label = typeof item === "string" ? undefined : item.label;
+              const isRemote = typeof src === "string" && src.startsWith("http");
+              const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
+              // Criss-cross alternating tilt like it was before
+              const tilt = index % 2 === 0 ? -2.5 : 3.5;
+
+              return (
+                <div
+                  key={index}
+                  style={{ transform: `rotate(${tilt}deg)` }}
+                  className="group relative aspect-[4/5] h-28 sm:h-36 md:h-44 lg:h-48 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:rotate-0 hover:z-30 border border-white/10 hover:border-red-500/70 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)] hover:shadow-[0_12px_35px_rgba(0,0,0,0.95),0_0_25px_rgba(220,38,38,0.4)] cursor-pointer"
+                >
+                  {src ? (
+                    <img
+                      src={smallSrc}
+                      {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
+                      sizes="(max-width: 768px) 140px, 200px"
+                      alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
+                      loading="eager"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-neutral-900" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Description / Details */}
         <motion.p
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.5 }}
-          className="mt-2 sm:mt-3 max-w-2xl text-sm sm:text-base md:text-lg text-gray-300 mx-auto font-sans leading-relaxed"
+          className="relative z-20 mt-1 sm:mt-2 max-w-2xl text-xs sm:text-base md:text-lg text-gray-300 mx-auto font-sans leading-relaxed px-4"
         >
           {description}
         </motion.p>
@@ -356,7 +392,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.6 }}
-          className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
+          className="relative z-20 mt-5 sm:mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto"
         >
           <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
           {secondaryCtaText && (
@@ -375,7 +411,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.75 }}
-          className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-full"
+          className="relative z-20 mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-full"
         >
           <a
             href={GYM_CONFIG.mapLink}
@@ -406,49 +442,6 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               MG ROAD, AURANGABAD
             </span>
           </div>
-        </motion.div>
-      </div>
-
-      {/* Animated Image Marquee — Lifted up and aligned gracefully above the fold */}
-      <div className="relative z-20 w-full mt-4 sm:mt-6 md:mt-8 mb-2 sm:mb-4 py-2 [mask-image:linear-gradient(to_right,transparent_0%,black_6%,black_94%,transparent_100%)] pointer-events-auto">
-        <motion.div
-          className="flex gap-4 sm:gap-5 items-center px-4"
-          animate={{
-            x: ["0%", "-50%"],
-            transition: {
-              ease: "linear",
-              duration: 45,
-              repeat: Infinity,
-            },
-          }}
-        >
-          {duplicatedImages.map((item, index) => {
-            const src = typeof item === "string" ? item : item.src;
-            const label = typeof item === "string" ? undefined : item.label;
-            const isRemote = typeof src === "string" && src.startsWith("http");
-            const smallSrc = isRemote ? src.replace("w=1470", "w=480").replace("w=1469", "w=480") : src;
-
-            return (
-              <div
-                key={index}
-                className="group relative aspect-[4/5] h-32 sm:h-40 md:h-48 lg:h-52 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-300 hover:scale-105 hover:z-20 border border-white/10 hover:border-red-500/70 shadow-[0_10px_30px_rgba(0,0,0,0.85),0_0_15px_rgba(220,38,38,0.15)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.95),0_0_30px_rgba(220,38,38,0.5)] cursor-pointer"
-              >
-                {src ? (
-                  <img
-                    src={smallSrc}
-                    {...(isRemote ? { srcSet: `${smallSrc} 480w, ${src} 1470w` } : {})}
-                    sizes="(max-width: 768px) 160px, 220px"
-                    alt={label ? `Vikings Gym ${label}` : `Vikings Gym training facility ${index + 1}`}
-                    loading="eager"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-neutral-900" />
-                )}
-              </div>
-            );
-          })}
         </motion.div>
       </div>
     </section>
