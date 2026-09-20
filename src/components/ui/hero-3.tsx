@@ -246,7 +246,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       onTouchStart={handleTouchMove}
       onTouchMove={handleTouchMove}
       className={cn(
-        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-center items-center text-center px-0 pt-2 pb-4 sm:pt-4 sm:pb-6 md:pt-6 md:pb-8 border-b border-red-950/20",
+        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-start sm:justify-center items-center text-center px-0 pt-3 pb-6 sm:pt-4 sm:pb-6 md:pt-6 md:pb-8 border-b border-red-950/20",
         className
       )}
     >
@@ -309,8 +309,8 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_38%,transparent_30%,rgba(0,0,0,0.75)_100%)]" />
       </div>
 
-      {/* Title Container — Elevated slightly up on smartphone & tablet */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 -mt-1 sm:-mt-2 md:mt-0">
+      {/* Title Container — Elevated up like a heading on smartphone, centered on tablet/PC */}
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-1 sm:pt-0">
         <motion.h1
           initial="hidden"
           animate="show"

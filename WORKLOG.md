@@ -3,6 +3,28 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Smartphone-Specific Headline Elevation & Component Alignment (Antigravity session)
+
+**Goal:** For smartphones only, position the headline "CARVE YOUR BODY FOR VALHALLA" up at the top like a proper page heading, while maintaining smooth, harmonious alignment across all subsequent components (overlapping marquee controls and facility details), and keeping PC & tablet viewports untouched.
+
+**What changed:**
+- **Smartphone-Specific Heading Elevation (`src/components/ui/hero-3.tsx`):**
+  - Updated the hero section to `justify-start sm:justify-center pt-3 pb-6 sm:pt-4 sm:pb-6 md:pt-6 md:pb-8`.
+  - On smartphones, the section aligns from the top (`justify-start pt-3`), letting "CARVE YOUR BODY FOR VALHALLA" sit up top as a true page heading directly below the sticky navbar.
+  - On PC and tablets, `sm:justify-center` keeps the entire composition centered vertically.
+- **Component Alignment:**
+  - Marquee stage sits with calibrated margins (`my-2 sm:my-3.5 md:my-5`) right below the elevated heading.
+  - The overlapping lucid action buttons (`INVEST IN YOURSELF` and `EXPLORE THE ARENA`) and frosted trust badges are centered over the moving ribbon.
+  - Facility details prose sits centered directly below the marquee stage.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Elevated Headline with Overlapping Lucid Buttons & Trust Badges (Antigravity session)
 
 **Goal:** Elevate the "CARVE YOUR BODY FOR VALHALLA" headline slightly higher on mobile/tablet, restore the lucid CTA buttons (`INVEST IN YOURSELF`, `EXPLORE THE ARENA`), Google reviews, and date/hours pill overlapping the moving criss-cross images ribbon, and keep the facility details after the marquee stage.
