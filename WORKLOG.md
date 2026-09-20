@@ -3,6 +3,28 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Edge-to-Edge Hero Marquee Moving From Screen Sides (Antigravity session)
+
+**Goal:** Restore the laterally moving background images to move continuously from the very sides (edges) of the screen across the entire viewport width, rather than being confined inside the center `max-w-4xl` box.
+
+**What changed:**
+- **Full-Bleed Marquee Stage (`src/components/ui/hero-3.tsx`):**
+  - Unnested the marquee stage from inside the centered `max-w-4xl` wrapper.
+  - Separated hero layout into 3 distinct vertical units:
+    1. Centered Title container (`max-w-4xl w-full mx-auto px-4 sm:px-6`).
+    2. Edge-to-edge full-bleed Marquee Stage (`w-full overflow-hidden select-none`), allowing images to glide seamlessly from the far left of the viewport to the far right.
+    3. Centered Description container (`max-w-4xl w-full mx-auto px-4 sm:px-6`).
+  - Updated edge masks to `[mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)]` for a subtle, natural fade at the very viewport perimeter.
+  - Kept CTA buttons and trust badges centered directly over the moving images (`max-w-xl mx-auto px-3 sm:px-6`).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Comprehensive Smartphone & Tablet Optimization for Hero Section (Antigravity session)
 
 **Goal:** Thoroughly optimize the hero section across smartphone (<640px) and tablet (640px-1024px, including portrait iPads 768px/810px/834px) viewports: prevent horizontal scroll overflow, fit cleanly above the fold with navbar offset, calibrate marquee card heights, ensure ergonomic touch targets, and configure responsive GPU animation speeds.
