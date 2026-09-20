@@ -3,6 +3,23 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Increased Smartphone Hero Heading Size (Antigravity session)
+
+**Goal:** Increase the font size of the hero heading ("CARVE YOUR BODY FOR VALHALLA") specifically for smartphones to deliver a bolder, more commanding impact while keeping line-height compact and tight.
+
+**What changed:**
+- **Smartphone Typography (`src/components/ui/hero-3.tsx`):**
+  - Upgraded heading font size on smartphones from `text-3xl xs:text-4xl` to `text-4xl xs:text-5xl` with tight, bold leading (`leading-[0.96] xs:leading-[0.92] sm:leading-[0.95]`).
+  - Tablet (`sm:text-5xl`) and desktop (`md:text-6xl lg:text-7xl`) font scales remain intact.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Smartphone Hero UI Redesigned to Match PC Composition (Antigravity session)
 
 **Goal:** Redesign the smartphone hero UI so it visually mirrors the premium, cohesive, vertically centered composition of the PC version, rather than splitting elements to screen extremes.

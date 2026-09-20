@@ -310,7 +310,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="relative z-20 w-full text-center mx-auto text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-2 sm:mb-3"
+          className="relative z-20 w-full text-center mx-auto text-4xl xs:text-5xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.96] xs:leading-[0.92] sm:leading-[0.95] mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
