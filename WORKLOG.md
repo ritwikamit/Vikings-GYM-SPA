@@ -3,6 +3,31 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Dual-layer Cyber Viking // Valhalla Berserker spotlight reveal hero background (Antigravity session)
+
+**Goal:** Customize and implement the interactive dual-layer spotlight reveal mechanism for Vikings Gym & Spa, placing it in the very background of the hero section so moving the cursor/touch reveals an alternate glowing red Cyber-Berserker warrior scene beneath the atmospheric Nordic iron gym backdrop.
+
+**What changed:**
+- **Customized Viking Character Assets (`assets/viking-base.jpg` & `assets/viking-reveal.jpg`):**
+  - Generated matching photorealistic wide-angle composition of a powerful Nordic Viking warrior athlete in a dark luxury training facility (`VALHALLA TRAINING GROUND`).
+  - Base image: Dramatic moody steel-lit gym arena with heavy iron barbell and Nordic carvings.
+  - Reveal image: Fiery crimson Cyber-Berserker mode with glowing red runic tattoos, red glowing cybernetic eyes, molten embers, and lightning power arcs.
+- **Spotlight Reveal Background (`src/components/ui/hero-3.tsx`):**
+  - Integrated `hero-base-img` at `z-0` with cinematic dark vignette and subtle ambient breathing.
+  - Integrated `hero-reveal-img` at `z-1` with dynamic `radial-gradient` mask on mousemove and touchmove (`updateSpotlight`), responsive radius R (140px on mobile, 280px on desktop).
+  - Cursor torch and touch movements illuminate the hidden Berserker warrior energy in real-time under the user's cursor or finger.
+  - All foreground hero elements (title, moving criss-cross marquee ribbon, lucid action buttons, aligned reviews/timetable, and minimal facility details) remain perfectly layered and interactive on top (`z-10` / `z-20`).
+- **Customized Prompt Documentation:**
+  - Saved customized standalone prompt specification `cyber_viking_prompt.md` tailored for Vikings Gym & Spa.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (8.85s); prerender outputs 145,121-byte static HTML with bundled Viking assets.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Minimal hero description presentation (Antigravity session)
 
 **Goal:** Simplify the facility description typography below the hero marquee to a clean, minimal, unboxed presentation without heavy borders, boxes, or keylines.
