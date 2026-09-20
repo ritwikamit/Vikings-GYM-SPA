@@ -3,6 +3,27 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Smartphone & Tablet Hero Section Optimization (Antigravity session)
+
+**Goal:** Optimize the hero section for smartphones and tablets to ensure buttons and trust badges fit side-by-side with fluid proportions, zero clipping, and fast touch responsiveness.
+
+**What changed:**
+- **Fluid Button Row (`src/components/ui/hero-3.tsx`):**
+  - Updated action buttons (`INVEST IN YOURSELF` & `EXPLORE THE ARENA`) to display in a fluid horizontal row on mobile (`flex-row gap-2 sm:gap-3.5`) with responsive padding (`px-5 py-2.5 sm:px-8 sm:py-3.5`) and font sizing (`text-[11px] sm:text-xs`), eliminating vertical stacking that previously crowded small smartphone viewports.
+  - Added `touch-manipulation` for instantaneous tap response without 300ms mobile tap delay.
+- **Responsive Trust Signals:**
+  - Scaled rating stars (`w-2.5 h-2.5 sm:w-3 sm:h-3`), typography (`text-[9px] sm:text-[11px]`), and padding (`px-2.5 sm:px-4 py-1 sm:py-1.5`) so Google Reviews and Mon–Sat Timetable align in one continuous row on narrow screens without horizontal overflow.
+- **Stage Centering:**
+  - Tuned vertical gap and breathing space (`gap-2.5 sm:gap-3.5`) so the controls sit comfortably within the moving images ribbon across both smartphones (<640px) and tablets (640px-1024px).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`) clean with 0 errors.
+- `npm run build` succeeds (9.01s); prerender outputs 144,249-byte static HTML.
+
+**Deploy status:** Pushed to GitHub `main`; Vercel auto-deploy triggered. Backend untouched.
+
+---
+
 ## 2026-09-20 — Minimal hero description presentation (Antigravity session)
 
 **Goal:** Simplify the facility description typography below the hero marquee to a clean, minimal, unboxed presentation without heavy borders, boxes, or keylines.

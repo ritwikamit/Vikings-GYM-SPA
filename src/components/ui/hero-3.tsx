@@ -21,13 +21,13 @@ export interface AnimatedMarqueeHeroProps {
   className?: string;
 }
 
-// Reusable Button component styled for Vikings Gym
+// Reusable Button component styled for Vikings Gym (fluid sizing for smartphone & tablet)
 const ActionButton = ({ children, onClick }: { children: React.ReactNode, onClick?: () => void }) => (
   <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
+    whileHover={{ scale: 1.04 }}
+    whileTap={{ scale: 0.96 }}
     onClick={onClick}
-    className="w-full sm:w-auto px-8 py-4 rounded-md bg-red-600 text-black font-mono font-black text-xs tracking-[0.2em] shadow-lg shadow-red-600/20 transition-colors hover:bg-red-700 flex items-center justify-center gap-2 uppercase cursor-pointer"
+    className="w-auto px-5 py-2.5 sm:px-8 sm:py-3.5 rounded-md bg-red-600 text-black font-mono font-black text-[11px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] shadow-lg shadow-red-600/30 transition-all hover:bg-red-500 flex items-center justify-center gap-1.5 sm:gap-2 uppercase cursor-pointer shrink-0 touch-manipulation"
   >
     {children}
   </motion.button>
@@ -376,21 +376,21 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           </div>
 
           {/* Floating Foreground Layer OVER the moving images */}
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-4">
-            <div className="pointer-events-auto flex flex-col items-center gap-3 sm:gap-3.5 w-full max-w-2xl">
-              {/* Call to Action Buttons — Lucid Styling */}
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-3 sm:px-4">
+            <div className="pointer-events-auto flex flex-col items-center gap-2.5 sm:gap-3.5 w-full max-w-2xl">
+              {/* Call to Action Buttons — Lucid Fluid Row */}
               <motion.div
                 initial="hidden"
                 animate="show"
                 variants={FADE_IN_ANIMATION_VARIANTS}
                 transition={{ delay: 0.45 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-3.5 w-full sm:w-auto"
+                className="flex flex-row items-center justify-center gap-2 sm:gap-3.5 w-full sm:w-auto"
               >
                 <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
                 {secondaryCtaText && (
                   <button
                     onClick={onSecondaryCtaClick}
-                    className="btn-ice w-full sm:w-auto px-7 py-3.5 sm:px-8 sm:py-3.5 rounded-md border border-white/15 bg-black/40 hover:bg-white/10 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-xs tracking-[0.2em] uppercase transition-all cursor-pointer shadow-xl"
+                    className="btn-ice w-auto px-5 py-2.5 sm:px-8 sm:py-3.5 rounded-md border border-white/15 bg-black/40 hover:bg-white/10 backdrop-blur-md text-gray-200 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-600/40 font-mono font-black text-[11px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] uppercase transition-all cursor-pointer shadow-xl shrink-0 touch-manipulation"
                   >
                     {secondaryCtaText}
                   </button>
@@ -403,36 +403,36 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
                 animate="show"
                 variants={FADE_IN_ANIMATION_VARIANTS}
                 transition={{ delay: 0.6 }}
-                className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-2 sm:gap-2.5 max-w-full"
+                className="flex flex-row flex-wrap sm:flex-nowrap items-center justify-center gap-1.5 sm:gap-2.5 max-w-full px-1"
               >
                 <a
                   href={GYM_CONFIG.mapLink}
                   target="_blank"
                   rel="noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3.5 sm:px-4 py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/60 shadow-lg cursor-pointer shrink-0"
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-4 py-1 sm:py-1.5 backdrop-blur-md transition-all hover:border-amber-400/50 hover:bg-black/70 shadow-lg cursor-pointer shrink-0 touch-manipulation"
                 >
                   <span className="flex items-center gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3 h-3 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
+                        className={`w-2.5 h-2.5 sm:w-3 sm:h-3 ${i < Math.round(GYM_CONFIG.rating) ? "text-amber-400 fill-amber-400" : "text-neutral-600"}`}
                       />
                     ))}
                   </span>
-                  <span className="text-xs sm:text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
-                  <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.16em] sm:tracking-[0.18em] text-gray-300 group-hover:text-white transition-colors">
+                  <span className="text-[11px] sm:text-sm font-sans font-black text-white">{GYM_CONFIG.rating}</span>
+                  <span className="text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.18em] text-gray-300 group-hover:text-white transition-colors">
                     · {GYM_CONFIG.reviews} REVIEWS
                   </span>
                 </a>
 
-                <div className="inline-flex items-center gap-2 sm:gap-2.5 rounded-full border border-white/15 bg-black/45 px-3.5 sm:px-4 py-1.5 backdrop-blur-md text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.18em] text-gray-300 shadow-lg shrink-0">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Clock className="w-3 h-3 text-red-500 shrink-0" />
+                <div className="inline-flex items-center gap-1.5 sm:gap-2.5 rounded-full border border-white/15 bg-black/50 px-2.5 sm:px-4 py-1 sm:py-1.5 backdrop-blur-md text-[9px] sm:text-[11px] font-mono font-bold tracking-[0.12em] sm:tracking-[0.18em] text-gray-300 shadow-lg shrink-0">
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
                     MON–SAT · 5 AM – 10 PM
                   </span>
                   <span className="text-neutral-600 select-none">·</span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="w-3 h-3 text-red-500 shrink-0" />
+                  <span className="inline-flex items-center gap-1">
+                    <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 shrink-0" />
                     MG ROAD
                   </span>
                 </div>
