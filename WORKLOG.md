@@ -3,6 +3,29 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-09-20 — Smartphone Filled Hero Layout with Balanced Vertical Padding (Antigravity session)
+
+**Goal:** Ensure the hero section looks completely filled across the entire smartphone viewport height (`min-h-[calc(100svh-3.5rem)]`) with generous, balanced vertical padding between the heading, moving marquee stage, and facility details, eliminating dead empty space at the bottom while keeping PC & tablet viewports untouched.
+
+**What changed:**
+- **Smartphone Filled Viewport (`src/components/ui/hero-3.tsx`):**
+  - Updated hero section layout to `justify-between sm:justify-center px-0 py-3 xs:py-4 sm:py-6 md:py-8`.
+  - Configured flex distribution so the three main blocks cleanly occupy the viewport:
+    1. **Heading at the top:** Elevated with `pt-2 xs:pt-3 sm:pt-0 shrink-0` like a true page title.
+    2. **Marquee stage in the center:** Centered with `my-auto sm:my-3.5 md:my-5 flex flex-col justify-center` and expanded mobile card heights (`h-40 xs:h-44 sm:h-48 md:h-52 lg:h-56`) so the image ribbon with overlapping lucid buttons (`INVEST IN YOURSELF`, `EXPLORE THE ARENA`) and trust badges commands rich presence.
+    3. **Facility details at the bottom:** Anchored at the bottom with `pb-2 xs:pb-3 sm:pb-0 shrink-0` and balanced text sizing.
+  - Generous, natural breathing room now fills between the title, image ribbon, and description on all smartphone screen heights (from iPhone SE to Pro Max).
+- **Preserved PC & Tablet:**
+  - Preserved `sm:justify-center`, `sm:pt-0`, and `sm:pb-0` to keep tablet and desktop compositions centered.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+
+**Deploy status:** Ready to commit & push to GitHub `main` to trigger Vercel auto-deploy.
+
+---
+
 ## 2026-09-20 — Smartphone-Specific Headline Elevation & Component Alignment (Antigravity session)
 
 **Goal:** For smartphones only, position the headline "CARVE YOUR BODY FOR VALHALLA" up at the top like a proper page heading, while maintaining smooth, harmonious alignment across all subsequent components (overlapping marquee controls and facility details), and keeping PC & tablet viewports untouched.

@@ -246,7 +246,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       onTouchStart={handleTouchMove}
       onTouchMove={handleTouchMove}
       className={cn(
-        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-start sm:justify-center items-center text-center px-0 pt-3 pb-6 sm:pt-4 sm:pb-6 md:pt-6 md:pb-8 border-b border-red-950/20",
+        "relative w-full min-h-[calc(100svh-3.5rem)] sm:min-h-[calc(100dvh-4.5rem)] overflow-x-hidden bg-black flex flex-col justify-between sm:justify-center items-center text-center px-0 py-3 xs:py-4 sm:py-6 md:py-8 border-b border-red-950/20",
         className
       )}
     >
@@ -310,7 +310,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       {/* Title Container — Elevated up like a heading on smartphone, centered on tablet/PC */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-1 sm:pt-0">
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pt-2 xs:pt-3 sm:pt-0 shrink-0">
         <motion.h1
           initial="hidden"
           animate="show"
@@ -322,7 +322,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               },
             },
           }}
-          className="relative z-20 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[0.98] sm:leading-[0.95] mb-2 sm:mb-3"
+          className="relative z-20 text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white uppercase leading-[1.02] sm:leading-[0.95] mb-1 xs:mb-2 sm:mb-3"
         >
           {typeof title === 'string' ? (
             title.split(" ").map((word, i) => (
@@ -341,7 +341,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       {/* Full-bleed Marquee Stage with Overlapping Lucid Buttons & Trust Badges */}
-      <div className="relative z-20 w-full overflow-hidden my-2 sm:my-3.5 md:my-5 py-2.5 sm:py-3.5 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)]">
+      <div className="relative z-20 w-full overflow-hidden my-auto sm:my-3.5 md:my-5 py-3 sm:py-3.5 select-none [mask-image:linear-gradient(to_right,transparent_0%,black_3%,black_97%,transparent_100%)] flex flex-col justify-center">
         {/* Moving background track with criss-cross tilted cards from the sides of the screen */}
         <div className="hero-marquee-track flex gap-3 sm:gap-4 md:gap-5 items-center px-2 sm:px-4 opacity-55 sm:opacity-70 transition-opacity pointer-events-none">
           {duplicatedImages.map((item, index) => {
@@ -356,7 +356,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
               <div
                 key={index}
                 style={{ transform: `rotate(${tilt}deg)` }}
-                className="relative aspect-[4/5] h-36 xs:h-40 sm:h-44 md:h-48 lg:h-52 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)]"
+                className="relative aspect-[4/5] h-40 xs:h-44 sm:h-48 md:h-52 lg:h-56 flex-shrink-0 rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_25px_rgba(0,0,0,0.85),0_0_12px_rgba(220,38,38,0.15)]"
               >
                 {src ? (
                   <img
@@ -443,13 +443,13 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
       </div>
 
       {/* Description / Details Container — Positioned after the marquee stage */}
-      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6">
+      <div className="z-10 flex flex-col items-center max-w-4xl w-full mx-auto px-4 sm:px-6 pb-2 xs:pb-3 sm:pb-0 shrink-0">
         <motion.p
           initial="hidden"
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.7 }}
-          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-300 mx-auto font-sans leading-relaxed tracking-normal text-balance px-2 mt-1.5 sm:mt-3"
+          className="relative z-20 max-w-xl sm:max-w-2xl text-[11px] xs:text-xs sm:text-sm md:text-base text-gray-300 mx-auto font-sans leading-relaxed tracking-normal text-balance px-2"
         >
           {description}
         </motion.p>
