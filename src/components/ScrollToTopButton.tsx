@@ -1,32 +1,39 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ScrollToTopButton() {
+  const location = useLocation();
   const [show, setShow] = useState(false);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let rafId: number | null = null;
+    const updateScroll = () => {
+      const sy = window.scrollY;
+      setShow(sy > 200);
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total > 0) {
+        setProgress(Math.min(100, Math.max(0, (sy / total) * 100)));
+      }
+    };
+
     const onScroll = () => {
       if (rafId !== null) return;
       rafId = window.requestAnimationFrame(() => {
-        const sy = window.scrollY;
-        setShow(sy > 200);
-        const total = document.documentElement.scrollHeight - window.innerHeight;
-        if (total > 0) {
-          setProgress(Math.min(100, Math.max(0, (sy / total) * 100)));
-        }
+        updateScroll();
         rafId = null;
       });
     };
-    onScroll();
+
+    updateScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (rafId !== null) window.cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [location.pathname]);
 
   return (
     <AnimatePresence>

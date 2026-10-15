@@ -3,6 +3,29 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Fix Scroll-To-Top and Mobile Footer Nav on Memberships Page (Antigravity session)
+
+**User Query / Request:**
+- "In membership page the scrolling up arrow now there" (meaning not there on `/memberships`)
+
+**Root Cause Identified:**
+- In `src/App.tsx`, `isPublicSite` was checking `!location.pathname.startsWith("/member")`.
+- Because `"/memberships".startsWith("/member")` evaluates to `true`, the public Memberships page (`/memberships`) was mistakenly identified as a member dashboard route (`/member`), causing both `<ScrollToTopButton />` and `<MobileFooterNav />` to be excluded!
+
+**What Changed:**
+1. **Route Prefix Disambiguation (`src/App.tsx`):**
+   - Changed the member console check to explicitly check `isMemberConsole = location.pathname === "/member" || location.pathname.startsWith("/member/")`.
+   - Now `/memberships` is properly recognized as part of `isPublicSite`.
+2. **Instant Navigation Re-Evaluation (`src/components/ScrollToTopButton.tsx`):**
+   - Added `location.pathname` dependency to `useEffect` in `ScrollToTopButton.tsx` so the button immediately calculates scroll metrics whenever changing pages.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 229,678 bytes).
+- Git push: Synced to GitHub `main` for Vercel auto-deployment.
+
+---
+
 ## 2026-10-15 — Scroll-To-Top Centering, Cross-Page Support & Persistent Mobile Footer Nav (Antigravity session)
 
 **User Request:**

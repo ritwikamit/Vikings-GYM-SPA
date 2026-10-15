@@ -247,9 +247,10 @@ export default function App() {
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const isERP = location.pathname.startsWith("/erp");
+  const isMemberConsole = location.pathname === "/member" || location.pathname.startsWith("/member/");
   const isPublicSite =
     !isERP &&
-    !location.pathname.startsWith("/member") &&
+    !isMemberConsole &&
     !location.pathname.startsWith("/login") &&
     !location.pathname.startsWith("/reset-password");
 
