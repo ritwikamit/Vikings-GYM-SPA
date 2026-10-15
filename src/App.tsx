@@ -2,12 +2,22 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
+import MinimalLoadingScreen from "./components/MinimalLoadingScreen";
 // Portal consoles are code-split: public visitors only download the landing page.
 const AuthGateway = lazy(() => import("./components/AuthGateway"));
 const ResetPassword = lazy(() => import("./components/ResetPassword"));
 const ERPModules = lazy(() => import("./components/ERPModules"));
 const MemberDashboard = lazy(() => import("./components/MemberDashboard"));
 const GalleryPage = lazy(() => import("./pages/GalleryPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
+const TermsConditionsPage = lazy(() => import("./pages/TermsConditionsPage"));
+const CookiesPolicyPage = lazy(() => import("./pages/CookiesPolicyPage"));
+const FacilitiesPage = lazy(() => import("./pages/FacilitiesPage"));
+const TrainersPage = lazy(() => import("./pages/TrainersPage"));
+const MembershipsPage = lazy(() => import("./pages/MembershipsPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const FranchisePage = lazy(() => import("./pages/FranchisePage"));
+const AmbassadorPage = lazy(() => import("./pages/AmbassadorPage"));
 import { UserRole } from "./types";
 
 import { 
@@ -38,11 +48,7 @@ import { useQuery } from "@tanstack/react-query";
 const ProtectedRoute = ({ children, roles }: { children: any, roles?: string[] }) => {
   const { user, loading, isAuthenticated } = useAuth();
 
-  if (loading) return (
-    <div className="flex items-center justify-center h-screen bg-black">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-red-500" />
-    </div>
-  );
+  if (loading) return <MinimalLoadingScreen />;
 
   if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(user.role)) {
@@ -265,17 +271,20 @@ export default function App() {
   };
 
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-screen bg-black">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-red-500" />
-        </div>
-      }
-    >
+    <Suspense fallback={<MinimalLoadingScreen />}>
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<PublicWebsite onJoinNow={() => navigate("/login?view=register")} onLoginClick={() => navigate("/login")} />} />
       <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/facilities" element={<FacilitiesPage />} />
+      <Route path="/trainers" element={<TrainersPage />} />
+      <Route path="/memberships" element={<MembershipsPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/franchise" element={<FranchisePage />} />
+      <Route path="/ambassador" element={<AmbassadorPage />} />
+      <Route path="/privacy" element={<PrivacyPolicyPage />} />
+      <Route path="/terms" element={<TermsConditionsPage />} />
+      <Route path="/cookies" element={<CookiesPolicyPage />} />
       <Route path="/login" element={
         <AuthRedirect>
           <AuthGateway onLoginSuccess={(role) => navigate(role === UserRole.MEMBER ? "/member" : "/erp")} onBackToWebsite={() => navigate("/")} />

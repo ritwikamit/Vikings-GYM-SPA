@@ -1,4 +1,45 @@
+# Robots.txt for Vikings Gym & Spa (https://www.vikingsgym.in)
+# Optimized for Google, Bing, Applebot and Generative AI Answer Engines (AEO/GEO)
+
 User-agent: *
 Allow: /
+Disallow: /erp/
+Disallow: /member/
+Disallow: /api/
 
+# Explicit permissions for Search & AI Answer Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Canonical XML Sitemap
 Sitemap: https://www.vikingsgym.in/sitemap.xml

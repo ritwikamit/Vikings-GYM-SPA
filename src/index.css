@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif;
   --breakpoint-xs: 440px;
   /* Custom mid-shades used across the Vikings theme (between default steps) */
   --color-red-650: oklch(0.541 0.229 27.42);
@@ -9,6 +11,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
@@ -86,6 +89,9 @@ button {
   display: flex;
   width: max-content;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   animation: hero-marquee-scroll 35s linear infinite;
 }
 
@@ -101,11 +107,562 @@ button {
   }
 }
 
+/* Hardware-accelerated moving text ribbon just below hero */
+@keyframes ticker-ribbon-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.ticker-ribbon-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  animation: ticker-ribbon-scroll 28s linear infinite;
+}
+
+.ticker-ribbon-track:hover {
+  animation-play-state: paused;
+}
+
+/* Dual-Row Facility Gallery Continuous Auto-Marquee (Upper: Left-to-Right, Lower: Right-to-Left) */
+@keyframes marquee-ltr {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes marquee-rtl {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.gallery-marquee-ltr {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  animation: marquee-ltr 42s linear infinite;
+}
+
+.gallery-marquee-rtl {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  animation: marquee-rtl 42s linear infinite;
+}
+
+.gallery-marquee-ltr:hover,
+.gallery-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .hero-marquee-track {
+  .hero-marquee-track,
+  .gallery-marquee-ltr,
+  .gallery-marquee-rtl {
     animation-play-state: paused;
   }
+  .moving-border-red::before,
+  .moving-border-red::after {
+    animation: none !important;
+  }
 }
+
+/* Aesthetic moving red light beam border (Redesigned for ultra-smooth 60/120fps rotation) */
+/* Google AI / Gemini Animated Moving Border Box */
+@keyframes google-border-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.moving-border-red {
+  position: relative;
+  overflow: hidden;
+  padding: 2px;
+  isolation: isolate;
+  box-shadow: 0 14px 40px -10px rgba(234, 67, 53, 0.28), 0 0 24px -6px rgba(66, 133, 244, 0.22);
+  transition: box-shadow 0.4s ease, transform 0.3s ease;
+}
+
+.moving-border-red:hover {
+  box-shadow: 0 20px 50px -10px rgba(234, 67, 53, 0.38), 0 0 32px -4px rgba(66, 133, 244, 0.3);
+}
+
+/* Google signature chromatic AI light beam with brilliant white crest */
+.moving-border-red::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 150deg,
+    rgba(66, 133, 244, 0.08) 180deg,
+    #4285F4 220deg,  /* Google Blue */
+    #34A853 260deg,  /* Google Green */
+    #FBBC05 295deg,  /* Google Yellow */
+    #EA4335 330deg,  /* Google Red */
+    #FF5722 350deg,  /* Coral Flame */
+    #FFFFFF 360deg   /* White Light Crest */
+  );
+  transform-origin: center center;
+  animation: google-border-spin 4.5s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Diffuse Google ambient glow layer (adds soft outer aura) */
+.moving-border-red::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 170deg,
+    rgba(66, 133, 244, 0.5) 220deg,
+    rgba(52, 168, 83, 0.5) 260deg,
+    rgba(251, 188, 5, 0.6) 295deg,
+    rgba(234, 67, 53, 0.7) 330deg,
+    rgba(255, 255, 255, 0.9) 360deg
+  );
+  filter: blur(14px);
+  transform-origin: center center;
+  animation: google-border-spin 4.5s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.moving-border-red-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #09090b;
+}
+
+/* ==========================================================================
+   LIGHT MODE DESIGN SYSTEM
+   Deep-engineered for complete legibility, contrast, and luxury aesthetics
+   across all components, cards, forms, modals, tables, and subpages.
+   ========================================================================== */
+
+.theme-light {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  color-scheme: light;
+}
+
+/* 1. Base Backgrounds & Surface Containers */
+.theme-light .bg-black,
+.theme-light .bg-\[\#000000\],
+.theme-light .bg-\[\#050505\] {
+  background-color: #f8fafc !important;
+}
+
+.theme-light .bg-neutral-950,
+.theme-light .bg-neutral-950\/40,
+.theme-light .bg-neutral-950\/60,
+.theme-light .bg-neutral-950\/70,
+.theme-light .bg-neutral-950\/80,
+.theme-light .bg-neutral-950\/90,
+.theme-light .bg-neutral-950\/95,
+.theme-light .bg-neutral-900,
+.theme-light .bg-neutral-900\/20,
+.theme-light .bg-neutral-900\/30,
+.theme-light .bg-neutral-900\/40,
+.theme-light .bg-neutral-900\/50,
+.theme-light .bg-neutral-900\/60,
+.theme-light .bg-neutral-900\/70,
+.theme-light .bg-neutral-900\/80,
+.theme-light .bg-neutral-900\/90,
+.theme-light .bg-neutral-850,
+.theme-light .bg-\[\#0c0c0c\],
+.theme-light .bg-\[\#0a0a0a\],
+.theme-light .bg-\[\#09090b\],
+.theme-light .bg-\[\#080808\],
+.theme-light .bg-\[\#080808\]\/98,
+.theme-light .bg-\[\#0b0b0b\],
+.theme-light .bg-\[\#0b0b0b\]\/90,
+.theme-light .bg-\[\#121212\],
+.theme-light .bg-\[\#171717\],
+.theme-light .bg-\[\#171717\]\/80,
+.theme-light .moving-border-red-inner {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Glass & Semi-transparent surfaces */
+.theme-light .bg-black\/40,
+.theme-light .bg-black\/50,
+.theme-light .bg-black\/60,
+.theme-light .bg-black\/70,
+.theme-light .bg-black\/75,
+.theme-light .bg-black\/80,
+.theme-light .bg-black\/85,
+.theme-light .bg-black\/90,
+.theme-light .bg-black\/92,
+.theme-light .bg-black\/95 {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
+}
+
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10 {
+  background-color: #f1f5f9 !important;
+}
+
+.theme-light .hover\:bg-white\/5:hover,
+.theme-light .hover\:bg-white\/10:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* 2. Text Colors & Headings */
+.theme-light .text-white {
+  color: #0f172a !important;
+}
+
+.theme-light .text-gray-100,
+.theme-light .text-gray-200,
+.theme-light .text-gray-300,
+.theme-light .text-neutral-100,
+.theme-light .text-neutral-200,
+.theme-light .text-neutral-300,
+.theme-light .text-zinc-100,
+.theme-light .text-zinc-200,
+.theme-light .text-zinc-300 {
+  color: #334155 !important;
+}
+
+.theme-light .text-gray-400,
+.theme-light .text-gray-500,
+.theme-light .text-neutral-400,
+.theme-light .text-neutral-500,
+.theme-light .text-zinc-400,
+.theme-light .text-zinc-500 {
+  color: #64748b !important;
+}
+
+.theme-light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+.theme-light h1, 
+.theme-light h2, 
+.theme-light h3, 
+.theme-light h4 {
+  color: #0f172a;
+}
+
+/* 3. Borders & Dividers */
+.theme-light .border-neutral-700,
+.theme-light .border-neutral-800,
+.theme-light .border-neutral-850,
+.theme-light .border-neutral-900,
+.theme-light .border-red-950\/20,
+.theme-light .border-red-950\/30,
+.theme-light .border-red-950\/40,
+.theme-light .border-red-950\/60,
+.theme-light .border-white\/5,
+.theme-light .border-white\/10,
+.theme-light .border-white\/15,
+.theme-light .border-white\/20,
+.theme-light .border-white\/30 {
+  border-color: #e2e8f0 !important;
+}
+
+/* 4. Navigation Bar */
+.theme-light nav {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-light nav .text-white {
+  color: #09090b !important;
+}
+
+.theme-light nav a.text-gray-300,
+.theme-light nav button.text-gray-300 {
+  color: #475569 !important;
+}
+
+.theme-light nav a.text-gray-300:hover,
+.theme-light nav button.text-gray-300:hover {
+  color: #09090b !important;
+}
+
+.theme-light nav button[aria-label*="mode"],
+.theme-light button[aria-label*="mode"] {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.theme-light nav button[aria-label*="mode"]:hover,
+.theme-light button[aria-label*="mode"]:hover {
+  background-color: #e2e8f0 !important;
+  border-color: #ef4444 !important;
+}
+
+/* Navigation Dropdown Menu */
+.theme-light .w-64.rounded-xl.bg-neutral-950\/95,
+.theme-light nav .bg-neutral-950\/95 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 5. Ticker Ribbon Track */
+.theme-light .ticker-ribbon-track {
+  color: #1e293b !important;
+}
+
+.theme-light .ticker-ribbon-track .text-white {
+  color: #0f172a !important;
+}
+
+.theme-light .ticker-ribbon-track .text-neutral-300 {
+  color: #334155 !important;
+}
+
+/* 6. Form Inputs, Selects & Textareas */
+.theme-light input,
+.theme-light textarea,
+.theme-light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.theme-light input:focus,
+.theme-light textarea:focus,
+.theme-light select:focus {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* 7. Secondary / Outline Buttons */
+.theme-light .btn-ice,
+.theme-light a[href="#pricing"],
+.theme-light button[class*="bg-neutral-900"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-light a[href="#pricing"]:hover,
+.theme-light button[class*="bg-neutral-900"]:hover {
+  background-color: #f8fafc !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+/* 8. Light Theme Card Shadows & Moving Border */
+.theme-light .moving-border-red {
+  box-shadow: 0 12px 32px -8px rgba(239, 68, 68, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 9. HERO SECTION PROTECTION (Hero has video background, so it MUST stay dark with white text) */
+.theme-light #hero,
+.theme-light [data-hero-section="true"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.theme-light #hero h1,
+.theme-light [data-hero-section="true"] h1,
+.theme-light #hero .text-white,
+.theme-light [data-hero-section="true"] .text-white {
+  color: #ffffff !important;
+}
+
+.theme-light #hero .text-gray-200,
+.theme-light [data-hero-section="true"] .text-gray-200 {
+  color: #e2e8f0 !important;
+}
+
+.theme-light #hero .text-gray-300,
+.theme-light [data-hero-section="true"] .text-gray-300 {
+  color: #cbd5e1 !important;
+}
+
+.theme-light #hero .text-gray-400,
+.theme-light [data-hero-section="true"] .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+/* EXPLORE THE ARENA Secondary Button Protection (Keep dark frosted glass with white text in light mode) */
+.theme-light #hero .btn-ice,
+.theme-light [data-hero-section="true"] .btn-ice,
+.theme-light .hero-secondary-btn,
+#hero .btn-ice,
+.hero-secondary-btn {
+  background-color: rgba(10, 10, 12, 0.8) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-light #hero .btn-ice:hover,
+.theme-light [data-hero-section="true"] .btn-ice:hover,
+.theme-light .hero-secondary-btn:hover,
+#hero .btn-ice:hover,
+.hero-secondary-btn:hover {
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.theme-light .hero-pill {
+  background-color: rgba(5, 5, 5, 0.82) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.theme-light .hero-pill * {
+  color: inherit;
+}
+
+/* 10. SUBPAGE HERO BANNERS (Keep dark photographic background & bright white headings) */
+.theme-light .subpage-hero,
+.theme-light [data-subpage-hero="true"] {
+  background-color: #000000 !important;
+}
+
+.theme-light .subpage-hero h1,
+.theme-light [data-subpage-hero="true"] h1,
+.theme-light .subpage-hero .text-white,
+.theme-light [data-subpage-hero="true"] .text-white {
+  color: #ffffff !important;
+}
+
+.theme-light .subpage-hero p,
+.theme-light [data-subpage-hero="true"] p,
+.theme-light .subpage-hero .text-gray-200,
+.theme-light [data-subpage-hero="true"] .text-gray-200,
+.theme-light .subpage-hero .text-gray-300,
+.theme-light [data-subpage-hero="true"] .text-gray-300 {
+  color: #e2e8f0 !important;
+}
+
+/* 11. MODALS & LIGHTBOXES (Keep dark backdrop for media clarity) */
+.theme-light .story-viewer-modal,
+.theme-light .gallery-lightbox-modal,
+.theme-light [data-modal="true"] {
+  background-color: rgba(0, 0, 0, 0.94) !important;
+}
+
+.theme-light .story-viewer-modal .text-white,
+.theme-light .gallery-lightbox-modal .text-white,
+.theme-light [data-modal="true"] .text-white {
+  color: #ffffff !important;
+}
+
+/* 12. FOOTER IS ALWAYS LUXURY DARK IN BOTH THEMES */
+.theme-light footer,
+.theme-light .footer-always-dark,
+footer.footer-always-dark {
+  background-color: #09090b !important;
+  border-top-color: #27272a !important;
+  color: #cbd5e1 !important;
+}
+
+.theme-light footer h3,
+.theme-light footer h4,
+.theme-light footer .text-white,
+.theme-light footer span.text-white,
+.theme-light .footer-always-dark .text-white {
+  color: #ffffff !important;
+}
+
+.theme-light footer p,
+.theme-light footer li,
+.theme-light footer .text-gray-400,
+.theme-light footer .text-gray-500,
+.theme-light .footer-always-dark .text-gray-400,
+.theme-light .footer-always-dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.theme-light footer a,
+.theme-light .footer-always-dark a {
+  color: #cbd5e1 !important;
+}
+
+.theme-light footer a:hover,
+.theme-light .footer-always-dark a:hover {
+  color: #ef4444 !important;
+}
+
+.theme-light footer .bg-neutral-900,
+.theme-light .footer-always-dark .bg-neutral-900 {
+  background-color: #18181b !important;
+  color: #e2e8f0 !important;
+}
+
+.theme-light footer .border-neutral-900,
+.theme-light .footer-always-dark .border-neutral-900 {
+  border-color: #27272a !important;
+}
+
+/* 13. SCROLL-TO-TOP BUTTON */
+.scroll-top-btn-inner,
+.theme-light .scroll-top-btn-inner {
+  background-color: rgba(9, 9, 11, 0.96) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+.scroll-top-btn-inner:hover,
+.theme-light .scroll-top-btn-inner:hover {
+  color: #ef4444 !important;
+}
+
+

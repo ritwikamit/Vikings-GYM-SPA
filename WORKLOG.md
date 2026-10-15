@@ -3,7 +3,761 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
-## 2026-09-20 — Increased Smartphone Hero Heading Size (Antigravity session)
+## 2026-10-15 — Fix: "EXPLORE THE ARENA" Button Visibility in Light Mode & Theme Toggle Responsiveness (Antigravity session)
+
+**User Request:**
+- "explore the arena button not visible in light mode, and the dark/light mode button is not responding correctly after clicking fix it please"
+
+**Root Causes & Fixes:**
+1. **"EXPLORE THE ARENA" Button White-on-White Contrast Collision:**
+   - **Root Cause:** In light mode, generic `.theme-light .btn-ice` and `.theme-light .bg-black/70` applied `background-color: #ffffff !important`, while `.theme-light #hero .text-white` applied `color: #ffffff !important`. This created white text on a white button background, rendering the button invisible.
+   - **Fix:** In `src/components/ui/hero-3.tsx`, tagged the button with `hero-secondary-btn` and explicit classes (`!bg-black/75 !text-white !border-white/40`). In `src/index.css`, added explicit rules protecting `#hero .btn-ice` and `.hero-secondary-btn` to guarantee dark frosted glass with pure white typography in both light and dark modes over the video background.
+2. **Theme Toggle Button Unresponsiveness:**
+   - **Root Cause:** In `src/components/PublicNavbar.tsx`, `window.dispatchEvent(new CustomEvent('vikings_theme_change', ...))` was previously invoked synchronously *inside* the `setIsLightMode((prev) => ...)` reducer. In React 19, this triggered the component's own event listener while state mutation was in flight, causing race conditions and state desynchronization.
+   - **Fix:** Refactored `toggleTheme` to execute synchronously outside the reducer, directly inspecting `document.documentElement.classList.contains("theme-light")`, immediately toggling DOM classes on `<html>` and `<body>`, persisting to `localStorage`, and updating React state cleanly. In event listeners, added guard checks (`prev !== nextTheme`).
+   - **Mobile Drawer Theme Control:** Added an interactive Theme Switcher directly inside the mobile menu drawer so mobile visitors can also switch themes effortlessly.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly with **0 errors** (`dist/index.html` 232,886 bytes).
+- Live local dev server running on `http://localhost:3000/`. (Kept strictly local).
+
+---
+
+## 2026-10-15 — Ultra-Smooth Scrolling & Animations Optimization, and Ponytail Code Review (Antigravity session)
+
+**User Request:**
+- "make sure the scrolling and other animations look super smooth and at last use ponytail to review the codes that are not been reviewed by ponytail"
+
+**What changed:**
+1. **Isolated Scroll Progress & Re-Render Elimination (`src/components/PublicWebsite.tsx`):**
+   - Extracted the dynamic scroll-to-top button into an isolated `<ScrollToTopButton />` component.
+   - Previously, `scrollProgress` and `showBackToTop` lived in the top-level `PublicWebsite` state, causing the entire 2,600+ line JSX tree to re-render 60-120 times per second during user scroll.
+   - With isolated state and local RAF throttling in `ScrollToTopButton`, `PublicWebsite` re-renders during scroll drop to zero.
+2. **Discrete Scroll-Spy Boundary Triggering:**
+   - Unified the scroll-spy effect into a single `requestAnimationFrame` loop that only triggers `setActiveSection` when crossing actual section boundaries, eliminating forced synchronous layout recalculations (`getBoundingClientRect`) on every raw scroll event.
+3. **Hardware-Accelerated Marquee & Border Animations (`src/index.css`):**
+   - Added `scroll-padding-top: 5rem` to `html` so anchor jumps land with breathing space under the floating header.
+   - Added `transform: translate3d(0, 0, 0)`, `backface-visibility: hidden`, and `-webkit-backface-visibility: hidden` across `.hero-marquee-track`, `.ticker-ribbon-track`, `.gallery-marquee-ltr`, `.gallery-marquee-rtl`, and `.moving-border-red::before` & `::after`.
+   - Forces compositor layer promotion on mobile and desktop, eliminating subpixel stutter.
+4. **Scroll Reveal Animation Smoothing:**
+   - Refined `Reveal` component viewport threshold (`margin: "-30px"`) and cubic-bezier easing `[0.16, 1, 0.3, 1]` for silky entrance transitions.
+5. **Ponytail Review & Cleanup:**
+   - Deleted unused states and dead functions (`scrolled`, `moreOpen`, `moreRef`, `MORE_LINKS`, `moreActive`, `DeskLink`, `mobileNavLinkClass`, `toggleTheme`) from `PublicWebsite.tsx` left over from the `PublicNavbar` extraction.
+   - Hardened external link security: added `"noopener,noreferrer"` to `window.open` across `PublicNavbar.tsx`, `FacilitiesPage.tsx`, `MembershipsPage.tsx`, and `TrainersPage.tsx`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer passed cleanly with **0 errors** (`dist/index.html` 232,848 bytes).
+- Live local dev server running on `http://localhost:3000/`. (Kept strictly local).
+
+---
+
+## 2026-10-15 — Full-Spectrum Light Mode & Dark Mode Support Across All Components (Antigravity session)
+
+**User Request:**
+- "make sure every component appears in light mode as well as dark mode"
+
+**What changed:**
+1. **Immediate Theme Hydration (`index.html`):**
+   - Added an inline script in `<head>` that reads `localStorage.getItem('vikings_theme')` and immediately applies `.theme-light` to `document.documentElement` before first paint. This eliminates theme flash on refresh or navigation.
+2. **Synchronized Dual-Tree Theme Events (`src/components/PublicNavbar.tsx` & `src/components/PublicWebsite.tsx`):**
+   - Updated `PublicNavbar` theme toggle to dispatch `vikings_theme_change` window event alongside `localStorage` and `classList` manipulation.
+   - Wired listeners in both `PublicNavbar` and `PublicWebsite` so any theme toggle updates all components and subpage navbars instantaneously.
+3. **Universal Light Mode CSS Engine (`src/index.css`):**
+   - Engineered comprehensive `.theme-light` styling covering all arbitrary dark background utilities (`.bg-black`, `.bg-[#050505]`, `.bg-[#09090b]`, `.bg-[#0c0c0c]`, `.bg-[#080808]`, `.bg-[#121212]`, `.bg-[#171717]`, `.bg-neutral-950/*`, `.bg-neutral-900/*`) mapped to clean white `#ffffff` or slate `#f8fafc`.
+   - Tuned text contrast: mapped `.text-white` to dark charcoal `#0f172a`, `.text-gray/neutral/zinc-100..300` to `#334155`, and muted copy to `#64748b`.
+   - Adapted form elements (inputs, textareas, selects) with `#ffffff` backgrounds, slate borders, dark text, and vibrant red focus rings.
+   - Redesigned floating cylindrical navbar, dropdown menus, and mobile overlay drawer in light mode with frosted glass and crisp dark labels.
+   - Adapted the moving text ticker ribbon (`#ticker-ribbon`) to clean light surfaces with dark athletic typography.
+   - Protected photographic hero headers: added `.subpage-hero` and `[data-subpage-hero="true"]` rules so media-backed headers on dedicated subpages and the main video hero retain their dark vignette overlays and pristine white text in both light and dark modes.
+   - Retained luxury dark aesthetic for the footer (`.footer-always-dark`) across both modes.
+4. **Tagged All Dedicated Subpage Hero Headers:**
+   - Added `subpage-hero` class and `data-subpage-hero="true"` to hero banners across `FacilitiesPage.tsx`, `TrainersPage.tsx`, `MembershipsPage.tsx`, `GalleryPage.tsx`, `ContactPage.tsx`, `AmbassadorPage.tsx`, `FranchisePage.tsx`, `TermsConditionsPage.tsx`, `PrivacyPolicyPage.tsx`, and `CookiesPolicyPage.tsx`.
+5. **Theme-Aware Minimal Loading Screen (`src/components/MinimalLoadingScreen.tsx`):**
+   - Added smooth theme transitions to the minimal loading screen so it seamlessly matches the active theme.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerendering built cleanly with **0 errors** (`dist/index.html` 232,848 bytes).
+- Dev server running on `http://localhost:3000/`. (Kept strictly local, no git push).
+
+---
+
+## 2026-10-15 — Minimal Redesign of the Loading Page (Antigravity session)
+
+**User Request:**
+- "now just redesign the loading page and make it minimal with name vikings gym & spa  Loading..."
+
+**What changed:**
+1. **Redesigned Initial HTML Loader (`index.html`):**
+   - Stripped away the heavy multi-layer circular SVG spinner, pulsing outer ring, and bulky typography cards.
+   - Built a sleek, minimal layout:
+     - Compact Vikings emblem (`/logo.png`, 42px) with subtle ambient red aura.
+     - Pure minimal brand title: `VIKINGS GYM & SPA` with red brand accent.
+     - Slender 2px laser progress track (`minimal-loader-bar` smooth animation).
+     - Minimal subtext: `Loading...` with a subtle breathing opacity pulse.
+     - Smooth 0.35s dismissal on page readiness.
+2. **Synchronized React Suspense & Auth Fallback (`src/components/MinimalLoadingScreen.tsx` & `src/App.tsx`):**
+   - Created reusable `MinimalLoadingScreen` component matching the exact minimal design.
+   - Replaced generic spinner in `App.tsx` auth check (`if (loading)`) and `<Suspense fallback={...}>` with `<MinimalLoadingScreen />`.
+   - Result: Seamless, unified, and minimal loading experience from initial document fetch through to client hydration.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` generated at 232,623 bytes).
+- Live local dev server active on `http://localhost:3000/`. (Kept strictly local).
+
+---
+
+## 2026-10-15 — AI Icon Removal & Complete SEO, AEO, GEO, and SXO Optimization (Antigravity session)
+
+**User Requests:**
+1. Remove the AI icon (`Sparkles`) from `आधुनिक फिटनेस एरीना • PURPOSE-BUILT FACILITY`.
+2. Fully optimize the platform for SEO, AEO, GEO, and SXO so that whenever anyone in/near Aurangabad searches on Google or asks an AI engine (ChatGPT, Perplexity, Gemini, Claude, Apple Intelligence) for "best gym near me", "best gym in aurangabad", "best gym in aurangabad bihar", "premium gym in aurangabad", or gym fees/amenities, Vikings Gym & Spa ranks #1.
+
+**What changed:**
+1. **AI Icon Removal:**
+   - In `src/components/PublicWebsite.tsx` (manifesto badge), removed `<Sparkles className="w-3.5 h-3.5" />` while preserving the clean, bold typography and red accent styling.
+2. **SEO (Search Engine Optimization):**
+   - In `index.html`, optimized `<title>` and `<meta name="description">` to capture exact-match user searches: "Best Gym in Aurangabad, Bihar | Vikings Gym & Spa — Steam Bath, Viva Fitness & Personal Training".
+   - Expanded target keywords: "best gym in aurangabad", "best gym in aurangabad bihar", "best gym near me", "premium gym in aurangabad", "gym in aurangabad bihar", "aurangabad gym fees", "ladies gym aurangabad bihar", "steam bath gym aurangabad", "vikings gym spa", and Hindi transliterations ("औरंगाबाद बिहार का सबसे अच्छा जिम", "वाइकिंग्स जिम औरंगाबाद").
+3. **AEO (Answer Engine Optimization for AI Search):**
+   - Upgraded `index.html` with a comprehensive Schema.org `@graph` JSON-LD knowledge graph:
+     - `ExerciseGym` & `HealthClub` multi-type schema with exact location, geo-coordinates (`24.7517185, 84.3707624`), contact number, operating hours, amenities list, pricing range, and aggregate ratings (4.9★ / 150+ reviews).
+     - Full `FAQPage` schema addressing the 7 highest-intent conversational queries ("Which is the best gym in Aurangabad?", "What are gym membership fees?", "Where is Vikings Gym located?", "Does it have a steam bath?", "Is it suitable for women and beginners?", "Opening hours", "Free trial").
+     - `BreadcrumbList` schema linking all key landing and dedicated pages.
+     - `WebSite` schema for search actions.
+   - Updated `src/components/PublicWebsite.tsx` on-page `FAQS` list to match the structured schema 1:1, ensuring factual parity between DOM text and JSON-LD.
+4. **GEO (Generative Engine Optimization & Geographic Local SEO):**
+   - Configured geographic metadata: `geo.region` (IN-BR), `geo.placename` (Aurangabad, Bihar, India), `geo.position`, `ICBM`.
+   - Included specific sub-localities in schema `areaServed`: MG Road, Ramesh Chowk, Overbridge, Dani Bigha, Jasoiya, Karma Road, Daudnagar, Rafiganj, Dehri-on-Sone.
+   - In `src/components/ui/hero-3.tsx`, added semantic screen-reader/crawler heading anchors and accessible labels.
+5. **SXO (Search Experience Optimization):**
+   - Configured high-contrast OpenGraph (`og:title`, `og:description`, `og:image`, `business:contact_data`) and Twitter Cards (`summary_large_image`) for click-attracting social shares.
+   - Created client-side route SEO manager `src/lib/seo.ts` (`usePageSEO` hook) and integrated it into all dedicated subpages (`FacilitiesPage`, `TrainersPage`, `MembershipsPage`, `GalleryPage`, `ContactPage`, `AmbassadorPage`, `FranchisePage`, and `PublicWebsite`).
+6. **Robots & Sitemap:**
+   - In `public/robots.txt`, explicitly permitted AI crawlers: `GPTBot`, `ChatGPT-User`, `PerplexityBot`, `Google-Extended`, `ClaudeBot`, `anthropic-ai`, `Applebot`.
+   - In `public/sitemap.xml`, indexed all 11 dedicated pages with priority, lastmod, and changefreq.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerenderer completed cleanly with 0 errors (`dist/index.html` generated at 234,385 bytes with full DOM prerendering for instant search engine indexing).
+- Local dev server active on `http://localhost:3000/`. (Kept strictly local, no git push).
+
+---
+
+## 2026-10-15 — Fix & Explanation: Duplicate Failed Network Requests for Plans & Trainers (Antigravity session)
+
+**Issue:** In Chrome DevTools Network tab, requests to `/memberships/plans` and `/trainers` failed twice upon opening the landing page.
+
+**Root Causes Identified & Resolved:**
+1. **Unused Backend Calls on Static Public Landing Page:** `src/components/PublicWebsite.tsx` previously ran two legacy TanStack `useQuery` hooks (`public-plans` hitting `/memberships/plans` and `public-trainers` hitting `/trainers`).
+2. **Backend Server Offline During Client Dev:** The frontend API client targets `http://localhost:5000/api`. When visiting the frontend without the local Python server running, the browser received `ERR_CONNECTION_REFUSED`.
+3. **Why it failed exactly 2 times:** TanStack Query in `src/main.tsx` is configured with `defaultOptions: { queries: { retry: 1 } }`. When the first request failed, React Query automatically fired 1 retry attempt (1 initial + 1 retry = 2 failed requests logged per endpoint).
+4. **Redundancy:** Neither `plansData` nor `trainersData` was actually needed by the public page. `DEFAULT_TRAINERS` and `DEFAULT_PLANS` are pre-baked with rich photos, authentic team bios, perks, and pricing for instantaneous, reliable loading.
+5. **Fix:** Removed the unused `useQuery` calls in `src/components/PublicWebsite.tsx` and mapped directly to `DEFAULT_PLANS`. Zero failed network requests now occur when loading the site.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerendering built cleanly with 0 errors.
+- Local Dev Server: Live on `http://localhost:3000/`. (Kept strictly local).
+
+---
+
+## 2026-10-15 — Reusable Unified Navbar Made Available Across All Dedicated Pages (Antigravity session)
+
+**Goal:** Make the full, interactive desktop and mobile navigation bar available across all pages of the website, rather than only having a minimal "Back to Arena" header on subpages.
+
+**What changed:**
+- **Created Reusable `PublicNavbar` Component (`src/components/PublicNavbar.tsx`):**
+  - Encapsulated the complete navigation suite: scroll-responsive floating cylindrical pill animation, logo linking home, 4 primary dedicated pages (`Facilities`, `Trainers`, `Memberships`, `Gallery`) with hover-expanding icon typography, 5th `More` dropdown (`MoreHorizontal`), light/dark theme toggle, "Join Now" WhatsApp CTA, quick desktop "ARENA" button for subpages, and mobile hamburger overlay drawer.
+  - Added active route detection (`useLocation()`) so the currently viewed page is automatically highlighted.
+- **Integrated Across All Dedicated Pages:**
+  - `src/pages/FacilitiesPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/TrainersPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/MembershipsPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/GalleryPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/AmbassadorPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/ContactPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/FranchisePage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/TermsConditionsPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/PrivacyPolicyPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+  - `src/pages/CookiesPolicyPage.tsx`: Replaced isolated header with `<PublicNavbar />`.
+- **Integrated in Home Page (`src/components/PublicWebsite.tsx`):**
+  - Unified header and mobile menu overlay with `<PublicNavbar activeSection={activeSection} onLoginClick={PORTAL_ACCESS_ENABLED ? onLoginClick : undefined} />`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerendering built cleanly with 0 errors (`dist/index.html` 221,966 bytes).
+- Live local dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to git).
+
+---
+
+## 2026-10-15 — Website Polish: Minimal Stories/Arena, Auto-Moving Gallery Marquee, Icon Nav Menus with Hover Reveal, Dropping Hero Animations, and Smooth Border Animations (Antigravity session)
+
+**Goal:**
+1. Remove heavy cards from daily stories and arena moments; make both sections minimal and streamlined.
+2. Remove unnecessary cylinder pill badges across the website and dedicated pages, replacing with clean typography.
+3. Replace static facility gallery preview with automated dual-row continuous marquees (upper row left-to-right, lower row right-to-left).
+4. Dedicate the top navigation bar to 4 primary pages (`Facilities`, `Trainers`, `Memberships`, `Gallery`) + 5th `More` dropdown (Brand Ambassador, Contact, Franchise, and Arena sections).
+5. Implement icon-only navigation menus by default with smooth hover label expansion (`group-hover:max-w-[130px] group-hover:opacity-100`).
+6. Add dropping-from-above hero animation (`initial={{ opacity: 0, y: -60 }} animate={{ opacity: 1, y: 0 }}`) to all dedicated pages (`FacilitiesPage`, `TrainersPage`, `MembershipsPage`, `GalleryPage`, `AmbassadorPage`, `ContactPage`, `FranchisePage`, `TermsConditionsPage`, `PrivacyPolicyPage`, `CookiesPolicyPage`).
+7. Optimize the animated red border spin (`@keyframes google-border-spin` & `.moving-border-red`) for silky smooth 360-degree rotation across cards.
+
+**What changed:**
+- **CSS Animations (`src/index.css`):**
+  - Added continuous infinite marquee keyframes `@keyframes marquee-ltr` (-50% to 0%) and `@keyframes marquee-rtl` (0% to -50%) with pause-on-hover utility classes `.gallery-marquee-ltr` and `.gallery-marquee-rtl`.
+  - Tuned `.moving-border-red`: removed duplicate overriding `transform`, set centered `transform-origin`, and normalized timing to `6s linear infinite`.
+- **Public Website (`src/components/PublicWebsite.tsx`):**
+  - **Nav Bar:** Configured 4 dedicated page links with icons: Facilities (`Building2`), Trainers (`Users`), Memberships (`Crown`), Gallery (`Camera`), plus `More` (`MoreHorizontal`). Icons display minimally by default and expand their labels on hover.
+  - **Arena in Motion (`#arena-action`):** Removed heavy action cards, borders, and paragraphs; replaced with sleek dual-video loop preview and direct action links.
+  - **Daily Stories (`#gallery`):** Removed bulky 5-card deck. Preserved clean Instagram-style circular story rings with tap-to-view fullscreen modal.
+  - **Facility Gallery Marquee (`#gallery`):** Replaced static photo grid with dual-row infinite auto-moving ribbons (top row left-to-right, bottom row right-to-left, pauses on hover) linking to `/gallery`.
+  - **Cylinder Pill Badge Cleanup:** Removed extraneous `rounded-full border border-red-500/30` cylinder pills across Manifesto, Arena, Facilities, Brand Ambassador, BMI calculator, and Stories.
+- **Dedicated Pages Animation & Typography:**
+  - `src/pages/FacilitiesPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/TrainersPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/MembershipsPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/GalleryPage.tsx`: Added `motion.div` dropping hero animation, dual-row continuous photo marquees (upper LTR, lower RTL), and cleaned badges.
+  - `src/pages/AmbassadorPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/ContactPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/FranchisePage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+  - `src/pages/TermsConditionsPage.tsx`, `PrivacyPolicyPage.tsx`, `CookiesPolicyPage.tsx`: Added `motion.div` dropping hero animation and cleaned pill badges.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerender succeeded with 0 errors (`dist/index.html` 222,183 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to git).
+
+---
+
+## 2026-10-15 — Drastic Landing Page Length Optimization for Smartphones and Tablets (Antigravity session)
+
+**Goal:** Ensure the landing page is not excessively long on smartphones and tablets, cutting over 4,500px of unnecessary vertical scroll while leaving the rich desktop experience 100% intact.
+
+**What changed (`src/components/PublicWebsite.tsx`):**
+- **Section Headers & Whitespace Padding Reduction:**
+  - Scaled all section vertical paddings from bloated `py-16 md:py-24` down to compact `py-8 sm:py-12 md:py-20` across `#manifesto`, `#facilities`, `#arena-action`, `#trainers`, `#ambassador`, `#calculator`, `#pricing`, `#gallery`, `#review`, `#faq`, `#contact`, and `#about`.
+  - Tightened `SectionHeader` bottom margins from `mb-10 sm:mb-14` to `mb-6 sm:mb-10 md:mb-14` and kicker/title font scales for mobile viewports.
+- **Facilities Section (`#facilities`):**
+  - Converted stacked mobile cards into a compact 2x2 grid (`grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6`).
+  - Added direct link: `EXPLORE FULL FACILITY SPECS (ALL 8 ZONES) →` pointing to `/facilities`.
+- **Coaches & Trainers Section (`#trainers`):**
+  - On mobile/tablet, limited initial display to top 2 coaches (Owner Coach Amit Singh and Head Coach Bittu Verma), hiding remaining coaches on small viewports (`hidden lg:flex`).
+  - Added prominent mobile button: `MEET ALL 6 CERTIFIED COACHES & PT PACKAGES →` pointing to `/trainers`.
+- **Ambassador Section (`#ambassador`):**
+  - Reduced photo min-height on mobile from `min-h-[460px]` to `min-h-[240px] xs:min-h-[280px] md:min-h-[460px]` and condensed text margins.
+  - Linked directly to `/ambassador`.
+- **BMI Calculator Section (`#calculator`):**
+  - Reduced container padding to `py-8 sm:py-12 md:py-20 px-4 sm:px-6` and condensed input form padding.
+- **Memberships & Pricing Section (`#pricing`):**
+  - On mobile/tablet, displays top 2 primary membership tiers by default (`hidden lg:flex` for tiers 3 & 4), saving over 1,500px of vertical scrolling.
+  - Added button: `VIEW ALL 4 MEMBERSHIP TIERS & PT RATES →` pointing to `/memberships`.
+  - Hid secondary group class / personal training feature cards on small viewports (`hidden lg:grid`) and replaced with a one-line link to `/memberships`.
+- **Stories & Gallery Preview (`#gallery`):**
+  - Limited photo preview grid on mobile to 4 items (2x2) instead of 6 (`hidden sm:block` for items 5 & 6) with quick link to `/gallery`.
+- **Reviews & Google Maps (`#review`):**
+  - Hid the Google Maps QR code box on mobile and tablet (`hidden lg:flex`) since smartphones cannot point their camera at their own screen. Members can tap "LEAVE A REVIEW" or "OPEN IN GOOGLE MAPS" directly.
+- **FAQs Section (`#faq`):**
+  - Implemented mobile accordion collapse showing only the top 3 FAQs by default, with an interactive toggle button: `VIEW ALL 6 FAQS (3 MORE) ↓`. Full FAQ list displays seamlessly when tapped or on desktop.
+- **Contact & Map Section (`#contact`):**
+  - Compacted contact form inputs (`py-2`, `rows={2}`) and tightened spacing from `space-y-5` to `space-y-3.5 sm:space-y-5`.
+- **About Section (`#about`) & Footer:**
+  - Reduced map iframe height on mobile from `300px` to `220px` and condensed footer vertical padding (`pt-8 sm:pt-14 pb-6 sm:pb-8`).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerender succeeded with 0 errors (`dist/index.html` 176,447 bytes).
+- Dev server active on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for user review on localhost.
+
+---
+
+## 2026-10-15 — Remove Sub-Header Navigation Strip on Smartphone & Tablet (Antigravity session)
+
+**Goal:** Remove the horizontal quick-link nav menus strip that was rendered directly beneath the header bar on smartphones and tablets.
+
+**What changed:**
+- **Navigation Cleanup (`src/components/PublicWebsite.tsx`):**
+  - Removed the `div.lg:hidden` sub-header horizontal scrolling navigation strip (`MANIFESTO`, `FACILITIES`, `TRAINERS`, `BMI`, `MEMBERSHIPS`, `STORIES`, `FAQS`, `CONTACT`, `ABOUT`) located underneath `<nav>`.
+  - Removed the unused `MOBILE_LINKS` array.
+  - The hero section now cleanly meets the header bar on smartphones and tablets without vertical clutter.
+  - Full mobile navigation remains accessible via the hamburger menu button in the header bar which opens the dedicated overlay drawer.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerender succeeded with 0 errors (`dist/index.html` 170,135 bytes).
+- Dev server active on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for user review on localhost.
+
+---
+
+## 2026-10-15 — Revert Hindi Texts from Hero Highlighted Changing Texts (Antigravity session)
+
+**Goal:** Remove Hindi texts from hero highlighted changing texts per user request.
+
+**What changed:**
+- **Hero Title Rotating Words (`src/components/PublicWebsite.tsx`):**
+  - Reverted `RotatingHeroTitle` back to pure athletic English power words:
+    `"VALHALLA"`, `"GREATNESS"`, `"GLORY"`, `"WARRIORS"`, `"STRENGTH"`, `"DOMINANCE"`.
+  - Retained vibrant red gradient text styling (`from-red-600 via-red-500 to-rose-600`) and 3-second cycle.
+- **Hero Highlights Bar (`src/components/ui/hero-3.tsx`):**
+  - Removed dynamic Hindi text cycling array (`HIGHLIGHT_WORDS`) and associated timers/state.
+  - Restored crisp, static athletic highlight: `OLYMPIC IRON & MOROCCAN SPA`.
+  - Preserved live hours badge (`OPEN 5:00 AM – 10:00 PM`) and athlete rating (`4.9★ RATED (650+ ATHLETES)`).
+  - Set description prose to clean English: `{GYM_CONFIG.address} · Certified Coaches · Viva Fitness Equipment & Moroccan Steam Spa`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production bundle and prerender succeeded with 0 errors (`dist/index.html` 171,181 bytes).
+- Dev server active on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for user review on localhost.
+
+---
+
+## 2026-10-15 — Security Leak Prevention via DevTools/Inspect, Centralized Config & Rotating Hindi Hero Texts (Antigravity session)
+
+**Goal:** Complete user requirements:
+1. **Security & Inspect Data Leak Prevention:** Guarantee that when inspecting the browser DevTools (Elements, Sources, Network, Console), no sensitive data (auth reset links/tokens, debuggers, internal dev comments, source maps) leaks to the client.
+2. **Remove Hardcoded Texts:** Centralize all hardcoded business details (addresses, phone numbers, WhatsApp, emails, batch hours, social URLs) in `src/config/gym.ts` and bind all standalone and public pages to this single source of truth.
+3. **Rotating Hindi Hero Texts:** Add authentic, athletic Hindi texts into both the rotating hero title words and the hero highlights bar below the action buttons.
+
+**What changed:**
+- **Security & Inspect Leak Prevention (`vite.config.ts`, `src/components/AuthGateway.tsx`):**
+  - Configured `vite.config.ts` production build with `sourcemap: false` and `minify: 'esbuild'`.
+  - Added `esbuild: { drop: ['debugger'], legalComments: 'none' }` so all developer comments and debugger statements are stripped from compiled assets.
+  - Added explicit vendor chunking (`vendor-react`, `vendor-icons`, `vendor-motion`) with `chunkSizeWarningLimit: 800`.
+  - In `src/components/AuthGateway.tsx`: Removed dev-mode DOM leak where backend `reset_link` containing reset tokens was rendered into the HTML DOM. Replaced with secure, generic confirmation text revealing zero sensitive tokens or query links in DevTools.
+- **Centralized Configuration (`src/config/gym.ts`):**
+  - Expanded `GYM_CONFIG` with `name`, `shortName`, `hindiName`, `hindiFullName`, `phone`, `phoneDisplay`, `phoneAlternate`, `phoneAlternateDisplay`, `whatsapp`, `email`, `infoEmail`, `franchiseEmail`, `address`, `addressFull`, `hindiAddress`, `landmark`, `operatingHours`, `operatingHoursShort`, `hours`, `morningBatch`, `eveningBatch`, `sundayHours`, `rating`, `athleteCount`, `facebook`, `instagram`, `instagramAmbassador`, `mapLink`, and `mapEmbed`.
+- **Eliminated Hardcoded Strings across Pages:**
+  - `src/pages/ContactPage.tsx`: Bound phone numbers, emails, addresses, hours, and map embeds to `GYM_CONFIG`.
+  - `src/pages/FranchisePage.tsx`: Bound `franchiseEmail`, `phoneDisplay`, address, and operating hours to `GYM_CONFIG`.
+  - `src/pages/AmbassadorPage.tsx`: Bound `instagramAmbassador`, address, and operating hours to `GYM_CONFIG`.
+  - `src/pages/FacilitiesPage.tsx`: Bound footer name, address, and operating hours to `GYM_CONFIG`.
+  - `src/pages/TrainersPage.tsx`: Bound footer name, address, and operating hours to `GYM_CONFIG`.
+  - `src/pages/MembershipsPage.tsx`: Bound footer name, address, and operating hours to `GYM_CONFIG`.
+  - `src/pages/GalleryPage.tsx`: Bound footer name, address, and operating hours to `GYM_CONFIG`.
+- **Rotating Hindi Hero Texts (`src/components/PublicWebsite.tsx`, `src/components/ui/hero-3.tsx`):**
+  - In `RotatingHeroTitle`: Added authentic Hindi athletic power words cycling every 3 seconds:
+    `"VALHALLA"`, `"अखंड शक्ति"`, `"WARRIORS"`, `"अजेय योद्धा"`, `"STRENGTH"`, `"शौर्य व पराक्रम"`, `"GREATNESS"`, `"विजयी भव"`.
+  - In `hero-3.tsx`: Added `HIGHLIGHT_WORDS` cycling through grounded bilingual facility highlights:
+    `"OLYMPIC IRON & MOROCCAN SPA"`, `"ओलंपिक बारबेल एवं स्टीम स्पा"`, `"VIVA FITNESS IMPORTED RIGS"`, `"प्रमाणित स्ट्रेंथ व फिटनेस ट्रेनर्स"`, `"60KG DUMBBELLS & OLYMPIC TRACK"`, `"महिला व पुरुष हेतु सुरक्षित वातानुकूलित अखाड़ा"`.
+  - Bound static rating and operating hours to `GYM_CONFIG.rating` and `GYM_CONFIG.operatingHoursShort`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors across entire workspace.
+- `npm run build`: Production build and prerender succeeded with 0 errors (`dist/index.html` 171,292 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for user review on localhost.
+
+---
+
+## 2026-10-15 — Google AI/Gemini-Style Animated Border Box Redesign (Antigravity session)
+
+**Goal:** Redesign the moving border animation box (`.moving-border-red`) to match Google's flagship animation design language (Google Gemini / Google AI luminous border).
+
+**What changed:**
+- `src/index.css`:
+  - Completely re-architected `.moving-border-red` into a dual-layer Google AI chromatic glowing box:
+    1. **Crisp Outer Beam (`::before`):** 300% conical gradient spinning smoothly at 4.5s linear infinite with Google's signature spectrum flow: Google Blue (`#4285F4`) → Google Green (`#34A853`) → Google Yellow (`#FBBC05`) → Google Red / Crimson (`#EA4335`) → Coral Flame (`#FF5722`) → Pure White Light Crest (`#FFFFFF`).
+    2. **Ambient Luminous Aura (`::after`):** Heavy blurred light layer (`filter: blur(14px); opacity: 0.85`) tracking the rotating beam to cast Google's signature ethereal glowing halo onto surrounding surfaces.
+    3. **Container Box-Shadow:** Tuned dual-color ambient glow (`rgba(234, 67, 53, 0.28)` red and `rgba(66, 133, 244, 0.22)` blue) that expands dynamically on card hover.
+    4. **Corner Radius Inheritance:** Set `border-radius: inherit` on `.moving-border-red-inner` to seamlessly match any parent corner radius (`rounded-xl`, `rounded-2xl`, `rounded-3xl`) with uniform 2px border thickness.
+    5. **Theme Support:** Updated light-mode elevation shadow and disabled animations in `prefers-reduced-motion` media query.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors (`dist/index.html` 170,556 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+## 2026-10-15 — Moving Text Ribbon, Smooth Red Borders, Cylindrical Morphing Header & Dedicated Pages (Antigravity session)
+
+**Goal:** Implement the user's multi-part UI & architectural requests:
+1. **Moving Ribbon of Texts Below Hero:** Added an athletic, hardware-accelerated continuous moving marquee ribbon just below `<AnimatedMarqueeHero />` featuring grounded Hindi & English details (Viva Fitness equipment, 60kg dumbbells, Moroccan steam bath, biometric turnstile access, certified coaches, MG Road Aurangabad).
+2. **Smooth Red Line of Borders:** Redesigned `.moving-border-red` in `src/index.css` with a 250% size conic-gradient beam, smooth multi-stop interpolation, 5s linear infinite duration, and GPU-accelerated `translate3d(0, 0, 0)` for silky 60/120fps rotation.
+3. **Smooth Scroll-Up Button Red Border Filler:** Refined the circular SVG progress border with `stroke-dashoffset 90ms cubic-bezier(0.1, 0.9, 0.2, 1)`, a glowing red drop shadow (`drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]`), and 2.8px stroke width for jitter-free real-time tracking on scroll.
+4. **Cylindrical Header Bar on Scroll:** Styled the main header to smoothly morph into a floating cylindrical pill (`mx-auto max-w-6xl rounded-full border border-red-500/40 bg-neutral-950/92 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.85)] ring-1 ring-red-500/25 px-4 sm:px-6 h-14`) when scrolled down, and smoothly transition back to the original full-width, flat-bottom top position (`w-full rounded-none border-b border-red-950/40 bg-black/85 h-[72px]`) when scrolled back to the top.
+5. **Dedicated Pages in Identical Format:** Created dedicated pages for all menus requiring separate pages with landscaped photo heroes, dark vignette overlays, kicker badges, structured content cards, bilingual Hindi/English copy, and consistent footers:
+   - `/facilities` (`FacilitiesPage.tsx` with `strengthPanoramic` hero & 8 facility zone cards)
+   - `/trainers` (`TrainersPage.tsx` with `freeWeightsBenches` hero, trainer bios & PT packages)
+   - `/memberships` (`MembershipsPage.tsx` with `deadliftPlatform` hero, 4 tier cards & inclusions)
+   - `/contact` (`ContactPage.tsx` with `receptionWide` hero, inquiry form & Google Maps embed)
+   - `/franchise` (`FranchisePage.tsx` with `mainArenaPanoramic` hero, business models & kit request)
+   - `/ambassador` (`AmbassadorPage.tsx` with `photoVaishnavi` hero & authentic nutrition story)
+6. **Routing & Navigation:** Wired up lazy routes in `src/App.tsx` and integrated direct links in both the desktop MORE dropdown and the mobile menu overlay.
+
+**What changed:**
+- `src/index.css`:
+  - Added `@keyframes ticker-ribbon-scroll` and `.ticker-ribbon-track` with hardware acceleration.
+  - Refined `.moving-border-red` conic-gradient and duration.
+- `src/components/PublicWebsite.tsx`:
+  - Inserted the moving text ticker ribbon between hero and manifesto showcase.
+  - Converted `<header>` / `<nav>` into a morphing cylindrical capsule on scroll that reverts cleanly to top position.
+  - Enhanced the scroll-up button SVG circular fill with 90ms eased transition and subtle glow.
+  - Updated MORE dropdown and mobile drawer to provide direct links to all dedicated separate pages.
+- `src/App.tsx`:
+  - Added lazy imports and routes for `/facilities`, `/trainers`, `/memberships`, `/contact`, `/franchise`, and `/ambassador`.
+- Created dedicated pages:
+  - `src/pages/FacilitiesPage.tsx`
+  - `src/pages/TrainersPage.tsx`
+  - `src/pages/MembershipsPage.tsx`
+  - `src/pages/ContactPage.tsx`
+  - `src/pages/FranchisePage.tsx`
+  - `src/pages/AmbassadorPage.tsx`
+- `WORKLOG.md`: Documented all updates.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors across all files.
+- `npm run build`: Production bundle and prerender succeeded with 0 errors (`dist/index.html` 170,556 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for user review on localhost.
+
+---
+
+## 2026-10-15 — Full-Screen Cookie Consent, Facebook Page Integration, Hero Face-Cropping Fix, Daily Stories Redesign, Circular Loader & Grounded Hindi Texts (Antigravity session)
+
+**Goal:** Implement the user's latest set of requirements:
+1. Facebook Integration: Added official Facebook page (`https://www.facebook.com/p/Vikings-Gym-Spa-61565130891501/`) to config, footer, contact section, and daily stories.
+2. Fix Hero Video1 Face Cropping: Adjusted object positioning to `object-[center_10%] sm:object-[center_14%] md:object-[center_18%]` so upper bodies and faces are never cropped out.
+3. Full-Screen Functional Cookie Modal: Designed an immersive full-screen modal covering the entire screen (`fixed inset-0 z-[100] bg-black/90 backdrop-blur-2xl`) for new visitors with bilingual Hindi/English explanation and working choices ("ALLOW ALL COOKIES" and "ESSENTIAL ONLY" writing to `localStorage`).
+4. Redesign Daily Stories & Arena Moments (`#gallery`): Built an interactive Instagram-style story deck featuring animated pulsing rings, live status tags, bilingual workout details, and a full In-App Story Viewer modal with progress segments, keyboard navigation (`Escape`, `ArrowLeft`, `ArrowRight`), and direct links to Instagram Stories and Facebook.
+5. Circular Loading Animation (`index.html`): Added a luxury circular SVG spinning ring, glowing ambient red back-light, "VIKINGS GYM & SPA" typography, and Hindi brand subtitle "वाइकिंग्स जिम एंड स्पा • AURANGABAD".
+6. Grounded Hindi Texts: Tastefully integrated authentic Devanagari script across the landing page (Header, Hero subtitle, Manifesto, Facilities, Trainers, Memberships, Daily Stories, Contact, and Footer).
+7. Anti-AI Copywriting Compliance (`.agents/contentWritingSkill.md`): Removed artificial tropes and negative parallelisms ("NOT JUST A GYM"), replacing them with concrete local facts (MG Road Aurangabad Bihar 824101, Viva Fitness equipment, certified coach Amit Singh).
+
+**What changed:**
+- `src/config/gym.ts`: Added `facebook` URL and `hindiFullName`.
+- `src/components/ui/hero-3.tsx`:
+  - Fixed `video1` object positioning to `object-[center_10%] sm:object-[center_14%] md:object-[center_18%]` to keep faces in view on all screen sizes.
+  - Added grounded Hindi subtitle in hero highlights.
+- `index.html`:
+  - Replaced linear beam with circular SVG rotating ring loader, dashed inner pulse ring, and bold "VIKINGS GYM & SPA" + Hindi subtitle.
+- `src/components/PublicWebsite.tsx`:
+  - Transformed cookie notice from bottom toast into a full-screen backdrop modal (`fixed inset-0 z-[100] bg-black/90 backdrop-blur-2xl`) with functional buttons and links to `/cookies` and `/terms`.
+  - Redesigned `#gallery` with Instagram-style avatar story rings, 5 workout moment cards with Hindi tags, and an in-app interactive Story Viewer modal.
+  - Integrated Facebook official page link in footer, contact section, and story viewer.
+  - Added authentic Hindi text to Navbar brand, Manifesto, Facilities, Trainers, Memberships, and Contact sections.
+  - Eliminated negative parallelism in Manifesto.
+- `WORKLOG.md`: Documented all updates.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors (`dist/index.html` 165,132 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+## 2026-10-15 — 5-Item Landing Page Nav Order, Sound Button Removal from Arena in Motion, Hero Viewport Mobile Padding & Ponytail Code Analysis (Antigravity session)
+
+**Goal:** Implement all requested refinements:
+1. Main Navigation: Retain strictly 5 menus in exact landing page order (`FACILITIES`, `TRAINERS`, `MEMBERSHIPS`, `CONTACT`, with `MORE` as the 5th menu).
+2. Navigation Cleanup: Removed `ambassador`, `arena-action`, and `review` from all navigation menus (`MORE_LINKS`, `MOBILE_LINKS`, and `SECTION_IDS`).
+3. Arena in Motion: Removed the floating sound toggle button from `ActionReelCard` videos so they play cleanly and silently.
+4. Hero Padding & Smartphone Viewport Optimization: Calibrated vertical padding (`pt-5 xs:pt-7 sm:pt-10 md:pt-14 pb-20 xs:pb-24 sm:pb-12 md:pb-14`), title typography, button dimensions, and description text so everything is fully visible above the mobile sticky action bar on all smartphone screen sizes.
+5. Ponytail Review: Applied lazy senior dev principles (deletion over addition, eliminated dead `isMuted` audio state, zero over-engineering, compact responsive tokens).
+
+**What changed:**
+- **Desktop & Mobile Navigation Alignment (`src/components/PublicWebsite.tsx`):**
+  - Updated primary desktop navbar to 5 items in strict page sequence:
+    1. `FACILITIES` (`#facilities`)
+    2. `TRAINERS` (`#trainers`)
+    3. `MEMBERSHIPS` (`#pricing`)
+    4. `CONTACT` (`#contact`)
+    5. `MORE` (5th dropdown menu)
+  - Removed `ambassador`, `arena-action`, and `review` from `MORE_LINKS`, `MOBILE_LINKS`, mobile drawer, and `SECTION_IDS`.
+  - Reorganized `MORE_LINKS` to: `MANIFESTO`, `BMI CALCULATOR`, `DAILY STORIES & GALLERY`, `FAQS`, `ABOUT VALHALLA`, and `FRANCHISE`.
+- **Sound Button Removed from Arena in Motion (`src/components/PublicWebsite.tsx`):**
+  - Deleted `isMuted` state, `toggleSound` handler, and floating top-right volume toggle button from `ActionReelCard`. Videos play seamlessly muted without UI obstruction.
+- **Hero Padding & Mobile Optimization (`src/components/ui/hero-3.tsx`, `src/components/PublicWebsite.tsx`):**
+  - Calibrated hero section bottom padding on smartphones (`pb-20 xs:pb-24`) to sit cleanly above the fixed mobile sticky action bar.
+  - Sized headline font (`text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl`) and dynamic width in `RotatingHeroTitle` (`min-w-[200px] xs:min-w-[260px] sm:min-w-[420px] md:min-w-[560px]`).
+  - Fluid button sizing (`min-h-[38px] xs:min-h-[42px] px-4 xs:px-6 py-2`) and compact, high-contrast trust badges.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors (`dist/index.html` 148,154 bytes).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+**Goal:** Implement all requested refinements:
+1. Video 1: Keep clean in its original resolution and natural aspect fit without digital zoom (`scale-105` removed).
+2. Video 4: Removed from hero sequence to eliminate blurriness.
+3. Hero Slideshow Sequence: After Video 1 finishes playing (`onEnded`), smoothly cross-fade through high-resolution landscaped gym photos (`mainArenaPanoramic`, `strengthPanoramic`, `freeWeightsBenches`, `deadliftPlatform`, `cardioRowingWide`) without any zoom, then loop back to Video 1 in an infinite continuous cycle.
+4. Hero Changing Text: Styled the rotating power words with pure red gradient only (`from-red-600 via-red-500 to-rose-600`), eliminating amber/yellow tints.
+5. All Standalone Pages: Added a dedicated landscaped photo in the hero background with dark contrast overlays and texts directly over it:
+   - `/gallery` (`GalleryPage.tsx`): Wide landscaped main arena floor (`mainArenaPanoramic`) hero.
+   - `/privacy` (`PrivacyPolicyPage.tsx`): Wide reception lounge (`receptionWide`) hero.
+   - `/terms` (`TermsConditionsPage.tsx`): Olympic competition deadlift platform (`deadliftPlatform`) hero.
+   - `/cookies` (`CookiesPolicyPage.tsx`): Reception digital check-in workstation (`receptionDeskWorkstation`) hero.
+
+**What changed:**
+- **Hero Video & Landscaped Photo Loop (`src/components/ui/hero-3.tsx`, `src/components/PublicWebsite.tsx`):**
+  - Removed `scale-105` and zoom transitions from Video 1; now fits the hero cleanly at original resolution with `object-cover`.
+  - Removed `video4Src` from the hero sequence.
+  - Implemented automatic transition from Video 1 $\rightarrow$ landscaped photo cross-fade slideshow $\rightarrow$ loop back to Video 1.
+  - Photos cross-fade smoothly every 3.5s with `AnimatePresence` and zero zoom scaling.
+- **Pure Red Gradient for Rotating Hero Title (`src/components/PublicWebsite.tsx`):**
+  - Changed `RotatingHeroTitle` gradient from multi-color (`red/rose/amber`) to pure vibrant red tones: `bg-gradient-to-r from-red-600 via-red-500 to-rose-600` with pure red drop-shadow glow.
+- **Dedicated Landscaped Photo Heroes across All Standalone Pages (`src/pages/`):**
+  - `GalleryPage.tsx`: Built full-width hero header over `mainArenaPanoramic` with dual edge vignette fades, badge, title, description, and interactive filter pills.
+  - `PrivacyPolicyPage.tsx`: Added landscaped hero header over `receptionWide` with badge, title, and subtitle over the photo.
+  - `TermsConditionsPage.tsx`: Added landscaped hero header over `deadliftPlatform` with badge, title, and subtitle over the photo.
+  - `CookiesPolicyPage.tsx`: Added landscaped hero header over `receptionDeskWorkstation` with badge, title, and subtitle over the photo.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html` 149,947 bytes) passed with 0 errors.
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+**Goal:** Implement all requested refinements:
+1. Streamline desktop navbar to only core relevant menus (`FACILITIES`, `MEMBERSHIPS`, `TRAINERS`, `AMBASSADOR`) with all remaining sections organized into `MORE`.
+2. Ensure background videos zoom smoothly (`scale-105 transition-all duration-1000 ease-out`) without harsh cropping or clipping.
+3. Fade hero background video from the left and right side edges smoothly to pure black.
+4. Remove rectangular bounding container and background from hero details, keeping them transparent with crisp drop shadows.
+5. Animate "CARVE YOUR BODY FOR [WORD]" with vibrant fire gradient focus on the power word, cycling through 6 relevant words (`VALHALLA`, `GREATNESS`, `GLORY`, `WARRIORS`, `STRENGTH`, `DOMINANCE`) every 3 seconds.
+6. Keep the scroll-up button identical in light and dark modes (deep black face `#09090b`), and make the circular red SVG border filling smooth across all scroll speeds.
+
+**What changed:**
+- **Hero Title Animation & 3s Power Word Rotation (`src/components/PublicWebsite.tsx`):**
+  - Created `RotatingHeroTitle` component with `AnimatePresence (mode="wait")`.
+  - Animates the static kicker "CARVE YOUR BODY FOR" with subtle drop-shadows.
+  - Rotates through 6 athletic power words: `VALHALLA` → `GREATNESS` → `GLORY` → `WARRIORS` → `STRENGTH` → `DOMINANCE` every 3000ms.
+  - Focused word styled with rich multi-stop fire gradient (`from-red-500 via-rose-400 to-amber-300`), dual glowing drop shadows (`drop-shadow-[0_0_40px_rgba(239,68,68,0.75)]`), and vertical blur entrance/exit transitions.
+- **Hero Video Side Fades & Smooth Zoom (`src/components/ui/hero-3.tsx`):**
+  - Added left and right side-edge vignette gradients fading seamlessly into pure black:
+    - Left: `bg-gradient-to-r from-black via-black/65 to-transparent`
+    - Right: `bg-gradient-to-l from-black via-black/65 to-transparent`
+  - Replaced static cuts with gentle 1-second video zooming (`scale-105 transition-all duration-1000 ease-out`).
+- **Hero Details Transparency (`src/components/ui/hero-3.tsx`):**
+  - Removed rectangular frosted glass bounding container (`.hero-pill`), background fills, and borders.
+  - Hero details now float 100% transparently over the video with high-contrast text drop shadows for legibility.
+- **Streamlined Desktop Navbar (`src/components/PublicWebsite.tsx`):**
+  - Kept only 4 core menus on the primary desktop navigation bar: `FACILITIES`, `MEMBERSHIPS`, `TRAINERS`, and `AMBASSADOR`.
+  - Moved all other sections into the `MORE` dropdown in strict page order: `MANIFESTO`, `ARENA IN MOTION`, `BMI CALCULATOR`, `DAILY STORIES & GALLERY`, `FAQS`, `WARRIOR REVIEWS`, `CONTACT & DIRECTIONS`, `ABOUT VALHALLA`, and `FRANCHISE`.
+- **Butter-Smooth Circular Scroll-Up Button (`src/components/PublicWebsite.tsx`, `src/index.css`):**
+  - Button face protected to remain deep black (`#09090b`) in both dark and light modes with white arrow and red hover.
+  - Wrapped scroll progress listener in `requestAnimationFrame` for stutter-free tracking.
+  - Added `transition: stroke-dashoffset 0.15s cubic-bezier(0.2, 0.8, 0.2, 1)` and `will-change: stroke-dashoffset` to the circular red SVG border for smooth filling and un-filling.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors.
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+**Goal:** Implement all requested refinements:
+1. Ensure the Light theme looks just as appealing and high-end as the Dark theme, while keeping the footer permanently dark luxury.
+2. Guarantee that border animations and the circular scroll-up button look smooth and identical in both dark and light themes (protected inner dark button face and rotating beam borders).
+3. Redesign the HTML loading page in `index.html` to be ultra-minimal, high-contrast, and elegant (pulsing transparent logo mark + glowing red gradient progress beam + fast load fadeout).
+4. Rewrite and protect hero highlights in `hero-3.tsx` within a dark frosted glass pill (`.hero-pill`) so they are 100% crisp and readable in both dark and light modes.
+5. Redesign the Daily Stories section into a modern Instagram Stories & Arena Moments card showcase with active story rings, video badges, and fullscreen Instagram links.
+6. Align all navbar menus (desktop visible links, MORE dropdown, mobile bar, and mobile drawer) in the exact top-to-bottom order of the landing page, and implement real-time scroll-position tracking so the active section updates smoothly on the navbar as the user scrolls.
+7. For Amit Singh: Add an "OWNER" tag/badge (`OWNER & HEAD COACH`).
+8. For Brand Ambassador (Vaishnavi Singh): Create a separate, dedicated luxury spotlight section (`#ambassador`) celebrating her role, philosophy, and `@chawal.to.choorma` link.
+
+**What changed:**
+- **Minimal High-End Loader (`index.html`):**
+  - Removed dated `Franklin Gothic` text, arbitrary 2-second timeout, and plain "Loading..." markup.
+  - Implemented deep black `#050505` backdrop with a centered 58px logo with a glowing radial aura and an ultra-thin 2px red gradient progress beam.
+  - Added clean fade-out on window `'load'` with a rapid fallback.
+- **Light Theme Protection & Aesthetics (`src/index.css`):**
+  - Scoped `.theme-light footer` and `.footer-always-dark` to permanently retain deep `#09090b` background, `#ffffff` headers, `#cbd5e1` text, and `#27272a` borders.
+  - Scoped `.scroll-top-btn-inner` so the circular scroll button face remains deep black `#09090b` with smooth red hover in both dark and light themes.
+  - Protected `#hero` and `.hero-pill` from light-theme color bleaching so the video background text remains crystal-clear.
+  - Added card elevations, clean borders, and soft shadows to `.theme-light` components.
+- **Rewritten Hero Highlights (`src/components/ui/hero-3.tsx`):**
+  - Wrapped hero highlights inside `.hero-pill` (frosted dark glass with `bg-neutral-950/85 backdrop-blur-md border-white/15`).
+  - Rewritten punchy copy: `⚡ OPEN 5:00 AM – 10:00 PM` · `★ 4.9 RATED (650+ ATHLETES)` · `OLYMPIC IRON & MOROCCAN SPA`.
+  - Added `id="hero"` and `data-hero-section="true"` for styling and scroll spy.
+- **Amit Singh & Brand Ambassador Spotlight (`src/components/PublicWebsite.tsx`):**
+  - Updated Coach Amit Singh to `role: "OWNER & HEAD COACH"` with `isOwner: true` and rendered an unmissable red `OWNER` badge next to his role with subtle luxury card glow.
+  - Extracted Vaishnavi Singh from `DEFAULT_TRAINERS` and designed a dedicated `<section id="ambassador">` directly after the coaches grid.
+  - Featured her portrait, verified `@chawal.to.choorma` link, personal philosophy quote, and 2 core wellness pillars (The Vikings Mindset & Sustainable Nutrition).
+- **Daily Stories Redesign (`src/components/PublicWebsite.tsx`):**
+  - Replaced the basic circular bubbles with a modern 5-card Instagram Stories deck featuring active gradient story rings (`from-amber-400 via-rose-500 to-red-600`), hover play overlays, "LIVE" indicator, and story category labels.
+- **Navbar Ordering & Real-Time Scroll Spy (`src/components/PublicWebsite.tsx`):**
+  - Reordered desktop links, `MORE_LINKS`, and `MOBILE_LINKS` to strictly match the landing page sequence:
+    `manifesto` → `facilities` → `arena-action` → `trainers` → `ambassador` → `calculator` → `pricing` → `gallery` → `faq` → `review` → `contact` → `about`.
+  - Replaced the restrictive `IntersectionObserver` with an active scroll-position spy that calculates section offsets in real-time, lighting up the active nav item and the `MORE` button seamlessly.
+  - Updated footer explore links to match the exact same top-to-bottom sequence.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors.
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Kept strictly local per user instructions (NOT pushed to GitHub). Ready for review on localhost.
+
+---
+
+## 2026-10-14 — Arena in Motion Redesign, Modern Google Fonts, Dedicated Legal Pages, Signature Reel Cleanup & Hero Video Clarity (Antigravity session)
+
+**Goal:** Implement all requested refinements:
+1. Redesign Arena in Motion section with luxury aura, wider grid, and modern athletic cards.
+2. Replace all typewriter/monospace fonts (`font-mono`) with modern Google Fonts (`Plus Jakarta Sans` & `Outfit`).
+3. Remove cylinder badges (`SIGNATURE REEL`) and overlay text (`AUTHENTIC VISION / BUILT DIFFERENT`) from the signature reel video in the Manifesto section.
+4. Animate "CARVE YOUR BODY FOR VALHALLA" title with glowing gradient drop-shadow and add attractive trust/metric details below the action buttons.
+5. Remove special/clutter menus (Action Reels, Privacy, Terms, Cookies) from header and mobile navigation.
+6. Create 3 dedicated standalone legal pages (`/privacy`, `/terms`, `/cookies`), link them cleanly in the footer, and remove heavy in-page legal sections from the main landing page.
+7. Maximize Hero video clarity by eliminating heavy stacked dark vignettes in favor of a crisp, translucent gradient.
+
+**What changed:**
+- **Modern Typography System (`index.html`, `src/index.css`):**
+  - Connected Google Fonts: `Plus Jakarta Sans` (weights 400-900) & `Outfit` (weights 400-900).
+  - Configured `--font-sans` and mapped `--font-mono` to modern display fonts to completely eliminate typewriter fonts across the website.
+- **Hero Video Clarity & Animation (`src/components/ui/hero-3.tsx`, `src/components/PublicWebsite.tsx`):**
+  - Replaced heavy 85% opacity dark vignettes with a crisp `bg-gradient-to-t from-black/80 via-black/20 to-black/35` overlay, making hero videos bright, vivid, and sharp.
+  - Animated "CARVE YOUR BODY FOR VALHALLA" with glowing gradient text shadow and entrance scaling.
+  - Added attractive details below the buttons: `OPEN 5:00 AM – 10:00 PM` · `4.9★ RATED (630+ ATHLETES)` · `CALIBRATED VIVA FITNESS & MOROCCAN SPA`.
+- **Manifesto Signature Reel Cleanup (`src/components/PublicWebsite.tsx`):**
+  - Removed floating cylinder badge (`SIGNATURE REEL`) and text overlays (`AUTHENTIC VISION / BUILT DIFFERENT`), leaving video clean and pristine with frosted sound toggle.
+- **Arena in Motion Redesign (`#arena-action` in `src/components/PublicWebsite.tsx`):**
+  - Redesigned with ambient red aura lighting, wider 2-column layout (`max-w-4xl`), and modernized `ActionReelCard` with rounded frosted audio toggle and sleek sans-serif typography.
+- **Dedicated Legal Pages (`src/pages/`, `src/App.tsx`):**
+  - Created `PrivacyPolicyPage.tsx` at `/privacy` with comprehensive data governance policies.
+  - Created `TermsConditionsPage.tsx` at `/terms` with floor etiquette, steam spa rules, and membership terms.
+  - Created `CookiesPolicyPage.tsx` at `/cookies` with local storage details and an interactive "RESET COOKIE CONSENT TOKEN" button.
+  - Wired into `App.tsx` with lazy code-split routes.
+  - Removed in-page `<section id="privacy">`, `<section id="terms">`, and `<section id="cookies">` from `PublicWebsite.tsx`.
+- **Navigation & Footer Updates (`src/components/PublicWebsite.tsx`):**
+  - Removed `ACTION REELS`, `PRIVACY POLICY`, `TERMS & CONDITIONS`, and `COOKIES POLICY` from `MORE_LINKS`, `MOBILE_LINKS`, and `SECTION_IDS`.
+  - Added dedicated, clean text links in footer bottom: `Privacy Policy · Terms & Conditions · Cookies Policy`.
+  - Updated Cookie Banner links to point to `/cookies` and `/terms`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors (all 3 legal pages prerendered).
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Held locally per user request (NOT pushed to GitHub). Ready to review on localhost.
+
+---
+
+## 2026-10-14 — Hero Full-Cover Video Alternation Loop, Simplified Navbar, 2 Action Reels, Pricing Tag Fix & Dynamic Circular Scroll Button (Antigravity session)
+
+**Goal:** Complete all requested UI/UX enhancements across landing page:
+1. Hero video fully covers hero section (`object-cover`), plays Video 1 first then Video 4 in continuous loop, zero sound marks, no cylinders or clutter, showing only the Title and 2 Action Buttons.
+2. Simplified Navbar with only 3 primary links (`FACILITIES`, `MEMBERSHIPS`, `TRAINERS`) and all secondary menus grouped into the `MORE` dropdown.
+3. Arena in Motion (`#arena-action`) limited to exactly 2 videos (Reel 2 and Reel 3) with zero cylinder pills.
+4. Membership Tiers & Pricing (`#pricing`): Fixed clipped "MOST POPULAR" tag by turning it into an internal unclipped top banner.
+5. Cookie Consent banner: Prompts new visitors immediately on opening the website once only per user (`localStorage`), positioned in a clean, non-obstructive bottom-left area.
+6. Scroll Up Arrow: Dark background circular button with dynamic red SVG border that fills clockwise as the user scrolls down, and un-fills as they scroll back up.
+
+**What changed:**
+- **Hero Section (`src/components/ui/hero-3.tsx`):**
+  - Converted `AnimatedMarqueeHero` into a full-bleed background video player (`absolute inset-0 w-full h-full object-cover`).
+  - Seamlessly alternates between `video1.webm` and `video4.webm` on `onEnded` in an infinite loop.
+  - Stripped all sound marks/audio buttons, mobile tab pickers, and cylinder pills.
+  - Retains exclusively the high-impact title ("CARVE YOUR BODY FOR VALHALLA") and the 2 action buttons ("INVEST IN YOURSELF", "EXPLORE THE ARENA").
+- **Navbar Redesign (`src/components/PublicWebsite.tsx`):**
+  - Streamlined desktop navbar to 3 primary links: `FACILITIES`, `MEMBERSHIPS`, `TRAINERS`.
+  - Moved `MANIFESTO`, `ACTION REELS`, `GALLERY`, `CONTACT`, `BMI CALCULATOR`, `FAQS`, `REVIEWS`, `ABOUT`, `PRIVACY`, `TERMS`, `COOKIES` into the clean `MORE` dropdown.
+- **Arena in Motion (`#arena-action` in `src/components/PublicWebsite.tsx`):**
+  - Rendered only 2 cards: Reel 2 (`videoStrengthAction` / Viva Fitness Stacks) and Reel 3 (`videoDumbbellPan` / Dumbbell Arsenal).
+  - Centered into a balanced 2-column grid (`max-w-3xl mx-auto`).
+  - Removed mobile swipe cylinders and badge pills.
+- **Membership Pricing (`#pricing` in `src/components/PublicWebsite.tsx`):**
+  - Replaced clipped `absolute -top-3` element with internal unclipped `w-full py-1.5 mb-4 bg-gradient-to-r from-red-600 to-rose-600 text-black font-mono font-black rounded-md` banner inside `moving-border-red-inner`.
+- **Interactive Cookie Consent (`src/components/PublicWebsite.tsx`):**
+  - Configured banner to display immediately on initial visit if `localStorage.getItem("vikings_cookie_consent")` is not set.
+  - Positioned safely at `fixed bottom-20 lg:bottom-6 left-4 sm:left-6 right-4 sm:right-auto sm:max-w-md z-50`.
+- **Scroll-Up Button (`src/components/PublicWebsite.tsx`):**
+  - Redesigned with dark button face (`bg-neutral-950/95 backdrop-blur-md`).
+  - Implemented dynamic circular SVG progress border (`strokeDasharray={131.95}`) filling with `#ef4444` based on scroll depth (`scrollProgress`).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors.
+- Dev server running on `http://localhost:3000/`.
+
+**Deploy status:** Held locally per user request (NOT pushed to GitHub). Ready to review on localhost.
+
+---
+
+## 2026-10-14 — Terms & Conditions, Cookies Policy, Interactive Cookie Consent Banner, FAQs & Privacy Policy (Antigravity session)
+
+**Goal:** Add Terms & Conditions and Cookies Policy to the landing page, and implement an interactive Cookie Consent banner asking new users to permit performance and caching cookies for faster loading and smoother media streaming.
+
+**What changed:**
+- **Terms & Conditions Section (`#terms` in `src/components/PublicWebsite.tsx`):**
+  - Added `<section id="terms">` covering 4 arena rules: Membership & Access Pass rules, Facility Etiquette & Floor Safety, Moroccan Steam Spa protocols, and Membership Freeze / Medical clearance rules.
+- **Cookies Policy Section (`#cookies` in `src/components/PublicWebsite.tsx`):**
+  - Added `<section id="cookies">` detailing Essential Performance Cache, High-Definition Video Streaming cache optimization, Zero Third-Party Ad Trackers pledge, and instructions on how to manage/reset preferences.
+- **Interactive Cookie Consent Banner (`src/components/PublicWebsite.tsx`):**
+  - Built an animated bottom toast framed with `.moving-border-red` (neon red rotating beam) that greets first-time visitors after a subtle delay.
+  - Explains the performance benefits of local cache for ultra-smooth 4K video streaming, instant dark/light theme switching, and instant page rendering.
+  - Provides `"ALLOW ALL COOKIES"`, `"ESSENTIAL ONLY"`, and direct links to `#cookies` and `#terms`.
+  - Remembers choice in `localStorage` (`vikings_cookie_consent`); includes a reconfigure button in the Cookies Policy section.
+  - Sits safely above the mobile sticky action bar (`bottom-20 lg:bottom-6`) on smartphones.
+- **Navigation & Footer Updates (`src/components/PublicWebsite.tsx`):**
+  - Added `#terms` and `#cookies` to `SECTION_IDS`, desktop `MORE` dropdown, mobile quick-link strip, mobile overlay drawer, and footer `Explore` grid.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender passed with 0 errors.
+- Dev server active on `http://localhost:3000/`.
+
+**Deploy status:** Held locally per user request (NOT pushed to GitHub). Ready to review on localhost.
+
+---
+
+## 2026-10-14 — Logo Transparency, Hero Video Background, Arena Action Reels & Mobile Optimization (Antigravity session)
+
+**Goal:** Remove logo background in header, install Ponytail rule and skills, make website mobile-first responsive, integrate `video1.webm` as hero background video, and embed `video2.webm`, `video3.webm`, and `video4.webm` into a dedicated mobile-optimized landing page section.
+
+**What changed:**
+- **Ponytail Rules & Skills Installation (`.agents/rules/ponytail.md`, `.agents/skills/`):**
+  - Downloaded and installed Ponytail lazy senior dev rule (`.agents/rules/ponytail.md`).
+  - Installed all 6 Ponytail skills (`ponytail`, `ponytail-audit`, `ponytail-debt`, `ponytail-gain`, `ponytail-help`, `ponytail-review`) in `.agents/skills/`.
+- **Header Logo Background Removal (`assets/l.webp`):**
+  - Replaced solid RGB `l.webp` with lossless RGBA WebP generated from `logo.png`, providing 100% transparent alpha backdrop across header, footer, and navigation.
+- **Hero Video Background (`src/components/ui/hero-3.tsx`, `src/components/PublicWebsite.tsx`):**
+  - Added `backgroundVideo` prop to `AnimatedMarqueeHero` with native looping muted `video1.webm` and dark radial/linear vignettes.
+  - Scaled mobile heading font gracefully (`text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl`) preventing horizontal overflow on 320px–390px screens.
+- **Arena Action Reels Section (`src/components/PublicWebsite.tsx`):**
+  - Created `ActionReelCard` component with native `<video>` playback, muted autoplay, interactive volume toggle button (`Volume2`/`VolumeX`), and ambient gradient overlays.
+  - Integrated `video2.webm` ("BUILT DIFFERENT"), `video3.webm` ("POWER & PRECISION"), and `video4.webm` ("THE DUMBBELL ARSENAL") into `<section id="arena-action">` below Facilities Showcase.
+  - Implemented mobile-first horizontal swipe carousel with snap points and swipe indicator, seamlessly switching to a 3-column grid on tablet and desktop.
+- **Mobile Friendliness:**
+  - Verified touch targets, typography contrast, safe area insets on mobile action bar, and zero horizontal scroll.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): 0 errors.
+- `npm run build`: Production build and prerender (`dist/index.html`) passed cleanly with 0 errors.
+- Dev server running on `http://localhost:3000` (and `http://192.168.29.221:3000` for mobile Wi-Fi inspection).
+
+**Deploy status:** Held locally per user request (NOT pushed to GitHub). Ready to push when user confirms.
+
+---
+
+
 
 **Goal:** Increase the font size of the hero heading ("CARVE YOUR BODY FOR VALHALLA") specifically for smartphones to deliver a bolder, more commanding impact while keeping line-height compact and tight.
 

@@ -110,14 +110,8 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
 
     setLoading(true);
     try {
-      const res = await authAPI.forgotPassword(email);
-      const link = res.data?.data?.reset_link;
-      if (link) {
-        setResetLink(link);
-        setSuccessMessage("Email delivery isn't configured yet. Use this reset link:");
-      } else {
-        setSuccessMessage("If your email is registered, you will receive a reset link shortly.");
-      }
+      await authAPI.forgotPassword(email);
+      setSuccessMessage("If your account is registered, instructions to reset your password have been dispatched securely.");
     } catch (err: any) {
       if (!err.response) {
         setErrorMessage("Network error: Cannot reach the server.");
@@ -231,11 +225,6 @@ export default function AuthGateway({ onLoginSuccess, onBackToWebsite }: AuthGat
         {successMessage && (
           <div className="p-3 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-400 mb-5 leading-normal">
             <p>{successMessage}</p>
-            {resetLink && (
-              <a href={resetLink} className="block mt-2 font-mono font-bold text-green-300 underline break-all hover:text-white">
-                {resetLink}
-              </a>
-            )}
           </div>
         )}
 

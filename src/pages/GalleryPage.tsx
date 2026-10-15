@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
+import PublicNavbar from "../components/PublicNavbar";
 import { 
   ArrowLeft, 
   Instagram, 
@@ -15,11 +16,19 @@ import {
   Camera,
   CheckCircle2
 } from "lucide-react";
-import { ALL_GYM_GALLERY_IMAGES, GalleryItem } from "../assets/gymImages";
+import { ALL_GYM_GALLERY_IMAGES, GalleryItem, mainArenaPanoramic } from "../assets/gymImages";
 import { GYM_CONFIG } from "../config/gym";
 import logoPremium from "../../assets/l.webp";
+import { usePageSEO } from "../lib/seo";
 
 export default function GalleryPage() {
+  usePageSEO({
+    title: "Vikings Gym & Spa Photo Gallery — Real Workout & Transformation Photos | Aurangabad",
+    description: "Browse HD photos of Vikings Gym & Spa in Aurangabad, Bihar: Viva Fitness equipment, Moroccan steam spa, Olympic deadlift platforms, and real training moments.",
+    keywords: "gym photos aurangabad, vikings gym gallery, best gym interior aurangabad bihar, gym pictures aurangabad",
+    canonical: "https://www.vikingsgym.in/gallery",
+  });
+
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -69,83 +78,101 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-red-600 selection:text-black font-sans">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-40 bg-black/85 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <div className="flex items-center gap-4 sm:gap-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-[0.15em] text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-3.5 py-2 rounded-md transition-all cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-red-500" />
-            <span>BACK TO ARENA</span>
-          </Link>
+      {/* Full Interactive Navigation Bar */}
+      <PublicNavbar />
 
-          <Link to="/" className="flex items-center gap-2 group">
-            <img src={logoPremium} alt="Vikings Gym" className="h-7 w-auto object-contain" />
-            <span className="font-mono font-black text-sm tracking-[0.2em] text-white group-hover:text-red-500 transition-colors hidden sm:inline">
-              VIKINGS GYM
-            </span>
-          </Link>
+      {/* Hero Header with Landscaped Photo Background & Dark Contrast Overlay */}
+      <section className="subpage-hero relative py-14 sm:py-20 px-4 sm:px-8 border-b border-white/10 overflow-hidden" data-subpage-hero="true">
+        {/* Background Landscaped Image (Clean fit, No Zoom) */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <img
+            src={mainArenaPanoramic}
+            alt="Vikings Arena Floor"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/85 to-[#050505]" />
+          <div className="absolute inset-y-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-[#050505] to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-[#050505] to-transparent" />
         </div>
 
-        <div className="flex items-center gap-3">
-          <a
-            href={GYM_CONFIG.mapLink}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-gray-400 hover:text-white transition-colors"
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: -60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <MapPin className="w-3.5 h-3.5 text-red-500" />
-            MG ROAD, AURANGABAD
-          </a>
+            <p className="text-red-500 font-mono text-xs font-bold tracking-[0.2em] uppercase mb-2">
+              OFFICIAL FACILITY ARCHIVE · {ALL_GYM_GALLERY_IMAGES.length} REAL PHOTOS
+            </p>
 
-          <a
-            href={`https://wa.me/${GYM_CONFIG.phone}?text=${encodeURIComponent("Hi Vikings Gym, I explored your complete gallery and would like to inquire about membership and facility tour.")}`}
-            target="_blank"
-            rel="noreferrer"
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-black font-mono font-black text-[11px] tracking-[0.18em] rounded-md transition-all uppercase cursor-pointer"
-          >
-            JOIN NOW
-          </a>
-        </div>
-      </header>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[1] mb-4 text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
+              EXPLORE THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-red-600">VIKINGS ARENA</span>
+            </h1>
+            <p className="text-gray-300 text-sm sm:text-base max-w-3xl leading-relaxed drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              100% authentic photography captured in-situ at our flagship facility on MG Road, Aurangabad, Bihar. 
+              Inspect every section from our executive reception lounge, Olympic powerlifting platform, and imported strength machines to our high-RPM spin fleet, group dance studios, and luxury changing suites.
+            </p>
+          </motion.div>
 
-      {/* Hero Header */}
-      <section className="relative py-12 sm:py-16 px-4 sm:px-8 max-w-7xl mx-auto border-b border-white/10">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/10 border border-red-600/30 text-red-400 font-mono text-[10px] font-bold tracking-[0.2em] uppercase mb-4">
-          <Camera className="w-3.5 h-3.5" />
-          <span>OFFICIAL FACILITY ARCHIVE · {ALL_GYM_GALLERY_IMAGES.length} REAL PHOTOS</span>
-        </div>
+          {/* Dual-Row Continuous Auto-Marquee: Upper LTR, Lower RTL */}
+          <div className="mt-8 mb-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
+            <div className="gallery-marquee-ltr flex gap-3 py-1">
+              {[...ALL_GYM_GALLERY_IMAGES.slice(0, 18), ...ALL_GYM_GALLERY_IMAGES.slice(0, 18)].map((img, i) => (
+                <div
+                  key={`marq1-${i}`}
+                  onClick={() => setLightboxIndex(i % ALL_GYM_GALLERY_IMAGES.length)}
+                  className="group relative w-56 sm:w-72 aspect-[16/10] shrink-0 rounded-xl overflow-hidden border border-neutral-800 hover:border-red-600/70 shadow-lg cursor-pointer transition-all"
+                >
+                  <img src={img.url} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[10px] font-sans font-bold text-white uppercase">
+                    <span className="truncate">{img.label}</span>
+                    <span className="text-red-400 font-mono text-[9px] shrink-0 ml-1">{img.zone}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[1] mb-4">
-          EXPLORE THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-800">VIKINGS ARENA</span>
-        </h1>
-        <p className="text-gray-400 text-sm sm:text-base max-w-3xl leading-relaxed">
-          100% authentic photography captured in-situ at our flagship facility on MG Road, Aurangabad, Bihar. 
-          Inspect every section from our executive reception lounge, Olympic powerlifting platform, and imported strength machines to our high-RPM spin fleet, group dance studios, and luxury changing suites.
-        </p>
+            <div className="gallery-marquee-rtl flex gap-3 py-1 mt-2">
+              {[...ALL_GYM_GALLERY_IMAGES.slice(18), ...ALL_GYM_GALLERY_IMAGES.slice(18)].map((img, i) => (
+                <div
+                  key={`marq2-${i}`}
+                  onClick={() => setLightboxIndex((18 + i) % ALL_GYM_GALLERY_IMAGES.length)}
+                  className="group relative w-56 sm:w-72 aspect-[16/10] shrink-0 rounded-xl overflow-hidden border border-neutral-800 hover:border-red-600/70 shadow-lg cursor-pointer transition-all"
+                >
+                  <img src={img.url} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[10px] font-sans font-bold text-white uppercase">
+                    <span className="truncate">{img.label}</span>
+                    <span className="text-red-400 font-mono text-[9px] shrink-0 ml-1">{img.zone}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        {/* Category Filter Tabs: Swipeable on mobile, wrapped on desktop */}
-        <div className="flex overflow-x-auto sm:flex-wrap items-center gap-2 pt-6 sm:pt-8 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                setLightboxIndex(null);
-              }}
-              className={`shrink-0 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 active:scale-95 touch-manipulation ${
-                activeCategory === cat.id
-                  ? "bg-red-600 text-black shadow-lg shadow-red-600/30"
-                  : "bg-neutral-900/90 border border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700"
-              }`}
-            >
-              <span>{cat.label}</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[9px] ${activeCategory === cat.id ? "bg-black/25 text-black font-black" : "bg-neutral-800 text-gray-400"}`}>
-                {cat.count}
-              </span>
-            </button>
-          ))}
+          {/* Category Filter Tabs: Swipeable on mobile, wrapped on desktop */}
+          <div className="flex overflow-x-auto sm:flex-wrap items-center gap-2 pt-6 sm:pt-8 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setActiveCategory(cat.id);
+                  setLightboxIndex(null);
+                }}
+                className={`shrink-0 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full font-mono text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-all cursor-pointer flex items-center gap-1.5 sm:gap-2 active:scale-95 touch-manipulation ${
+                  activeCategory === cat.id
+                    ? "bg-red-600 text-black shadow-lg shadow-red-600/30"
+                    : "bg-neutral-900/90 border border-neutral-800 text-gray-400 hover:text-white hover:border-neutral-700 backdrop-blur-sm"
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[9px] ${activeCategory === cat.id ? "bg-black/25 text-black font-black" : "bg-neutral-800 text-gray-400"}`}>
+                  {cat.count}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -298,7 +325,7 @@ export default function GalleryPage() {
           <span className="font-bold text-white tracking-widest uppercase">VIKINGS GYM & SPA</span>
         </div>
         <p className="max-w-md mx-auto mb-4 text-gray-400">
-          MG Road, Above Central Bank, Aurangabad, Bihar 824101 · Open Mon–Sat 5 AM – 10 PM
+          {GYM_CONFIG.address} · {GYM_CONFIG.operatingHoursShort}
         </p>
         <Link to="/" className="text-red-500 hover:underline">
           Return to Homepage
