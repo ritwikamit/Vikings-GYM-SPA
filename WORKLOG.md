@@ -3,6 +3,32 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Fix Initial Loading Screen Display & Eliminate Cookie Consent Flash (Antigravity session)
+
+**User Request:**
+- "why loading page is not there, make sure the accept cookie wont appear for the users who already accepted the cookie, for my computer it is still appearing for very small moment of time and disappearing automatically although i had acceped the cookie. use ponytail and push to github"
+
+**Root Cause Identified:**
+1. **Cookie Modal Flash:** The Puppeteer prerendering script ran in an incognito session with empty localStorage, baking the visible cookie modal into `dist/index.html`. Real visitors downloaded HTML with the modal already visible, which disappeared ~100ms later when React checked localStorage.
+2. **Missing Loading Screen:** The prerenderer captured the HTML after `dismissLoader()` had fired, saving `#loader` with inline `display: none; opacity: 0;`. Real visitors received the HTML with the loader already hidden.
+
+**What Changed:**
+1. **Zero Cookie Flash for Accepted Users (`src/components/PublicWebsite.tsx`):**
+   - Changed `showCookieBanner` initial state to `false`.
+   - `useEffect` checks `localStorage.getItem("vikings_cookie_consent")` post-mount; if consent already exists, the modal is never mounted.
+2. **Prerender Cleanliness (`scripts/prerender.mjs`):**
+   - Injected `localStorage.setItem("vikings_cookie_consent", "all")` via `page.evaluateOnNewDocument()` so the cookie modal is strictly excluded from prerendered static HTML.
+   - Restored `#loader` to its clean, initial visible state (`opacity: 1; display: flex;`) in the saved `dist/index.html`.
+3. **Smooth Loading Screen Experience (`index.html`):**
+   - Enforced a minimum display duration (900ms) for the initial minimal loader ("VIKINGS GYM & SPA Loading...") so visitors reliably see the brand emblem and laser animation before it smoothly dissolves away (`transition: opacity 0.35s`).
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 229,522 bytes).
+- Verified `dist/index.html` has `has cookie settings: false` and `has loader: true` with active styling.
+
+---
+
 ## 2026-10-15 — Server-Side OPENROUTER_API_KEY Proxy, Gradient Red Header & Badge Removal (Antigravity session)
 
 **User Request:**

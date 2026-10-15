@@ -88,16 +88,28 @@ function serve() {
 async function renderPage(browser, route) {
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(45000);
+  // Ensure cookie modal is NEVER baked into static HTML
+  await page.evaluateOnNewDocument(() => {
+    try {
+      localStorage.setItem("vikings_cookie_consent", "all");
+    } catch {}
+  });
   await page.goto(`${BASE}${route}`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 3000));
   try {
     await page.waitForSelector("#root > *", { timeout: 10000 });
   } catch {}
   await new Promise((r) => setTimeout(r, 1500));
-  const html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
+  let html = await page.evaluate(() => "<!doctype html>\n" + document.documentElement.outerHTML);
+  // Restore minimal loader to active, visible state in the saved HTML
+  html = html.replace(
+    /id="loader"[^>]*>/,
+    'id="loader" style="position: fixed; inset: 0; background: #000000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; opacity: 1; pointer-events: auto; transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;">'
+  );
   await page.close();
   return html;
 }
+
 
 async function main() {
   if (!existsSync(DIST)) {

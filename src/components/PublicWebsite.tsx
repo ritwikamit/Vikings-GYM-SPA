@@ -725,13 +725,19 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     return () => window.removeEventListener("keydown", handleKey);
   }, [activeStoryIndex]);
 
-  // Cookie consent banner for new visitors: asks immediately when opening website, once only per user
-  const [showCookieBanner, setShowCookieBanner] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !localStorage.getItem("vikings_cookie_consent");
-    }
-    return false;
-  });
+  // Cookie consent banner for new visitors: zero flash for existing users, once only per new user
+  const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const consent = localStorage.getItem("vikings_cookie_consent");
+        if (!consent) {
+          setShowCookieBanner(true);
+        }
+      }
+    } catch {}
+  }, []);
 
   const acceptCookies = (type: "all" | "essential" | "dismissed") => {
     if (typeof window !== "undefined") {
@@ -741,6 +747,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     }
     setShowCookieBanner(false);
   };
+
 
   // Active nav section with throttled scroll-spy (zero layout thrashing for 120fps mobile scroll)
   const [activeSection, setActiveSection] = useState("");
