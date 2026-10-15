@@ -20,7 +20,8 @@ Append a new entry at the top after each work session, then commit/push so both 
 **Verification:**
 - `npm run lint` (`tsc --noEmit`): **0 errors**.
 - `npm run build`: Production bundle and prerenderer completed cleanly with **0 errors** (`dist/index.html` 232,886 bytes).
-- Live local dev server running on `http://localhost:3000/`. (Kept strictly local).
+- Live local dev server verified on `http://localhost:3000/`.
+- Deployed: Pushed to GitHub `main` (commit `edee188`), triggering automated builds on Vercel (frontend) and Render (backend).
 
 ---
 
