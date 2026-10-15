@@ -3,6 +3,28 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — AI Chatbot Model Resilience & Expanded Knowledge Fallback (Antigravity session)
+
+**User Query:**
+- "in the site, the chatbot is not answering questions as it was answering in local host, it is just answering limited questions why?"
+
+**Root Cause Identified:**
+- In localhost, `.env.local` provides `VITE_OPENROUTER_API_KEY`, allowing the browser to stream answers directly from OpenRouter models.
+- On Vercel, `.env.local` is gitignored to protect sensitive credentials from GitHub leaks. Because `VITE_OPENROUTER_API_KEY` was not configured in Vercel's Environment Variables dashboard, the build ran with an empty key, triggering the minimal offline fallback.
+
+**What Changed:**
+1. **Model Upgrades (`src/services/aiChatService.ts`):**
+   - Configured `openrouter/auto` as primary model (verified live status 200 with DeepSeek) with fallback to `deepseek/deepseek-chat`, `meta-llama/llama-3.3-70b-instruct`, and `google/gemini-2.0-flash-001`.
+2. **Comprehensive Fallback Knowledge Base:**
+   - Greatly expanded `generateLocalFallbackResponse` to cover 15+ rich fitness domains: workouts, 4-day PPL splits, chest & bench press form, back & deadlifts, arm hypertrophy, leg day & squats, creatine & whey supplements, fat loss & abs, and female training with Neha Singh.
+   - Ensures deep, helpful answers even if the user is offline or before Vercel environment variables are populated.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 234,598 bytes).
+
+---
+
 ## 2026-10-15 — Chatbot Smartphone Viewport Optimization & Light/Dark Theme Readability (Antigravity session)
 
 **User Request:**
