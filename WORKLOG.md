@@ -3,6 +3,33 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Server-Side OPENROUTER_API_KEY Proxy, Gradient Red Header & Badge Removal (Antigravity session)
+
+**User Request:**
+- "i chanegd the key name to :OPENROUTER_API_KEY because is was saying vite exposes the key, now check everything is working now. keep the header of the chatbox geadient red and remove the fitness coach badge from the header."
+
+**What Changed:**
+1. **Secure Server-Side AI Chat Proxy (`api/chat.js` & `vercel.json`):**
+   - Implemented a serverless function (`api/chat.js`) that runs securely on Vercel's backend runtime.
+   - Reads `process.env.OPENROUTER_API_KEY` on the server without ever exposing the key in client-side bundles or network traces.
+   - Configured `vercel.json` with `/api/(.*)` rewrite pass-through so serverless endpoints are directly accessible alongside the SPA.
+   - Added Vite dev server middleware in `vite.config.ts` to simulate `/api/chat` locally during `npm run dev`.
+   - Updated `src/services/aiChatService.ts` to call `/api/chat` as primary path, with seamless fallback to client key or rich offline knowledge.
+2. **Gradient Red Chat Header (`src/components/RitwikChatbot.tsx`, `src/index.css`):**
+   - Redesigned chatbox header with permanent Vikings gradient red: `bg-gradient-to-r from-red-600 via-rose-600 to-red-700 border-b border-red-700/60 shadow-md`.
+   - Guaranteed pure `#ffffff` text and icon contrast in both light and dark themes using `.ritwik-gradient-header` CSS safeguards.
+3. **Removed Fitness Coach Badge:**
+   - Removed the `Fitness Coach` badge pill from the header, showcasing a clean, bold "Ritwik" brand title with "Vikings Gym & Spa Expert" subtitle.
+4. **Environment Variables:**
+   - Updated `.env.example` to document `OPENROUTER_API_KEY=""`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 234,580 bytes).
+- Zero leaks: Key is strictly server-side, `.env.local` remains untracked.
+
+---
+
 ## 2026-10-15 — AI Chatbot Model Resilience & Expanded Knowledge Fallback (Antigravity session)
 
 **User Query:**

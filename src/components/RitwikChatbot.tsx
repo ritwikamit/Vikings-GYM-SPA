@@ -247,61 +247,28 @@ export const RitwikChatbot: React.FC = () => {
                 : "bg-neutral-950 border border-neutral-800 text-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7),0_0_35px_-5px_rgba(220,38,38,0.2)]"
             }`}
           >
-            {/* Header: Always clearly visible on screen */}
-            <div
-              className={`relative px-4 py-3 border-b flex items-center justify-between shrink-0 transition-colors ${
-                isLight
-                  ? "bg-white border-slate-200"
-                  : "bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-950 border-neutral-800"
-              }`}
-            >
+            {/* Header: Gradient Red with pure white text & icons in both themes */}
+            <div className="ritwik-gradient-header relative px-4 py-3 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 border-b border-red-700/60 shadow-md flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative shrink-0">
-                  <div
-                    className={`w-10 h-10 rounded-full overflow-hidden border shadow-md ring-1 ${
-                      isLight
-                        ? "border-red-500/50 bg-slate-50 ring-red-500/20"
-                        : "border-red-500/50 bg-neutral-900 ring-red-500/20"
-                    }`}
-                  >
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/80 shadow-md bg-neutral-900 ring-2 ring-white/20">
                     <img
                       src={chatbotProfilePhoto}
                       alt="Coach Ritwik"
                       className="w-full h-full object-cover object-[center_20%]"
                     />
                   </div>
-                  <span
-                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 shadow-[0_0_6px_rgba(16,185,129,0.9)] ${
-                      isLight ? "ring-white" : "ring-neutral-900"
-                    }`}
-                  />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-red-700 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className={`font-extrabold text-sm tracking-wide ${
-                        isLight ? "text-slate-900" : "text-white"
-                      }`}
-                    >
+                  <div className="flex items-center">
+                    <span className="font-extrabold text-base tracking-wide text-white drop-shadow-xs">
                       Ritwik
                     </span>
-                    <span
-                      className={`text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 rounded border ${
-                        isLight
-                          ? "bg-red-50 text-red-600 border-red-200"
-                          : "bg-red-600/20 text-red-400 border-red-500/30"
-                      }`}
-                    >
-                      Fitness Coach
-                    </span>
                   </div>
-                  <p
-                    className={`text-[11px] flex items-center gap-1 font-medium ${
-                      isLight ? "text-slate-500" : "text-gray-400"
-                    }`}
-                  >
-                    <ShieldCheck className={`w-3 h-3 ${isLight ? "text-emerald-600" : "text-emerald-400"}`} />
-                    Vikings Gym &amp; Spa Expert
+                  <p className="text-[11px] flex items-center gap-1 font-medium text-red-100">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-300 shrink-0" />
+                    <span>Vikings Gym &amp; Spa Expert</span>
                   </p>
                 </div>
               </div>
@@ -312,29 +279,22 @@ export const RitwikChatbot: React.FC = () => {
                   onClick={handleResetChat}
                   title="Clear conversation"
                   aria-label="Clear chat"
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                    isLight
-                      ? "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
-                      : "text-gray-400 hover:text-white hover:bg-white/10"
-                  }`}
+                  className="p-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-4 h-4 text-white" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
                   title="Close chat"
                   aria-label="Close chat"
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                    isLight
-                      ? "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
-                      : "text-gray-400 hover:text-white hover:bg-white/10"
-                  }`}
+                  className="p-1.5 rounded-lg text-white/90 hover:text-white hover:bg-white/20 transition-colors cursor-pointer"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 text-white" />
                 </button>
               </div>
             </div>
+
 
             {/* Guardrail Disclaimer Banner */}
             <div

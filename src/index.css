@@ -689,6 +689,24 @@ footer.footer-always-dark {
 }
 
 /* 15. RITWIK CHATBOT LIGHT & DARK MODE CONTRAST SAFEGUARDS */
+.ritwik-gradient-header,
+.theme-light .ritwik-gradient-header,
+.ritwik-gradient-header span,
+.theme-light .ritwik-gradient-header span,
+.ritwik-gradient-header button,
+.theme-light .ritwik-gradient-header button,
+.ritwik-gradient-header svg,
+.theme-light .ritwik-gradient-header svg {
+  color: #ffffff !important;
+}
+
+.ritwik-gradient-header p,
+.theme-light .ritwik-gradient-header p,
+.ritwik-gradient-header p span,
+.theme-light .ritwik-gradient-header p span {
+  color: #fee2e2 !important;
+}
+
 .ritwik-user-bubble,
 .theme-light .ritwik-user-bubble,
 .ritwik-user-bubble *,
@@ -700,6 +718,7 @@ footer.footer-always-dark {
 .theme-light .ritwik-send-btn svg {
   color: #ffffff !important;
 }
+
 
 
 

@@ -80,54 +80,72 @@ export async function sendRitwikMessage(
 }
 
 export async function sendChatMessage(messages: { role: "user" | "assistant" | "system"; content: string }[]): Promise<string> {
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY || "";
-
   // Prepare messages with system prompt injected
   const conversation = [
     { role: "system", content: RITWIK_SYSTEM_PROMPT },
     ...messages.slice(-8), // keep last 8 messages for context efficiency
   ];
 
-  if (!apiKey) {
-    return generateLocalFallbackResponse(messages[messages.length - 1]?.content || "");
+  // 1. Primary path: Secure serverless proxy (/api/chat) where OPENROUTER_API_KEY stays private
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: conversation }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.reply) {
+        return data.reply;
+      }
+    }
+  } catch {
+    // Continue to client direct call or offline fallback
   }
 
-  // Attempt candidate models sequentially
-  for (const model of CANDIDATE_MODELS) {
-    try {
-      const response = await fetch(OPENROUTER_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-          "HTTP-Referer": typeof window !== "undefined" ? window.location.origin : "https://www.vikingsgym.in",
-          "X-Title": "Vikings Gym & Spa AI Coach",
-        },
-        body: JSON.stringify({
-          model,
-          messages: conversation,
-          temperature: 0.6,
-          max_tokens: 600,
-        }),
-      });
+  // 2. Secondary path: Client-side direct call if key is provided in client environment
+  const clientKey =
+    (import.meta.env.VITE_OPENROUTER_API_KEY as string) ||
+    (import.meta.env.OPENROUTER_API_KEY as string) ||
+    "";
 
-      if (!response.ok) {
+  if (clientKey) {
+    for (const model of CANDIDATE_MODELS) {
+      try {
+        const response = await fetch(OPENROUTER_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${clientKey}`,
+            "HTTP-Referer": typeof window !== "undefined" ? window.location.origin : "https://vikingsgymspa.vercel.app",
+            "X-Title": "Vikings Gym & Spa AI Coach",
+          },
+          body: JSON.stringify({
+            model,
+            messages: conversation,
+            temperature: 0.6,
+            max_tokens: 600,
+          }),
+        });
+
+        if (!response.ok) continue;
+
+        const data = await response.json();
+        const reply = data?.choices?.[0]?.message?.content?.trim();
+        if (reply) {
+          return reply;
+        }
+      } catch {
         continue;
       }
-
-      const data = await response.json();
-      const reply = data?.choices?.[0]?.message?.content?.trim();
-      if (reply) {
-        return reply;
-      }
-    } catch {
-      // Continue to next candidate model
     }
   }
 
-  // If external API is unavailable or rate-limited, provide verified instant answer
+  // 3. Fallback: Instant verified offline knowledge engine
   return generateLocalFallbackResponse(messages[messages.length - 1]?.content || "");
 }
+
 
 /**
  * Instant local knowledge engine: provides verified answers for common gym & diet queries
