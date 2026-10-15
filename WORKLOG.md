@@ -3,6 +3,33 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Scroll-To-Top Centering, Cross-Page Support & Persistent Mobile Footer Nav (Antigravity session)
+
+**User Request:**
+- "make sure the scrolling up arrow icon should be in centre of the circular box, make sure it also appears in all dedicated pages, keep the footer nav bar for the smartphoneand tab  constantly visible across pages, use ponytail for editing and then push"
+
+**What Changed:**
+1. **Mathematical Centering of Scroll-To-Top Arrow (`src/components/ScrollToTopButton.tsx`, `src/index.css`):**
+   - Replaced mismatched container sizes and hardcoded inner dimensions with exact symmetrical geometry (`w-[34px] h-[34px] sm:w-[38px] sm:h-[38px]` inside `w-11 h-11 sm:w-12 sm:h-12`), ensuring an exact 5px margin on all sides with zero subpixel rounding jitter.
+   - SVG progress ring now dynamically conforms to `w-full h-full` matching the button perimeter.
+   - Constrained hover transformation (`translateY(-2px)`) to true desktop hover pointers (`@media (hover: hover)`) so mobile and tablet touch interactions never stick the icon off-center.
+2. **Scroll-To-Top Available Across All Dedicated Pages (`src/App.tsx`):**
+   - Extracted `ScrollToTopButton` into an isolated, reusable component.
+   - Mounted globally in `src/App.tsx` across all public dedicated pages (`/`, `/facilities`, `/trainers`, `/memberships`, `/gallery`, `/contact`, `/franchise`, `/ambassador`, `/privacy`, `/terms`, `/cookies`).
+3. **Persistent Mobile & Tablet Footer Navigation (`src/components/MobileFooterNav.tsx`, `src/App.tsx`, `src/index.css`):**
+   - Extracted `MobileFooterNav` (Call, WhatsApp, Join Now) into an isolated component and mounted it globally for public routes.
+   - It is now constantly visible on smartphones and tablets across every page of the website.
+   - Applied global `footer { padding-bottom: calc(4.75rem + env(safe-area-inset-bottom)) !important; }` for viewports under 1024px so footer text is never covered by the bottom bar.
+4. **Ponytail Cleanliness:**
+   - Removed duplicate local definitions and inline JSX from `PublicWebsite.tsx`, reducing file complexity.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 229,684 bytes).
+- Git push: Synced to GitHub `main` for Vercel auto-deployment.
+
+---
+
 ## 2026-10-15 — Fix Initial Loading Screen Display & Eliminate Cookie Consent Flash (Antigravity session)
 
 **User Request:**

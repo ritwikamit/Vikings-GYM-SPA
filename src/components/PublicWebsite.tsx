@@ -239,79 +239,6 @@ function Reveal({ children, className, delay = 0 }: { children: React.ReactNode;
   );
 }
 
-// Isolated butter-smooth back-to-top button with circular SVG scroll progress
-function ScrollToTopButton() {
-  const [show, setShow] = useState(false);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    let rafId: number | null = null;
-    const onScroll = () => {
-      if (rafId !== null) return;
-      rafId = window.requestAnimationFrame(() => {
-        const sy = window.scrollY;
-        setShow(sy > 200);
-        const total = document.documentElement.scrollHeight - window.innerHeight;
-        if (total > 0) {
-          setProgress(Math.min(100, Math.max(0, (sy / total) * 100)));
-        }
-        rafId = null;
-      });
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafId !== null) window.cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.8, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 16 }}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.94 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label="Back to top"
-          className="fixed bottom-36 right-4 sm:right-6 lg:bottom-22 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center p-0 cursor-pointer shadow-2xl shadow-black/80 group"
-        >
-          <svg className="w-12 h-12 -rotate-90 pointer-events-none absolute inset-0 drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]" viewBox="0 0 48 48">
-            <circle
-              cx="24"
-              cy="24"
-              r="21"
-              fill="none"
-              stroke="rgba(255, 255, 255, 0.12)"
-              strokeWidth="2.5"
-            />
-            <circle
-              cx="24"
-              cy="24"
-              r="21"
-              fill="none"
-              stroke="#ef4444"
-              strokeWidth="2.8"
-              strokeDasharray={131.95}
-              strokeDashoffset={131.95 - (131.95 * progress) / 100}
-              strokeLinecap="round"
-              style={{
-                transition: "stroke-dashoffset 90ms cubic-bezier(0.1, 0.9, 0.2, 1)",
-                willChange: "stroke-dashoffset",
-              }}
-            />
-          </svg>
-          <div className="scroll-top-btn-inner w-[41px] h-[41px] rounded-full !bg-neutral-950 !text-white hover:!text-red-500 flex items-center justify-center transition-colors">
-            <ArrowUp className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
-          </div>
-        </motion.button>
-      )}
-    </AnimatePresence>
-  );
-}
 
 // Unified lucid section header: kicker + title + red rule + optional description (compact on mobile/tab)
 function SectionHeader({ kicker, title, desc }: { kicker: string; title: React.ReactNode; desc?: React.ReactNode }) {
@@ -2609,40 +2536,6 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         )}
       </AnimatePresence>
 
-      {/* Butter-smooth isolated scroll-to-top button */}
-      <ScrollToTopButton />
-
-      {/* Mobile sticky action bar: Call · WhatsApp · Join (phones/tablets only) */}
-      <div
-        className="mobile-action-bar lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-white/10 bg-black/92 backdrop-blur-md"
-        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      >
-        <div className="grid grid-cols-3 divide-x divide-white/10">
-          <a
-            href={`tel:${GYM_CONFIG.phone}`}
-            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-bold tracking-[0.18em] text-gray-300 active:text-white transition-colors"
-          >
-            <Phone className="w-5 h-5 text-red-500" />
-            CALL
-          </a>
-          <a
-            href={`https://wa.me/${GYM_CONFIG.whatsapp}`}
-            target="_blank"
-            rel="noreferrer"
-            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-bold tracking-[0.18em] text-gray-300 active:text-white transition-colors"
-          >
-            <MessageCircle className="w-5 h-5 text-red-500" />
-            WHATSAPP
-          </a>
-          <button
-            onClick={() => openWhatsApp(JOIN_MESSAGE)}
-            className="flex flex-col items-center gap-1 py-2.5 text-[10px] font-mono font-black tracking-[0.18em] bg-red-600 text-black active:bg-red-500 transition-colors cursor-pointer"
-          >
-            <Dumbbell className="w-5 h-5" />
-            JOIN NOW
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

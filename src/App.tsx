@@ -4,6 +4,8 @@ import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
 import MinimalLoadingScreen from "./components/MinimalLoadingScreen";
 import RitwikChatbot from "./components/RitwikChatbot";
+import ScrollToTopButton from "./components/ScrollToTopButton";
+import MobileFooterNav from "./components/MobileFooterNav";
 // Portal consoles are code-split: public visitors only download the landing page.
 const AuthGateway = lazy(() => import("./components/AuthGateway"));
 const ResetPassword = lazy(() => import("./components/ResetPassword"));
@@ -245,6 +247,11 @@ export default function App() {
   const location = useLocation();
   const { user, isAuthenticated } = useAuth();
   const isERP = location.pathname.startsWith("/erp");
+  const isPublicSite =
+    !isERP &&
+    !location.pathname.startsWith("/member") &&
+    !location.pathname.startsWith("/login") &&
+    !location.pathname.startsWith("/reset-password");
 
   // For the ERP layout
   const [activeTab, setActiveTab] = useState(() => {
@@ -320,6 +327,12 @@ export default function App() {
       />
     </Routes>
     {!isERP && <RitwikChatbot />}
+    {isPublicSite && (
+      <>
+        <ScrollToTopButton />
+        <MobileFooterNav />
+      </>
+    )}
     </Suspense>
   );
 }

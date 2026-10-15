@@ -655,17 +655,41 @@ footer.footer-always-dark {
   border-color: #27272a !important;
 }
 
-/* 13. SCROLL-TO-TOP BUTTON */
+/* 13. SCROLL-TO-TOP BUTTON (Precise centering & desktop-only hover lift) */
 .scroll-top-btn-inner,
 .theme-light .scroll-top-btn-inner {
   background-color: rgba(9, 9, 11, 0.96) !important;
   color: #f1f5f9 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-.scroll-top-btn-inner:hover,
-.theme-light .scroll-top-btn-inner:hover {
-  color: #ef4444 !important;
+.scroll-top-btn-inner svg,
+.theme-light .scroll-top-btn-inner svg {
+  display: block !important;
+  margin: 0 auto !important;
+  color: #ffffff !important;
+}
+
+@media (hover: hover) {
+  .scroll-top-btn-inner:hover svg,
+  .theme-light .scroll-top-btn-inner:hover svg {
+    color: #ef4444 !important;
+    transform: translateY(-2px);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* 13B. CONSTANT MOBILE/TAB FOOTER ACTION BAR PADDING */
+@media (max-width: 1023px) {
+  footer {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom)) !important;
+  }
 }
 
 /* 14. SMARTPHONE-ONLY HERO VIDEO 1 HIGH-DEF ENHANCEMENT (Desktop PC view unchanged) */
