@@ -3,6 +3,39 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Chatbot Smartphone Viewport Optimization & Light/Dark Theme Readability (Antigravity session)
+
+**User Request:**
+- "make sure the chatbot box alogn with its header also appears on the screen and make sure the texts and icons are visible in both light and dark theme, use ponytail and optimize it for smartphone and push the changes to github"
+
+**What Changed:**
+1. **Smartphone Viewport & Header Safety (`src/components/RitwikChatbot.tsx`):**
+   - Anchored modal container to `fixed z-50 inset-x-2.5 top-16 bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-22 sm:right-6 sm:w-[410px] sm:h-[580px] sm:max-h-[calc(100dvh-7rem)]`.
+   - On smartphones, the top edge rests cleanly below the navigation bar (`top-16`), ensuring Coach Ritwik's profile photo, title, fitness coach tag, and header action buttons (`RotateCcw`, `X`) are always 100% visible on screen without top clipping.
+   - Preserves desktop floating widget ergonomics.
+2. **Dual-Theme Text & Icon Contrast Adaptation:**
+   - Synchronized theme reactivity via `vikings_theme_change` window event and `MutationObserver` on `document.documentElement`.
+   - Light Theme (`.theme-light`):
+     - Window container: crisp white `bg-white` with `border-slate-200/90` and clean depth shadows.
+     - Header: `bg-white` with dark slate heading `#0f172a`, emerald shield icon, and high-contrast gray action icons (`text-slate-500 hover:text-slate-900 hover:bg-slate-100`).
+     - Disclaimer banner: `bg-red-50/90 border-red-100 text-red-950` with high-contrast `text-red-600` WhatsApp desk link.
+     - Bot messages: `bg-white border-slate-200/90 text-slate-800` with bold text in `text-red-600`.
+     - Prompt chips: `bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border-slate-300`.
+     - Input bar: `bg-slate-50 text-slate-900 placeholder-slate-400 border-slate-300`.
+     - Floating trigger button: `bg-white border-2 border-red-600 text-red-600 shadow-xl`.
+   - Dark Theme:
+     - Maintains luxury dark aesthetic (`bg-neutral-950`, `bg-neutral-900`, `text-white`, `text-gray-200`, red accents).
+3. **Contrast Safeguards (`src/index.css`):**
+   - Added `.ritwik-user-bubble` and `.ritwik-send-btn` CSS rules ensuring that text and icons inside red user bubbles and send buttons remain pure `#ffffff` in both light and dark modes, preventing global `.theme-light .text-white` overrides from darkening them.
+4. **Zero-Leak Security Audit:**
+   - Re-verified git status and staged files: zero credentials, API keys, or tokens committed.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 234,580 bytes).
+
+---
+
 ## 2026-10-15 — Chatbot Profile Photo Integration (ChatbotImage) & Vercel Auto-Deploy (Antigravity session)
 
 **User Request:**

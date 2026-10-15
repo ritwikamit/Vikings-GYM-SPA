@@ -688,5 +688,19 @@ footer.footer-always-dark {
   }
 }
 
+/* 15. RITWIK CHATBOT LIGHT & DARK MODE CONTRAST SAFEGUARDS */
+.ritwik-user-bubble,
+.theme-light .ritwik-user-bubble,
+.ritwik-user-bubble *,
+.theme-light .ritwik-user-bubble * {
+  color: #ffffff !important;
+}
+
+.ritwik-send-btn svg,
+.theme-light .ritwik-send-btn svg {
+  color: #ffffff !important;
+}
+
+
 
 

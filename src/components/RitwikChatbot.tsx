@@ -7,7 +7,6 @@ import {
   RotateCcw, 
   User, 
   CheckCheck,
-  Dumbbell,
   ShieldCheck,
   ExternalLink
 } from "lucide-react";
@@ -26,6 +25,15 @@ const QUICK_PROMPTS = [
 
 export const RitwikChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLight, setIsLight] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return (
+      document.documentElement.classList.contains("theme-light") ||
+      document.body?.classList.contains("theme-light") ||
+      localStorage.getItem("vikings_theme") === "light"
+    );
+  });
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome-1",
@@ -36,9 +44,33 @@ export const RitwikChatbot: React.FC = () => {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [hasUnread, setHasUnread] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Synchronize with site theme toggle (light / dark)
+  useEffect(() => {
+    const checkTheme = () => {
+      const active =
+        document.documentElement.classList.contains("theme-light") ||
+        document.body?.classList.contains("theme-light") ||
+        localStorage.getItem("vikings_theme") === "light";
+      setIsLight(active);
+    };
+    checkTheme();
+
+    const handleThemeChange = (e: any) => {
+      setIsLight(e?.detail?.theme === "light");
+    };
+
+    window.addEventListener("vikings_theme_change", handleThemeChange);
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => {
+      window.removeEventListener("vikings_theme_change", handleThemeChange);
+      observer.disconnect();
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,7 +79,6 @@ export const RitwikChatbot: React.FC = () => {
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
-      setHasUnread(false);
       setTimeout(() => inputRef.current?.focus(), 250);
     }
   }, [isOpen, messages]);
@@ -76,7 +107,6 @@ export const RitwikChatbot: React.FC = () => {
         timestamp: new Date()
       };
       setMessages((prev) => [...prev, botMsg]);
-      if (!isOpen) setHasUnread(true);
     } catch {
       const fallbackMsg: ChatMessage = {
         id: `bot-${Date.now()}`,
@@ -101,16 +131,17 @@ export const RitwikChatbot: React.FC = () => {
     ]);
   };
 
-  // Helper to format bot responses with markdown-like bolding and bullet points
   const formatBotContent = (content: string) => {
     const lines = content.split("\n");
     return lines.map((line, idx) => {
-      // Bold text processing
       const parts = line.split(/(\*\*.*?\*\*)/g);
       const renderedParts = parts.map((part, pIdx) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
-            <strong key={pIdx} className="font-bold text-red-500 font-sans">
+            <strong
+              key={pIdx}
+              className={`font-bold font-sans ${isLight ? "text-red-600" : "text-red-400"}`}
+            >
               {part.slice(2, -2)}
             </strong>
           );
@@ -145,7 +176,7 @@ export const RitwikChatbot: React.FC = () => {
 
   return (
     <>
-      {/* Floating Trigger Button: exact same size and right-alignment as ScrollToTopButton */}
+      {/* Floating Trigger Button */}
       <div className="fixed bottom-20 right-4 sm:right-6 lg:bottom-6 z-50 flex items-center">
         <AnimatePresence>
           {!isOpen && (
@@ -154,9 +185,18 @@ export const RitwikChatbot: React.FC = () => {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 8, scale: 0.95 }}
               onClick={() => setIsOpen(true)}
-              className="mr-2.5 hidden sm:flex items-center bg-neutral-950/90 text-neutral-200 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-neutral-800 hover:border-red-500/50 shadow-xl backdrop-blur-md cursor-pointer transition-all select-none group"
+              className={`mr-2.5 hidden sm:flex items-center text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-xl backdrop-blur-md cursor-pointer transition-all select-none group border ${
+                isLight
+                  ? "bg-white/95 text-slate-800 border-slate-200 hover:border-red-500/50"
+                  : "bg-neutral-950/90 text-neutral-200 border-neutral-800 hover:border-red-500/50"
+              }`}
             >
-              <span>Ask Coach <strong className="text-red-500 font-bold group-hover:text-red-400 transition-colors">Ritwik</strong></span>
+              <span>
+                Ask Coach{" "}
+                <strong className="text-red-500 font-bold group-hover:text-red-600 transition-colors">
+                  Ritwik
+                </strong>
+              </span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -166,58 +206,101 @@ export const RitwikChatbot: React.FC = () => {
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label={isOpen ? "Close Ritwik Chatbot" : "Open Ritwik Chatbot"}
-          className={`relative w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center p-0 cursor-pointer shadow-2xl transition-all duration-200 ${
-            isOpen 
-              ? "bg-neutral-900 border-2 border-red-500 text-white shadow-black/80" 
-              : "bg-neutral-950 border-2 border-red-600 hover:border-red-500 hover:bg-neutral-900 text-white shadow-black/80"
+          className={`relative w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center p-0 cursor-pointer shadow-2xl transition-all duration-200 border-2 ${
+            isOpen
+              ? isLight
+                ? "bg-slate-100 border-red-500 text-red-500"
+                : "bg-neutral-900 border-red-500 text-red-400"
+              : isLight
+                ? "bg-white border-red-600 hover:bg-slate-50 text-red-600"
+                : "bg-neutral-950 border-red-600 hover:border-red-500 hover:bg-neutral-900 text-white"
           }`}
         >
-          {/* Online green indicator: appears on the chatbot icon only */}
-          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-neutral-950 shadow-[0_0_8px_rgba(16,185,129,0.8)] pointer-events-none" />
+          {/* Online green indicator: appears on the chatbot icon perimeter */}
+          <span
+            className={`absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 shadow-[0_0_8px_rgba(16,185,129,0.8)] pointer-events-none ${
+              isLight ? "border-white" : "border-neutral-950"
+            }`}
+          />
 
           {isOpen ? (
-            <X className="w-5 h-5 text-red-400 transition-transform" />
+            <X className="w-5 h-5 text-red-500 transition-transform" />
           ) : (
-            <MessageSquare className="w-5 h-5 text-white transition-colors" />
+            <MessageSquare
+              className={`w-5 h-5 transition-colors ${isLight ? "text-red-600" : "text-white"}`}
+            />
           )}
         </motion.button>
       </div>
 
-      {/* Main Chat Modal Window */}
+      {/* Main Chat Modal Window: Smartphone-optimized & Light/Dark Theme Adaptive */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 25, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed bottom-24 sm:bottom-24 lg:bottom-22 right-3 sm:right-6 z-50 w-[calc(100vw-1.5rem)] sm:w-[410px] md:w-[430px] max-h-[82vh] sm:max-h-[640px] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-neutral-800 bg-neutral-950 text-white font-sans backdrop-blur-xl"
-            style={{
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 35px -5px rgba(220, 38, 38, 0.2)"
-            }}
+            exit={{ opacity: 0, y: 16, scale: 0.96 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className={`fixed z-50 inset-x-2.5 top-16 bottom-3 sm:inset-x-auto sm:top-auto sm:bottom-22 sm:right-6 sm:w-[410px] sm:h-[580px] sm:max-h-[calc(100dvh-7rem)] flex flex-col rounded-2xl overflow-hidden shadow-2xl font-sans backdrop-blur-xl transition-colors duration-200 ${
+              isLight
+                ? "bg-white border border-slate-200/90 text-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.18)]"
+                : "bg-neutral-950 border border-neutral-800 text-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7),0_0_35px_-5px_rgba(220,38,38,0.2)]"
+            }`}
           >
-            {/* Header */}
-            <div className="relative px-4 py-3.5 bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-950 border-b border-neutral-800 flex items-center justify-between">
+            {/* Header: Always clearly visible on screen */}
+            <div
+              className={`relative px-4 py-3 border-b flex items-center justify-between shrink-0 transition-colors ${
+                isLight
+                  ? "bg-white border-slate-200"
+                  : "bg-gradient-to-r from-neutral-900 via-neutral-900 to-neutral-950 border-neutral-800"
+              }`}
+            >
               <div className="flex items-center gap-3">
                 <div className="relative shrink-0">
-                  <div className="w-10 h-10 rounded-full overflow-hidden border border-red-500/50 shadow-md bg-neutral-900 ring-1 ring-red-500/20">
+                  <div
+                    className={`w-10 h-10 rounded-full overflow-hidden border shadow-md ring-1 ${
+                      isLight
+                        ? "border-red-500/50 bg-slate-50 ring-red-500/20"
+                        : "border-red-500/50 bg-neutral-900 ring-red-500/20"
+                    }`}
+                  >
                     <img
                       src={chatbotProfilePhoto}
                       alt="Coach Ritwik"
                       className="w-full h-full object-cover object-[center_20%]"
                     />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-neutral-900 shadow-[0_0_6px_rgba(16,185,129,0.9)]" />
+                  <span
+                    className={`absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 shadow-[0_0_6px_rgba(16,185,129,0.9)] ${
+                      isLight ? "ring-white" : "ring-neutral-900"
+                    }`}
+                  />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold text-sm tracking-wide text-white">Ritwik</span>
-                    <span className="text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-500/30">
+                    <span
+                      className={`font-extrabold text-sm tracking-wide ${
+                        isLight ? "text-slate-900" : "text-white"
+                      }`}
+                    >
+                      Ritwik
+                    </span>
+                    <span
+                      className={`text-[10px] uppercase font-mono font-bold px-1.5 py-0.5 rounded border ${
+                        isLight
+                          ? "bg-red-50 text-red-600 border-red-200"
+                          : "bg-red-600/20 text-red-400 border-red-500/30"
+                      }`}
+                    >
                       Fitness Coach
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-400 flex items-center gap-1 font-medium">
-                    <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                  <p
+                    className={`text-[11px] flex items-center gap-1 font-medium ${
+                      isLight ? "text-slate-500" : "text-gray-400"
+                    }`}
+                  >
+                    <ShieldCheck className={`w-3 h-3 ${isLight ? "text-emerald-600" : "text-emerald-400"}`} />
                     Vikings Gym &amp; Spa Expert
                   </p>
                 </div>
@@ -229,7 +312,11 @@ export const RitwikChatbot: React.FC = () => {
                   onClick={handleResetChat}
                   title="Clear conversation"
                   aria-label="Clear chat"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    isLight
+                      ? "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                  }`}
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -238,7 +325,11 @@ export const RitwikChatbot: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   title="Close chat"
                   aria-label="Close chat"
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                    isLight
+                      ? "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                  }`}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -246,22 +337,36 @@ export const RitwikChatbot: React.FC = () => {
             </div>
 
             {/* Guardrail Disclaimer Banner */}
-            <div className="px-3.5 py-1.5 bg-red-950/40 border-b border-red-900/30 text-[10.5px] text-neutral-300 flex items-center justify-between">
+            <div
+              className={`px-3.5 py-1.5 border-b text-[10.5px] flex items-center justify-between shrink-0 transition-colors ${
+                isLight
+                  ? "bg-red-50/90 border-red-100 text-red-950 font-medium"
+                  : "bg-red-950/40 border-red-900/30 text-neutral-300"
+              }`}
+            >
               <span className="truncate">
-                ⚡ Strictly answers <strong>Gym Workouts, Diets &amp; Vikings Facilities</strong>.
+                ⚡ Answers <strong>Gym Workouts, Diets &amp; Vikings Facilities</strong>.
               </span>
               <a
                 href={`https://wa.me/${GYM_CONFIG.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-red-400 hover:text-red-300 font-semibold flex items-center gap-0.5 shrink-0 ml-2"
+                className={`font-semibold flex items-center gap-0.5 shrink-0 ml-2 transition-colors ${
+                  isLight ? "text-red-600 hover:text-red-700" : "text-red-400 hover:text-red-300"
+                }`}
               >
                 WhatsApp Desk <ExternalLink className="w-2.5 h-2.5" />
               </a>
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3.5 text-xs sm:text-[13px] scrollbar-thin scrollbar-thumb-neutral-800">
+            <div
+              className={`flex-1 overflow-y-auto px-4 py-3 space-y-3.5 text-xs sm:text-[13px] scrollbar-thin transition-colors ${
+                isLight
+                  ? "bg-slate-100/70 scrollbar-thumb-slate-300"
+                  : "bg-neutral-950 scrollbar-thumb-neutral-800"
+              }`}
+            >
               {messages.map((msg) => {
                 const isUser = msg.role === "user";
                 return (
@@ -274,11 +379,13 @@ export const RitwikChatbot: React.FC = () => {
                       className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs font-bold border overflow-hidden ${
                         isUser
                           ? "bg-red-600 text-white border-red-500"
-                          : "border-red-500/40 bg-neutral-900"
+                          : isLight
+                            ? "border-red-400/50 bg-white"
+                            : "border-red-500/40 bg-neutral-900"
                       }`}
                     >
                       {isUser ? (
-                        <User className="w-3.5 h-3.5" />
+                        <User className="w-3.5 h-3.5 text-white" />
                       ) : (
                         <img
                           src={chatbotProfilePhoto}
@@ -290,26 +397,32 @@ export const RitwikChatbot: React.FC = () => {
 
                     {/* Bubble */}
                     <div
-                      className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 shadow-sm leading-relaxed ${
+                      className={`max-w-[84%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${
                         isUser
-                          ? "bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-tr-none font-medium"
-                          : "bg-neutral-900 border border-neutral-800 text-gray-200 rounded-tl-none font-normal"
+                          ? "bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-tr-none font-medium ritwik-user-bubble shadow-sm"
+                          : isLight
+                            ? "bg-white border border-slate-200/90 text-slate-800 rounded-tl-none font-normal shadow-xs"
+                            : "bg-neutral-900 border border-neutral-800 text-gray-200 rounded-tl-none font-normal shadow-xs"
                       }`}
                     >
                       {isUser ? (
-                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                        <p className="whitespace-pre-wrap !text-white text-white">{msg.content}</p>
                       ) : (
                         <div className="space-y-1">{formatBotContent(msg.content)}</div>
                       )}
                       <div
                         className={`text-[9.5px] mt-1 flex items-center gap-1 ${
-                          isUser ? "text-red-100 justify-end" : "text-gray-500 justify-start"
+                          isUser
+                            ? "text-red-100 justify-end"
+                            : isLight
+                              ? "text-slate-400 justify-start"
+                              : "text-gray-500 justify-start"
                         }`}
                       >
                         <span>
                           {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </span>
-                        {isUser && <CheckCheck className="w-3 h-3 text-red-200" />}
+                        {isUser && <CheckCheck className="w-3 h-3 text-red-100" />}
                       </div>
                     </div>
                   </div>
@@ -319,18 +432,34 @@ export const RitwikChatbot: React.FC = () => {
               {/* Typing indicator */}
               {loading && (
                 <div className="flex items-start gap-2.5">
-                  <div className="w-7 h-7 rounded-full border border-red-500/40 shrink-0 overflow-hidden bg-neutral-900">
+                  <div
+                    className={`w-7 h-7 rounded-full border shrink-0 overflow-hidden ${
+                      isLight ? "border-red-400/50 bg-white" : "border-red-500/40 bg-neutral-900"
+                    }`}
+                  >
                     <img
                       src={chatbotProfilePhoto}
                       alt="Ritwik"
                       className="w-full h-full object-cover object-[center_20%] opacity-85"
                     />
                   </div>
-                  <div className="bg-neutral-900 border border-neutral-800 text-gray-400 rounded-2xl rounded-tl-none px-4 py-2.5 flex items-center gap-1.5">
+                  <div
+                    className={`rounded-2xl rounded-tl-none px-4 py-2.5 flex items-center gap-1.5 border shadow-xs ${
+                      isLight
+                        ? "bg-white border-slate-200 text-slate-500"
+                        : "bg-neutral-900 border-neutral-800 text-gray-400"
+                    }`}
+                  >
                     <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
                     <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
                     <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-bounce" />
-                    <span className="text-[11px] text-gray-400 ml-1.5 font-mono">Ritwik is thinking...</span>
+                    <span
+                      className={`text-[11px] ml-1.5 font-mono ${
+                        isLight ? "text-slate-500" : "text-gray-400"
+                      }`}
+                    >
+                      Ritwik is thinking...
+                    </span>
                   </div>
                 </div>
               )}
@@ -339,14 +468,24 @@ export const RitwikChatbot: React.FC = () => {
             </div>
 
             {/* Quick Prompt Chips */}
-            <div className="px-3 py-2 bg-neutral-900/60 border-t border-neutral-850 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <div
+              className={`px-3 py-2 border-t flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 transition-colors ${
+                isLight
+                  ? "bg-slate-100/90 border-slate-200"
+                  : "bg-neutral-900/60 border-neutral-850"
+              }`}
+            >
               {QUICK_PROMPTS.map((prompt, idx) => (
                 <button
                   key={idx}
                   type="button"
                   disabled={loading}
                   onClick={() => handleSend(prompt)}
-                  className="shrink-0 text-[10.5px] font-semibold bg-neutral-800 hover:bg-neutral-750 text-gray-300 hover:text-white px-2.5 py-1 rounded-full border border-neutral-700 hover:border-red-500/40 transition-colors cursor-pointer select-none disabled:opacity-50"
+                  className={`shrink-0 text-[10.5px] font-semibold px-2.5 py-1 rounded-full border transition-colors cursor-pointer select-none disabled:opacity-50 ${
+                    isLight
+                      ? "bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 border-slate-300 hover:border-red-400 shadow-2xs"
+                      : "bg-neutral-800 hover:bg-neutral-750 text-gray-300 hover:text-white border-neutral-700 hover:border-red-500/40"
+                  }`}
                 >
                   {prompt}
                 </button>
@@ -359,7 +498,11 @@ export const RitwikChatbot: React.FC = () => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="p-3 bg-neutral-950 border-t border-neutral-800 flex items-center gap-2"
+              className={`p-3 border-t flex items-center gap-2 shrink-0 transition-colors ${
+                isLight
+                  ? "bg-white border-slate-200"
+                  : "bg-neutral-950 border-neutral-800"
+              }`}
             >
               <input
                 ref={inputRef}
@@ -368,15 +511,19 @@ export const RitwikChatbot: React.FC = () => {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask Ritwik about gym workouts or diets..."
                 disabled={loading}
-                className="flex-1 bg-neutral-900 text-white placeholder-gray-500 text-xs sm:text-[13px] px-3.5 py-2.5 rounded-xl border border-neutral-800 focus:outline-none focus:border-red-500 transition-colors disabled:opacity-60"
+                className={`flex-1 text-xs sm:text-[13px] px-3.5 py-2.5 rounded-xl border focus:outline-none focus:border-red-500 transition-colors disabled:opacity-60 ${
+                  isLight
+                    ? "bg-slate-50 text-slate-900 placeholder-slate-400 border-slate-300 focus:bg-white"
+                    : "bg-neutral-900 text-white placeholder-gray-500 border-neutral-800"
+                }`}
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
                 aria-label="Send message"
-                className="w-10 h-10 rounded-xl bg-red-600 hover:bg-red-500 disabled:bg-neutral-850 disabled:text-gray-600 text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer disabled:cursor-not-allowed shadow-md"
+                className="ritwik-send-btn w-10 h-10 rounded-xl bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:hover:bg-red-600 text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer disabled:cursor-not-allowed shadow-md"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-4 h-4 text-white" />
               </button>
             </form>
           </motion.div>
