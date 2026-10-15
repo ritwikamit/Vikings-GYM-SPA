@@ -8,6 +8,9 @@ export default function MinimalLoadingScreen() {
       <img
         src={logoPremium}
         alt="Vikings Gym &amp; Spa"
+        width="40"
+        height="40"
+        decoding="async"
         className="w-10 h-10 object-contain drop-shadow-[0_0_16px_rgba(239,68,68,0.5)] mb-3.5"
       />
 

@@ -97,6 +97,9 @@ export default function FacilitiesPage() {
           <img
             src={strengthPanoramic}
             alt="Vikings Arena Strength Equipment"
+            width="1920"
+            height="600"
+            decoding="async"
             className="w-full h-full object-cover object-[center_25%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/45" />
@@ -160,7 +163,10 @@ export default function FacilitiesPage() {
                     <img
                       src={zone.img}
                       alt={zone.title}
+                      width="640"
+                      height="400"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent" />

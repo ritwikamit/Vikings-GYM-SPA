@@ -167,7 +167,7 @@ export default function PublicNavbar({
             className="flex items-center gap-2 sm:gap-3 shrink-0 group"
             aria-label="Vikings Gym & Spa — return to arena home"
           >
-            <img src={logoPremium} alt="Vikings Logo" className="h-8 sm:h-9 w-auto shrink-0 group-hover:scale-105 transition-transform" />
+            <img src={logoPremium} alt="Vikings Logo" width="36" height="36" className="h-8 sm:h-9 w-auto shrink-0 group-hover:scale-105 transition-transform" />
             <span className="font-mono font-black text-white whitespace-nowrap leading-none sm:leading-normal">
               <span className="block sm:inline text-[13px] sm:text-lg tracking-tight sm:tracking-tighter">VIKINGS</span>{" "}
               <span className="block sm:inline text-[10px] sm:text-lg tracking-[0.12em] sm:tracking-tighter text-red-500">GYM &amp; SPA</span>

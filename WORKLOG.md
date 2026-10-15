@@ -3,6 +3,38 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-15 — Fix Explicit Dimensions on All Images to Eliminate CLS Warnings (Antigravity session)
+
+**User Request:**
+- "when i opened inspect there is an issue saying 'Lazy-loaded images should have explicit dimensions' what does this mean" -> "yes please fix it"
+
+**Root Cause:**
+- Chrome DevTools / Lighthouse audits flag images with `loading="lazy"` or content images that lack explicit `width` and `height` attributes (or aspect ratios).
+- Without dimensions, the browser allocates `0x0` pixels before downloading, causing sudden Cumulative Layout Shifts (CLS) as images expand on screen, which harms Google Core Web Vitals and user experience.
+
+**What Changed:**
+- Added explicit `width` and `height` attributes matching exact container aspect ratios and `decoding="async"` across all image elements in:
+  - `index.html` (initial loading emblem: 42x42)
+  - `src/components/MinimalLoadingScreen.tsx` (brand emblem: 40x40)
+  - `src/components/PublicNavbar.tsx` (brand logo: 36x36)
+  - `src/components/RitwikChatbot.tsx` (avatar windows: 40x40, 28x28)
+  - `src/components/PublicWebsite.tsx` (facilities 640x400, coaches 400x400, ambassador 460x580, story rings 64x64, story modal 450x800, gallery marquees 320x200, QR review code 260x260, developer logo 80x20)
+  - `src/pages/FacilitiesPage.tsx` (hero 1920x600, zones 640x400)
+  - `src/pages/TrainersPage.tsx` (hero 1920x600, coaches 400x500)
+  - `src/pages/MembershipsPage.tsx` (hero 1920x600)
+  - `src/pages/GalleryPage.tsx` (hero 1920x600, marquees 288x180, grid 400x300, footer 20x20)
+  - `src/pages/ContactPage.tsx` (hero 1920x400, footer 20x20)
+  - `src/pages/AmbassadorPage.tsx` (hero 1920x420, showcase 400x500, footer 20x20)
+  - `src/pages/FranchisePage.tsx` (hero 1920x400, footer 20x20)
+  - `src/pages/TermsConditionsPage.tsx`, `PrivacyPolicyPage.tsx`, `CookiesPolicyPage.tsx` (hero banners 1920x500)
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 233,409 bytes).
+- Git push: Synced to GitHub `main` for Vercel auto-deployment.
+
+---
+
 ## 2026-10-15 — Fix Scroll-To-Top and Mobile Footer Nav on Memberships Page (Antigravity session)
 
 **User Query / Request:**

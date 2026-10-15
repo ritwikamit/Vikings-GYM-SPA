@@ -88,6 +88,9 @@ export default function GalleryPage() {
           <img
             src={mainArenaPanoramic}
             alt="Vikings Arena Floor"
+            width="1920"
+            height="600"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/45" />
@@ -123,7 +126,7 @@ export default function GalleryPage() {
                   onClick={() => setLightboxIndex(i % ALL_GYM_GALLERY_IMAGES.length)}
                   className="group relative w-56 sm:w-72 aspect-[16/10] shrink-0 rounded-xl overflow-hidden border border-neutral-800 hover:border-red-600/70 shadow-lg cursor-pointer transition-all"
                 >
-                  <img src={img.url} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <img src={img.url} alt={img.label} width="288" height="180" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[10px] font-sans font-bold text-white uppercase">
                     <span className="truncate">{img.label}</span>
@@ -140,7 +143,7 @@ export default function GalleryPage() {
                   onClick={() => setLightboxIndex((18 + i) % ALL_GYM_GALLERY_IMAGES.length)}
                   className="group relative w-56 sm:w-72 aspect-[16/10] shrink-0 rounded-xl overflow-hidden border border-neutral-800 hover:border-red-600/70 shadow-lg cursor-pointer transition-all"
                 >
-                  <img src={img.url} alt={img.label} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <img src={img.url} alt={img.label} width="288" height="180" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
                   <div className="absolute bottom-2 left-2.5 right-2.5 flex items-center justify-between text-[10px] font-sans font-bold text-white uppercase">
                     <span className="truncate">{img.label}</span>
@@ -188,6 +191,8 @@ export default function GalleryPage() {
               <img
                 src={item.url}
                 alt={item.alt}
+                width="400"
+                height="300"
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
@@ -321,7 +326,7 @@ export default function GalleryPage() {
       {/* Footer */}
       <footer className="border-t border-neutral-900 py-12 px-4 sm:px-8 text-center text-xs text-gray-500 font-mono">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <img src={logoPremium} alt="Vikings Gym" className="h-5 w-auto" />
+          <img src={logoPremium} alt="Vikings Gym" width="20" height="20" className="h-5 w-auto" />
           <span className="font-bold text-white tracking-widest uppercase">VIKINGS GYM & SPA</span>
         </div>
         <p className="max-w-md mx-auto mb-4 text-gray-400">

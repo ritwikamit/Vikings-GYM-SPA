@@ -94,6 +94,9 @@ export default function MembershipsPage() {
           <img
             src={deadliftPlatform}
             alt="Vikings Deadlift Platform"
+            width="1920"
+            height="600"
+            decoding="async"
             className="w-full h-full object-cover object-[center_35%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/45" />

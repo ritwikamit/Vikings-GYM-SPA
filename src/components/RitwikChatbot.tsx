@@ -255,6 +255,9 @@ export const RitwikChatbot: React.FC = () => {
                     <img
                       src={chatbotProfilePhoto}
                       alt="Coach Ritwik"
+                      width="40"
+                      height="40"
+                      decoding="async"
                       className="w-full h-full object-cover object-[center_20%]"
                     />
                   </div>
@@ -350,6 +353,9 @@ export const RitwikChatbot: React.FC = () => {
                         <img
                           src={chatbotProfilePhoto}
                           alt="Ritwik"
+                          width="28"
+                          height="28"
+                          decoding="async"
                           className="w-full h-full object-cover object-[center_20%]"
                         />
                       )}
@@ -400,6 +406,9 @@ export const RitwikChatbot: React.FC = () => {
                     <img
                       src={chatbotProfilePhoto}
                       alt="Ritwik"
+                      width="28"
+                      height="28"
+                      decoding="async"
                       className="w-full h-full object-cover object-[center_20%] opacity-85"
                     />
                   </div>

@@ -33,6 +33,9 @@ export default function AmbassadorPage() {
         <img
           src={photoVaishnavi}
           alt="Vaishnavi Singh - Vikings Brand Ambassador"
+          width="1920"
+          height="420"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
         />
         {/* Cinematic Vignette Overlay with Side Fades - Keeps Ambassador face clearly visible */}
@@ -66,6 +69,10 @@ export default function AmbassadorPage() {
               <img
                 src={photoVaishnavi}
                 alt="Vaishnavi Singh"
+                width="400"
+                height="500"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
@@ -198,7 +205,7 @@ export default function AmbassadorPage() {
       {/* Consistent Footer */}
       <footer className="border-t border-neutral-900 py-12 px-4 sm:px-8 text-center text-xs text-gray-500 font-mono bg-black">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <img src={logoPremium} alt="Vikings Gym" className="h-5 w-auto" />
+          <img src={logoPremium} alt="Vikings Gym" width="20" height="20" className="h-5 w-auto" />
           <span className="font-bold text-white tracking-widest uppercase">VIKINGS GYM & SPA</span>
         </div>
         <p className="max-w-md mx-auto mb-4 text-gray-400">

@@ -53,6 +53,9 @@ export default function ContactPage() {
         <img
           src={receptionWide}
           alt="Vikings Gym Reception Desk"
+          width="1920"
+          height="400"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
         />
         {/* Cinematic Vignette Overlay with Side Fades */}
@@ -308,7 +311,7 @@ export default function ContactPage() {
       {/* Consistent Footer */}
       <footer className="border-t border-neutral-900 py-12 px-4 sm:px-8 text-center text-xs text-gray-500 font-mono bg-black">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <img src={logoPremium} alt="Vikings Gym" className="h-5 w-auto" />
+          <img src={logoPremium} alt="Vikings Gym" width="20" height="20" className="h-5 w-auto" />
           <span className="font-bold text-white tracking-widest uppercase">VIKINGS GYM & SPA</span>
         </div>
         <p className="max-w-md mx-auto mb-4 text-gray-400">

@@ -20,6 +20,9 @@ export default function TermsConditionsPage() {
           <img
             src={deadliftPlatform}
             alt="Olympic Deadlift Platform"
+            width="1920"
+            height="500"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/45" />

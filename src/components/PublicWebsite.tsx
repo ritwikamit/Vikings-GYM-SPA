@@ -931,6 +931,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     <img
                       src={f.img}
                       alt={`Vikings Gym Aurangabad ${f.title}`}
+                      width="640"
+                      height="400"
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -1053,7 +1055,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
               >
                 <div className="md:w-2/5 aspect-square md:aspect-auto md:h-auto bg-neutral-900 overflow-hidden">
                   {t.photoUrl ? (
-                    <img src={t.photoUrl} alt={`${t.name} — coach at Vikings Gym Aurangabad`} loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
+                    <img src={t.photoUrl} alt={`${t.name} — coach at Vikings Gym Aurangabad`} width="400" height="400" loading="lazy" decoding="async" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-red-950 via-neutral-900 to-neutral-950 flex items-center justify-center relative">
                       <div className="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
@@ -1147,6 +1149,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <img
                   src={photoVaishnavi}
                   alt="Vaishnavi Singh — Official Brand Ambassador Vikings Gym"
+                  width="460"
+                  height="580"
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
@@ -1547,7 +1551,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   {/* Glowing Instagram Ring */}
                   <div className="relative p-[2.5px] rounded-full bg-gradient-to-tr from-amber-400 via-rose-500 to-red-600 group-hover:scale-105 transition-transform duration-300 shadow-md shadow-red-950/40">
                     <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-black bg-black">
-                      <img src={s.img} alt={s.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <img src={s.img} alt={s.label} width="64" height="64" loading="lazy" decoding="async" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     </div>
                     {/* Live Dot */}
                     <span className="absolute bottom-0 right-1 w-3 h-3 rounded-full bg-red-600 border-2 border-black animate-pulse" />
@@ -1601,6 +1605,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   <img
                     src={STORY_TILES[activeStoryIndex]?.img}
                     alt={STORY_TILES[activeStoryIndex]?.label}
+                    width="450"
+                    height="800"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/70 pointer-events-none" />
@@ -1634,6 +1640,8 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                           <img
                             src={logoPremium}
                             alt="Vikings Gym"
+                            width="32"
+                            height="32"
                             className="w-full h-full rounded-full object-cover bg-black"
                           />
                         </div>
@@ -1756,7 +1764,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     <img
                       src={img.url}
                       alt={img.label}
+                      width="320"
+                      height="200"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85 group-hover:opacity-100 transition-opacity" />
@@ -1785,7 +1796,10 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                     <img
                       src={img.url}
                       alt={img.label}
+                      width="320"
+                      height="200"
                       loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85 group-hover:opacity-100 transition-opacity" />
@@ -1902,8 +1916,11 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodeURIComponent(GYM_CONFIG.mapLink)}`}
                   alt="QR code — review Vikings Gym & Spa on Google Maps"
+                  width="260"
+                  height="260"
                   className="w-48 h-48 sm:w-56 sm:h-56 object-contain"
                   loading="lazy"
+                  decoding="async"
                 />
               </a>
               <span className="text-gray-500 text-xs font-mono mt-4 text-center">
@@ -2338,7 +2355,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10 mb-6 sm:mb-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src={logoPremium} alt="Vikings Logo" className="h-8 w-auto" />
+              <img src={logoPremium} alt="Vikings Logo" width="32" height="32" className="h-8 w-auto" />
               <div>
                 <span className="font-mono text-sm font-black text-white tracking-widest block">
                   VIKINGS <span className="text-red-500">GYM &amp; SPA</span>
@@ -2417,7 +2434,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
           <div className="flex items-center justify-center gap-2.5 mt-3">
             <span className="text-[11px] text-gray-500 font-sans">Designed & Developed by</span>
             {/* TODO: link logo to https://accustomlabs.com once the site is live */}
-            <img src={devLogo} alt="AC Custom Labs logo" loading="lazy" className="h-5 w-auto" />
+            <img src={devLogo} alt="AC Custom Labs logo" width="80" height="20" loading="lazy" decoding="async" className="h-5 w-auto" />
           </div>
         </div>
       </footer>
