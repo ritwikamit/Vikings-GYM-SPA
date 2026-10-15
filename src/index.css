@@ -12,12 +12,15 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  touch-action: pan-y;
 }
 
 /* App-like taps on touch devices (no grey flash) */
@@ -664,5 +667,26 @@ footer.footer-always-dark {
 .theme-light .scroll-top-btn-inner:hover {
   color: #ef4444 !important;
 }
+
+/* 14. SMARTPHONE-ONLY HERO VIDEO 1 HIGH-DEF ENHANCEMENT (Desktop PC view unchanged) */
+@media (max-width: 767px) {
+  .mobile-hero-video {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    filter: contrast(1.15) brightness(0.92) saturate(1.12);
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-hero-video {
+    image-rendering: auto !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
 
 

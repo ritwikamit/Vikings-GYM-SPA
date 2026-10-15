@@ -55,9 +55,9 @@ export default function FranchisePage() {
           alt="Vikings Gym Main Floor Arena"
           className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
         />
-        {/* Dark Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-transparent to-black/90" />
+        {/* Cinematic Vignette Overlay with Side Fades */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-transparent to-black/85" />
         <motion.div
           initial={{ opacity: 0, y: -60 }}
           animate={{ opacity: 1, y: 0 }}

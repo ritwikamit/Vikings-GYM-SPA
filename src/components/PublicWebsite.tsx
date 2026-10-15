@@ -277,7 +277,7 @@ function ScrollToTopButton() {
           whileTap={{ scale: 0.94 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label="Back to top"
-          className="fixed bottom-20 right-4 sm:right-6 lg:bottom-6 z-50 w-12 h-12 rounded-full flex items-center justify-center p-0 cursor-pointer shadow-2xl shadow-black/80 group"
+          className="fixed bottom-36 right-4 sm:right-6 lg:bottom-22 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center p-0 cursor-pointer shadow-2xl shadow-black/80 group"
         >
           <svg className="w-12 h-12 -rotate-90 pointer-events-none absolute inset-0 drop-shadow-[0_0_6px_rgba(239,68,68,0.45)]" viewBox="0 0 48 48">
             <circle
@@ -733,36 +733,41 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
     return false;
   });
 
-  const acceptCookies = (type: "all" | "essential") => {
+  const acceptCookies = (type: "all" | "essential" | "dismissed") => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("vikings_cookie_consent", type);
+      try {
+        localStorage.setItem("vikings_cookie_consent", type);
+      } catch {}
     }
     setShowCookieBanner(false);
   };
 
-  // Active nav section with RAF-throttled scroll-spy (only triggers state update on boundary crossing)
+  // Active nav section with throttled scroll-spy (zero layout thrashing for 120fps mobile scroll)
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     let rafId: number | null = null;
     let lastSection = "";
+    let lastChecked = 0;
 
     const onScroll = () => {
+      const now = performance.now();
+      // Throttle calculations to at most once per 120ms to keep mobile scrolling butter-smooth
+      if (now - lastChecked < 120) return;
+      lastChecked = now;
+
       if (rafId !== null) return;
       rafId = window.requestAnimationFrame(() => {
         const sy = window.scrollY;
         let matched = "";
         if (sy >= 180) {
-          const headerOffset = 140;
+          const headerOffset = 160;
           for (let i = SECTION_IDS.length - 1; i >= 0; i--) {
             const id = SECTION_IDS[i];
             const el = document.getElementById(id);
-            if (el) {
-              const top = el.getBoundingClientRect().top + sy;
-              if (sy + headerOffset >= top) {
-                matched = id;
-                break;
-              }
+            if (el && sy + headerOffset >= el.offsetTop) {
+              matched = id;
+              break;
             }
           }
         }
@@ -2491,17 +2496,20 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-2xl p-4 sm:p-6 overflow-y-auto"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-xl p-4 sm:p-6 overflow-y-auto"
             style={{ overscrollBehavior: "contain" }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) acceptCookies("essential");
+            }}
           >
             <motion.div
               initial={{ scale: 0.94, opacity: 0, y: 16 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.94, opacity: 0, y: 16 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-lg moving-border-red rounded-3xl shadow-2xl shadow-red-950/80 my-auto text-left"
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-lg rounded-3xl shadow-2xl shadow-black/90 my-auto text-left border border-red-950/50 bg-[#0a0a0a]"
             >
-              <div className="moving-border-red-inner p-5 sm:p-7 bg-[#080808]/98 rounded-3xl border border-white/10 flex flex-col gap-4 sm:gap-5">
+              <div className="p-5 sm:p-7 bg-[#0a0a0a] rounded-3xl border border-white/10 flex flex-col gap-4 sm:gap-5">
                 {/* Header with Cookie Icon & Title */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
@@ -2574,7 +2582,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                 <div className="pt-2 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-sans text-gray-400">
                   <Link
                     to="/cookies"
-                    onClick={() => setShowCookieBanner(false)}
+                    onClick={() => acceptCookies("essential")}
                     className="hover:text-red-400 transition-colors underline flex items-center gap-1.5"
                   >
                     <FileText className="w-3.5 h-3.5" />
@@ -2582,7 +2590,7 @@ export default function PublicWebsite({ onJoinNow, onLoginClick }: PublicWebsite
                   </Link>
                   <Link
                     to="/terms"
-                    onClick={() => setShowCookieBanner(false)}
+                    onClick={() => acceptCookies("essential")}
                     className="hover:text-red-400 transition-colors underline"
                   >
                     Terms &amp; Conditions (नियम व शर्तें)

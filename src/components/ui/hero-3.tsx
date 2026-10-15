@@ -26,13 +26,13 @@ export interface AnimatedMarqueeHeroProps {
   className?: string;
 }
 
-// Reusable Button component styled for Vikings Gym (fluid sizing for smartphone & tablet)
+// Reusable Button component styled for Vikings Gym (fluid full-width sizing for smartphone, auto for tablet/desktop)
 const ActionButton = ({ children, onClick }: { children: React.ReactNode, onClick?: () => void }) => (
   <motion.button
-    whileHover={{ scale: 1.03 }}
-    whileTap={{ scale: 0.97 }}
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
     onClick={onClick}
-    className="w-auto min-h-[42px] sm:min-h-[46px] px-5 xs:px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-md bg-red-600 text-black font-sans font-black text-[11px] xs:text-xs sm:text-xs tracking-wider shadow-lg shadow-red-600/30 transition-all hover:bg-red-500 active:bg-red-700 flex items-center justify-center gap-1.5 sm:gap-2 uppercase cursor-pointer shrink-0 touch-manipulation"
+    className="w-full sm:w-auto min-h-[46px] px-6 sm:px-8 py-3 sm:py-3.5 rounded-md bg-red-600 text-black font-sans font-black text-xs sm:text-xs tracking-wider shadow-lg shadow-red-600/30 transition-all hover:bg-red-500 active:bg-red-700 flex items-center justify-center gap-2 uppercase cursor-pointer shrink-0 touch-manipulation text-center"
   >
     {children}
   </motion.button>
@@ -43,11 +43,15 @@ export function DotGrid() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   React.useEffect(() => {
+    // Skip heavy continuous canvas computation on smartphones / touch screens for butter-smooth scrolling
+    if (typeof window !== "undefined" && (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let raf = 0;
     let running = false;
@@ -233,7 +237,7 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
     >
       {/* 1. Full-Cover Hero Background: Video 1 (Original Fit, No Zoom) -> Landscaped Photos -> Video 1 in Loop */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        {/* Video 1 Layer: clean original fit, anchor near top so faces are never cut off */}
+        {/* Video 1 Layer: smartphone optimized clarity, contrast & subpixel framing; PC view unchanged */}
         <video
           ref={videoRef}
           src={video1Src}
@@ -243,9 +247,14 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           onEnded={handleVideoEnded}
           className={cn(
             "w-full h-full object-cover object-[center_10%] sm:object-[center_14%] md:object-[center_18%] transition-opacity duration-700",
+            "mobile-hero-video md:filter-none md:transform-none",
             heroMode === "video" ? "opacity-100" : "opacity-0"
           )}
         />
+
+        {/* Smartphone-Only Cinematic Clarity Overlay (Hides pixelation & sharpens athlete focus; hidden on PC) */}
+        <div className="md:hidden absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.65)_100%)] pointer-events-none z-[1]" />
+        <div className="md:hidden absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/75 pointer-events-none z-[1]" />
 
         {/* Landscaped Photos Layer: smooth cross-fade, properly framed */}
         {photos.length > 0 && (
@@ -296,19 +305,19 @@ export const AnimatedMarqueeHero: React.FC<AnimatedMarqueeHeroProps> = ({
           {title}
         </motion.h1>
 
-        {/* 3. Action Buttons: Fluid fit for smartphones */}
+        {/* 3. Action Buttons: Full-width stacked on smartphone, side-by-side on tablet/desktop */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.15, ease: "easeOut" }}
-          className="flex flex-row items-center justify-center gap-2.5 xs:gap-3.5 sm:gap-5 flex-wrap pt-1 sm:pt-2"
+          className="w-full max-w-sm sm:max-w-none flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-5 px-3 sm:px-0 pt-1 sm:pt-2"
         >
           <ActionButton onClick={onCtaClick}>{ctaText}</ActionButton>
           {secondaryCtaText && (
             <button
               type="button"
               onClick={onSecondaryCtaClick}
-              className="btn-ice hero-secondary-btn w-auto min-h-[38px] xs:min-h-[42px] sm:min-h-[46px] px-4 xs:px-6 sm:px-8 py-2 xs:py-2.5 sm:py-3.5 rounded-md border !border-white/40 !bg-black/75 hover:!bg-white/20 backdrop-blur-md !text-white hover:border-transparent hover:!text-white hover:shadow-lg hover:shadow-blue-600/40 font-sans font-black text-[10.5px] xs:text-xs sm:text-xs tracking-wider uppercase transition-all cursor-pointer shadow-xl shrink-0 touch-manipulation flex items-center justify-center"
+              className="btn-ice hero-secondary-btn w-full sm:w-auto min-h-[46px] px-6 sm:px-8 py-3 sm:py-3.5 rounded-md border !border-white/40 !bg-black/75 hover:!bg-white/20 backdrop-blur-md !text-white hover:border-transparent hover:!text-white hover:shadow-lg hover:shadow-blue-600/40 font-sans font-black text-xs sm:text-xs tracking-wider uppercase transition-all cursor-pointer shadow-xl shrink-0 touch-manipulation flex items-center justify-center text-center"
             >
               {secondaryCtaText}
             </button>

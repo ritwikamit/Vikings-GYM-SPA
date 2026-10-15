@@ -1,8 +1,9 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import PublicWebsite from "./components/PublicWebsite";
 import MinimalLoadingScreen from "./components/MinimalLoadingScreen";
+import RitwikChatbot from "./components/RitwikChatbot";
 // Portal consoles are code-split: public visitors only download the landing page.
 const AuthGateway = lazy(() => import("./components/AuthGateway"));
 const ResetPassword = lazy(() => import("./components/ResetPassword"));
@@ -241,7 +242,9 @@ const ConsoleLayout = ({ children, activeTab, setActiveTab }: any) => {
 // The Main App Routing Structure
 export default function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const isERP = location.pathname.startsWith("/erp");
 
   // For the ERP layout
   const [activeTab, setActiveTab] = useState(() => {
@@ -316,6 +319,7 @@ export default function App() {
         } 
       />
     </Routes>
+    {!isERP && <RitwikChatbot />}
     </Suspense>
   );
 }

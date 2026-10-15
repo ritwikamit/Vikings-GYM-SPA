@@ -35,9 +35,9 @@ export default function AmbassadorPage() {
           alt="Vaishnavi Singh - Vikings Brand Ambassador"
           className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
         />
-        {/* Dark Vignette Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-black/95" />
+        {/* Cinematic Vignette Overlay with Side Fades - Keeps Ambassador face clearly visible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-transparent to-black/85" />
         <motion.div
           initial={{ opacity: 0, y: -60 }}
           animate={{ opacity: 1, y: 0 }}
