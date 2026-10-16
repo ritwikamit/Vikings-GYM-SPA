@@ -3,6 +3,35 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-16 — AI Chatbot Single Introduction, Typewriter Typing Effect & Flagship Tag Mobile Overlap Fix (Antigravity session)
+
+**User Request:**
+- "there are two problems one is the AI chatbot always introduce itself in every question user asks make sure it only introduces one time and when user asks queries it just gives answer in one go, make it like it is typing manually and also refine the answers and remove markups like * instead use numbers and second In franchise and expansion page the flagship tag in smartphone is overlapping the text please fix it, use ponytail for editing everytime and push to github so that vercel auto deploys it."
+
+**What Changed:**
+1. **Chatbot Single Introduction & Preamble Removal (`src/services/aiChatService.ts`, `src/components/RitwikChatbot.tsx`):**
+   - Enforced strict prompt instructions in `RITWIK_SYSTEM_PROMPT` instructing the AI to never introduce itself ("I am Ritwik...", "Coach Ritwik here...", "Namaste, I am Ritwik...") in any response since the user already received the initial welcome introduction.
+   - Added `refineBotResponse()` sanitizer stripping redundant opening self-introductions from upstream API responses.
+   - Refined `generateLocalFallbackResponse` to eliminate repeated introductory headers across all fallback categories.
+2. **Manual Keystroke Typing Cadence (`src/components/RitwikChatbot.tsx`):**
+   - Implemented progressive typewriter reveal (`typeMessageOut`) streaming 3-5 characters every 20ms with smooth auto-scroll.
+   - Added pulsing red typing cursor indicator (`inline-block w-1.5 h-3.5 bg-red-500`) at the active message boundary.
+   - Disabled inputs and prompt chips during typing to prevent state collisions, with proper unmount timer cleanup.
+3. **Markup Asterisk Elimination & Numbered Lists (`src/services/aiChatService.ts`, `src/components/RitwikChatbot.tsx`):**
+   - Converted markdown bullet items (`*`, `-`, `•`) to numbered lists (`1.`, `2.`, `3.`) in `refineBotResponse()` and in all fallback responses.
+   - Stripped markdown asterisks (`*` and `**`) so no raw markup clutter appears in messages.
+   - In `formatBotContent()`, formatted numbered points with styled circular red numeral badges.
+4. **Flagship Tag Mobile Overlap Fix (`src/pages/FranchisePage.tsx`):**
+   - Removed `absolute top-4 right-4` positioning from the "Flagship" tag on Model B.
+   - Placed the tag in a responsive flex row (`flex items-center justify-between gap-2`) alongside "Model B · Full Experience" with `shrink-0`, eliminating text collision on smartphones.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 233,391 bytes).
+- Pushed to GitHub `main` to trigger automated Vercel deployment.
+
+---
+
 ## 2026-10-15 — Fix Explicit Dimensions on All Images to Eliminate CLS Warnings (Antigravity session)
 
 **User Request:**

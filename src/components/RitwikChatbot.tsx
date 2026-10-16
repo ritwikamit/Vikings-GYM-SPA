@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   ExternalLink
 } from "lucide-react";
-import { sendRitwikMessage, ChatMessage } from "../services/aiChatService";
+import { sendRitwikMessage, refineBotResponse, ChatMessage } from "../services/aiChatService";
 import { GYM_CONFIG } from "../config/gym";
 import chatbotProfilePhoto from "../../assets/ChatbotImage.webp";
 
@@ -38,14 +38,19 @@ export const RitwikChatbot: React.FC = () => {
     {
       id: "welcome-1",
       role: "assistant",
-      content: "Namaste! I am **Ritwik**, your AI Fitness Coach & Arena Advisor at **Vikings Gym & Spa**, Aurangabad.\n\nAsk me anything about **gym workouts, strength training, Indian diets, or our membership plans and steam spa**! How can I help you crush your fitness goals today?",
+      content:
+        "Namaste! I am Ritwik, your AI Fitness Coach & Arena Advisor at Vikings Gym & Spa, Aurangabad.\n\nAsk me anything about:\n1. Gym workouts, exercise form & strength training\n2. High-protein Indian diets & daily nutrition\n3. Vikings Gym membership plans & Moroccan steam spa\n\nHow can I help you crush your fitness goals today?",
       timestamp: new Date()
     }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [activeTypingId, setActiveTypingId] = useState<string | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Synchronize with site theme toggle (light / dark)
   useEffect(() => {
@@ -72,6 +77,15 @@ export const RitwikChatbot: React.FC = () => {
     };
   }, []);
 
+  // Cleanup typewriter on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimerRef.current) {
+        clearTimeout(typingTimerRef.current);
+      }
+    };
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -81,11 +95,42 @@ export const RitwikChatbot: React.FC = () => {
       scrollToBottom();
       setTimeout(() => inputRef.current?.focus(), 250);
     }
-  }, [isOpen, messages]);
+  }, [isOpen, messages, isTyping]);
+
+  // Simulates manual keystroke typing cadence with progressive reveal
+  const typeMessageOut = (text: string, msgId: string) => {
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+    }
+    setIsTyping(true);
+    setActiveTypingId(msgId);
+    let index = 0;
+
+    const tick = () => {
+      // Chunk 3-5 chars per tick for smooth, realistic typing speed
+      const chunkSize = Math.floor(Math.random() * 3) + 3;
+      index = Math.min(index + chunkSize, text.length);
+      const partial = text.slice(0, index);
+
+      setMessages((prev) =>
+        prev.map((m) => (m.id === msgId ? { ...m, content: partial } : m))
+      );
+      scrollToBottom();
+
+      if (index < text.length) {
+        typingTimerRef.current = setTimeout(tick, 20);
+      } else {
+        setIsTyping(false);
+        setActiveTypingId(null);
+      }
+    };
+
+    tick();
+  };
 
   const handleSend = async (textToSend?: string) => {
     const query = (textToSend || input).trim();
-    if (!query || loading) return;
+    if (!query || loading || isTyping) return;
 
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,
@@ -100,78 +145,94 @@ export const RitwikChatbot: React.FC = () => {
 
     try {
       const response = await sendRitwikMessage(query, messages);
+      const refined = refineBotResponse(response);
+      const botMsgId = `bot-${Date.now()}`;
       const botMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
+        id: botMsgId,
         role: "assistant",
-        content: response,
+        content: "",
         timestamp: new Date()
       };
       setMessages((prev) => [...prev, botMsg]);
+      setLoading(false);
+      typeMessageOut(refined, botMsgId);
     } catch {
-      const fallbackMsg: ChatMessage = {
-        id: `bot-${Date.now()}`,
+      const fallbackText = refineBotResponse(
+        "I am having trouble connecting to the network right now. Please call or WhatsApp our reception desk directly at +91 8809544449 for instant assistance!"
+      );
+      const botMsgId = `bot-${Date.now()}`;
+      const botMsg: ChatMessage = {
+        id: botMsgId,
         role: "assistant",
-        content: "I am having trouble connecting to the network right now. Please call or WhatsApp our reception desk directly at **+91 8809544449** for instant assistance!",
+        content: "",
         timestamp: new Date()
       };
-      setMessages((prev) => [...prev, fallbackMsg]);
-    } finally {
+      setMessages((prev) => [...prev, botMsg]);
       setLoading(false);
+      typeMessageOut(fallbackText, botMsgId);
     }
   };
 
   const handleResetChat = () => {
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+    }
+    setIsTyping(false);
+    setActiveTypingId(null);
+    setLoading(false);
     setMessages([
       {
         id: `welcome-${Date.now()}`,
         role: "assistant",
-        content: "Chat cleared! I am **Ritwik**. Ask me any question on **workouts, gym equipment, nutrition, or Vikings Gym memberships**.",
+        content:
+          "Chat cleared! I am Ritwik. Ask me any question on workouts, gym equipment, nutrition, or Vikings Gym memberships.",
         timestamp: new Date()
       }
     ]);
   };
 
-  const formatBotContent = (content: string) => {
+  const formatBotContent = (content: string, isBeingTyped: boolean) => {
     const lines = content.split("\n");
-    return lines.map((line, idx) => {
-      const parts = line.split(/(\*\*.*?\*\*)/g);
-      const renderedParts = parts.map((part, pIdx) => {
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return (
-            <strong
-              key={pIdx}
-              className={`font-bold font-sans ${isLight ? "text-red-600" : "text-red-400"}`}
-            >
-              {part.slice(2, -2)}
-            </strong>
-          );
-        }
-        return part;
-      });
+    return (
+      <div className="space-y-1">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            return <div key={idx} className="h-1.5" />;
+          }
 
-      if (line.trim().startsWith("- ") || line.trim().startsWith("• ")) {
-        return (
-          <li key={idx} className="ml-4 list-disc text-inherit my-0.5 leading-relaxed">
-            {renderedParts}
-          </li>
-        );
-      }
-      if (line.trim().match(/^\d+\.\s/)) {
-        return (
-          <li key={idx} className="ml-4 list-decimal text-inherit my-0.5 leading-relaxed">
-            {renderedParts}
-          </li>
-        );
-      }
-      if (line.trim() === "") {
-        return <div key={idx} className="h-2" />;
-      }
-      return (
-        <p key={idx} className="my-1 leading-relaxed">
-          {renderedParts}
-        </p>
-      );
-    });
+          // Check if numbered line like "1. text" or "1) text"
+          const numMatch = trimmed.match(/^(\d+)[\.\)]\s+(.*)$/);
+          if (numMatch) {
+            const num = numMatch[1];
+            const itemText = numMatch[2];
+            return (
+              <div key={idx} className="flex items-start gap-2 my-1 leading-relaxed">
+                <span
+                  className={`shrink-0 flex items-center justify-center w-4.5 h-4.5 rounded-full text-[10.5px] font-bold font-mono mt-0.5 ${
+                    isLight
+                      ? "bg-red-100 text-red-600"
+                      : "bg-red-950/90 text-red-400 border border-red-800/50"
+                  }`}
+                >
+                  {num}
+                </span>
+                <span className="flex-1">{itemText}</span>
+              </div>
+            );
+          }
+
+          return (
+            <p key={idx} className="my-1 leading-relaxed">
+              {trimmed}
+            </p>
+          );
+        })}
+        {isBeingTyped && (
+          <span className="inline-block w-1.5 h-3.5 ml-0.5 bg-red-500 rounded-xs animate-pulse align-middle" />
+        )}
+      </div>
+    );
   };
 
   return (
@@ -374,7 +435,7 @@ export const RitwikChatbot: React.FC = () => {
                       {isUser ? (
                         <p className="whitespace-pre-wrap !text-white text-white">{msg.content}</p>
                       ) : (
-                        <div className="space-y-1">{formatBotContent(msg.content)}</div>
+                        <div>{formatBotContent(msg.content, isTyping && msg.id === activeTypingId)}</div>
                       )}
                       <div
                         className={`text-[9.5px] mt-1 flex items-center gap-1 ${
@@ -448,7 +509,7 @@ export const RitwikChatbot: React.FC = () => {
                 <button
                   key={idx}
                   type="button"
-                  disabled={loading}
+                  disabled={loading || isTyping}
                   onClick={() => handleSend(prompt)}
                   className={`shrink-0 text-[10.5px] font-semibold px-2.5 py-1 rounded-full border transition-colors cursor-pointer select-none disabled:opacity-50 ${
                     isLight
@@ -479,7 +540,7 @@ export const RitwikChatbot: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask Ritwik about gym workouts or diets..."
-                disabled={loading}
+                disabled={loading || isTyping}
                 className={`flex-1 text-xs sm:text-[13px] px-3.5 py-2.5 rounded-xl border focus:outline-none focus:border-red-500 transition-colors disabled:opacity-60 ${
                   isLight
                     ? "bg-slate-50 text-slate-900 placeholder-slate-400 border-slate-300 focus:bg-white"
@@ -488,7 +549,7 @@ export const RitwikChatbot: React.FC = () => {
               />
               <button
                 type="submit"
-                disabled={!input.trim() || loading}
+                disabled={!input.trim() || loading || isTyping}
                 aria-label="Send message"
                 className="ritwik-send-btn w-10 h-10 rounded-xl bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:hover:bg-red-600 text-white flex items-center justify-center transition-colors shrink-0 cursor-pointer disabled:cursor-not-allowed shadow-md"
               >

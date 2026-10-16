@@ -170,13 +170,15 @@ export default function FranchisePage() {
             </div>
 
             <div className="p-6 rounded-xl border border-red-600/40 bg-red-950/10 relative flex flex-col justify-between shadow-xl shadow-red-950/20">
-              <div className="absolute top-4 right-4 text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-red-600 text-white tracking-widest">
-                Flagship
-              </div>
               <div>
-                <span className="text-[11px] font-bold text-red-400 uppercase tracking-widest">
-                  Model B · Full Experience
-                </span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[11px] font-bold text-red-400 uppercase tracking-widest">
+                    Model B · Full Experience
+                  </span>
+                  <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-red-600 text-white tracking-widest shrink-0">
+                    Flagship
+                  </span>
+                </div>
                 <h3 className="text-xl font-bold text-white mt-1">Vikings Gym & Spa Arena</h3>
                 <div className="text-2xl font-black text-red-500 mt-3 font-mono">
                   ₹60L - ₹85L <span className="text-xs text-neutral-400 font-sans font-normal">est. total setup</span>
