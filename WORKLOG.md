@@ -3,6 +3,34 @@
 Running changelog for AI assistants. Read this first (after AGENTS.md).
 Append a new entry at the top after each work session, then commit/push so both CLIs stay in sync.
 
+## 2026-10-16 — Bullet Dots (•) Formatting, Concise Human Answers & Traffic/Token Abuse Protection (Antigravity session)
+
+**User Request:**
+- "the chat bot is not giving point as numbers but it is incorrect, i want you to just use dots for point sentence, dont use numbers and make sure the answer is in human language and it should be short because long answers uses more tokens. keep answers concise and accurate. and one more thing protect my website for heavy traffic and exploiting the chatbot api tokens"
+
+**What Changed:**
+1. **Bullet Dots (•) & Human Conversational Tone (`src/services/aiChatService.ts`, `src/components/RitwikChatbot.tsx`):**
+   - Replaced numbered list requirement with clean bullet dots (`•`) for point sentences.
+   - Instructed `RITWIK_SYSTEM_PROMPT` to speak in friendly, natural, and motivating human language while strictly keeping answers short (2-4 sentences or 2-3 bullet dots) to economize tokens.
+   - Updated `refineBotResponse()` to convert any incoming numbers or dash bullets into uniform bullet dots (`•`) and strip all asterisks (`*` and `**`).
+   - In `formatBotContent()`, rendered bullet points with stylish red dot markers.
+   - Refactored all instant fallback knowledge responses to be concise, human, and dot-bulleted.
+2. **Server-Side Token Exploitation & Traffic Abuse Protection (`api/chat.js`):**
+   - Added IP-based sliding window rate limiter: maximum 8 requests per minute per IP, responding with HTTP 429 if exceeded.
+   - Payload & Token Shielding: limits input array to last 6 messages and enforces a strict 350-character ceiling on user query content to prevent prompt-injection token drainage.
+   - Token & Temperature Caps: lowered `max_tokens` from 600 down to **220** and set `temperature: 0.4`, preventing runaway rambling responses and minimizing OpenRouter token costs.
+3. **Client-Side Throttling & Query Guards (`src/components/RitwikChatbot.tsx`, `vite.config.ts`):**
+   - Added consecutive click debounce/cooldown (1.8s) to prevent button hammering or spamming Enter.
+   - Applied `maxLength={300}` on the chat input field.
+   - Synced local Vite dev server chat middleware with `max_tokens: 220` and `temperature: 0.4`.
+
+**Verification:**
+- `npm run lint` (`tsc --noEmit`): **0 errors**.
+- `npm run build`: Production bundle and prerenderer completed cleanly (**0 errors**, `dist/index.html` 233,391 bytes).
+- Pushed to GitHub `main` for Vercel auto-deployment.
+
+---
+
 ## 2026-10-16 — AI Chatbot Single Introduction, Typewriter Typing Effect & Flagship Tag Mobile Overlap Fix (Antigravity session)
 
 **User Request:**

@@ -39,7 +39,7 @@ export const RitwikChatbot: React.FC = () => {
       id: "welcome-1",
       role: "assistant",
       content:
-        "Namaste! I am Ritwik, your AI Fitness Coach & Arena Advisor at Vikings Gym & Spa, Aurangabad.\n\nAsk me anything about:\n1. Gym workouts, exercise form & strength training\n2. High-protein Indian diets & daily nutrition\n3. Vikings Gym membership plans & Moroccan steam spa\n\nHow can I help you crush your fitness goals today?",
+        "Namaste! I am Ritwik, your fitness coach at Vikings Gym & Spa, Aurangabad.\n\nAsk me anything about:\n• Gym workouts & exercise form\n• High-protein Indian diet plans\n• Membership fees & Moroccan steam spa\n\nHow can I help you today?",
       timestamp: new Date()
     }
   ]);
@@ -51,6 +51,7 @@ export const RitwikChatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSendTimeRef = useRef<number>(0);
 
   // Synchronize with site theme toggle (light / dark)
   useEffect(() => {
@@ -132,6 +133,11 @@ export const RitwikChatbot: React.FC = () => {
     const query = (textToSend || input).trim();
     if (!query || loading || isTyping) return;
 
+    // Traffic & abuse protection: rate limit rapid consecutive clicks (2s cooldown)
+    const now = Date.now();
+    if (now - lastSendTimeRef.current < 1800) return;
+    lastSendTimeRef.current = now;
+
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,
       role: "user",
@@ -185,7 +191,7 @@ export const RitwikChatbot: React.FC = () => {
         id: `welcome-${Date.now()}`,
         role: "assistant",
         content:
-          "Chat cleared! I am Ritwik. Ask me any question on workouts, gym equipment, nutrition, or Vikings Gym memberships.",
+          "Chat cleared! Ask me anything on workouts, diets, or Vikings Gym facilities.",
         timestamp: new Date()
       }
     ]);
@@ -201,23 +207,24 @@ export const RitwikChatbot: React.FC = () => {
             return <div key={idx} className="h-1.5" />;
           }
 
-          // Check if numbered line like "1. text" or "1) text"
-          const numMatch = trimmed.match(/^(\d+)[\.\)]\s+(.*)$/);
-          if (numMatch) {
-            const num = numMatch[1];
-            const itemText = numMatch[2];
+          // Bullet dot sentence: "• text" or "- text"
+          if (trimmed.startsWith("• ") || trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+            const itemText = trimmed.replace(/^[•\-\*]\s*/, "");
             return (
               <div key={idx} className="flex items-start gap-2 my-1 leading-relaxed">
-                <span
-                  className={`shrink-0 flex items-center justify-center w-4.5 h-4.5 rounded-full text-[10.5px] font-bold font-mono mt-0.5 ${
-                    isLight
-                      ? "bg-red-100 text-red-600"
-                      : "bg-red-950/90 text-red-400 border border-red-800/50"
-                  }`}
-                >
-                  {num}
-                </span>
+                <span className="text-red-500 font-bold text-base leading-none mt-0.5 shrink-0 select-none">•</span>
                 <span className="flex-1">{itemText}</span>
+              </div>
+            );
+          }
+
+          // Convert any stray numbered prefix "1. text" to a bullet dot
+          const numMatch = trimmed.match(/^\d+[\.\)]\s+(.*)$/);
+          if (numMatch) {
+            return (
+              <div key={idx} className="flex items-start gap-2 my-1 leading-relaxed">
+                <span className="text-red-500 font-bold text-base leading-none mt-0.5 shrink-0 select-none">•</span>
+                <span className="flex-1">{numMatch[1]}</span>
               </div>
             );
           }
@@ -540,6 +547,7 @@ export const RitwikChatbot: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask Ritwik about gym workouts or diets..."
+                maxLength={300}
                 disabled={loading || isTyping}
                 className={`flex-1 text-xs sm:text-[13px] px-3.5 py-2.5 rounded-xl border focus:outline-none focus:border-red-500 transition-colors disabled:opacity-60 ${
                   isLight

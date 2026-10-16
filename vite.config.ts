@@ -46,8 +46,8 @@ function localChatApiPlugin(env: Record<string, string>) {
                   body: JSON.stringify({
                     model,
                     messages,
-                    temperature: 0.6,
-                    max_tokens: 600
+                    temperature: 0.4,
+                    max_tokens: 220
                   })
                 });
 
